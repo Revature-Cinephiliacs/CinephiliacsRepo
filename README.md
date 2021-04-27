@@ -6,10 +6,13 @@ Do you like movies and want to find reviews for your next movie binge or analyze
 
 ## Technologies Used
 
-* C#
-* Entity Framework
-* xUnit Testing
-* SQL
+* ASP.NET WebAPI
+* Angular 2+
+* TypeScript
+* HTML
+* SCSS
+* Jasmine
+* Karma
 * Visual Studio
 * Git
 
