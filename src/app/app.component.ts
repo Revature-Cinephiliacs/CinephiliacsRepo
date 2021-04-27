@@ -13,10 +13,11 @@ export class AppComponent {
 
   headerSearch!: FormGroup;
 
-  // use this to determine if user is loggedin
+  // use this to know who the user is
   authModel: any;
   // use this to determine if user is an admin
   isUserAdmin: boolean;
+  // use this to determine if user is logged in
 
   constructor(public auth: AuthService) { }
 
@@ -24,7 +25,11 @@ export class AppComponent {
     this.headerSearch = new FormGroup({
       headSearch: new FormControl('', Validators.minLength(2))
     });
-
+    this.auth.userProfile$.subscribe(reply => {
+      console.log("user profile");
+      console.log(reply);
+      console.log("user profile");
+    });
     this.auth.authModel$.subscribe(reply => {
       console.log("app component reply");
       console.log(reply);
@@ -48,6 +53,14 @@ export class AppComponent {
       let searchParam = JSON.stringify(this.headerSearch.get('headSearch')!.value).substring(1, JSON.stringify(this.headerSearch.get('headSearch')!.value).length - 1);
       window.location.href = "/list/" + searchParam + "/1";
     }
+  }
+
+  testLogin() {
+    this.auth.login();
+  }
+
+  testLogout() {
+    this.auth.logout();
   }
 
   testCode(num: Number) {
