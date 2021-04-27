@@ -123,6 +123,7 @@ export class AuthService {
   // call this when
   private tryRetrieveUser() {
     // call to user service to call user api should go here.
+    // this code should be used once services and apis are ready
 
     // this.userService.checkIfNewUser().then(reply => {
     //   this.authModel$.next(reply);
@@ -143,6 +144,8 @@ export class AuthService {
   // send a request to check if user is an admin
   // if user isn't then set isadmin to false
   private isUserAdmin() {
+    // this code should be used once services and apis are ready
+
     // this.userService.isUserAdmin().then(reply => {
     //   this.isAdmin$.next(true);
     //   this.isAdmin = reply;
