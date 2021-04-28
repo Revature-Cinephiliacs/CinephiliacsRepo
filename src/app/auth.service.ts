@@ -4,6 +4,10 @@ import { Router } from '@angular/router';
 import createAuth0Client, { Auth0Client } from '@auth0/auth0-spa-js';
 import { BehaviorSubject, combineLatest, from, Observable, of, Subject, throwError } from 'rxjs';
 import { catchError, concatMap, shareReplay, tap } from 'rxjs/operators';
+import { LoginService } from './login.service';
+import { UrlService } from './url.service';
+import { UserService } from './user.service';
+// import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +33,7 @@ export class AuthService {
     createAuth0Client({
       domain: 'cinephiliacs.us.auth0.com', // the account
       client_id: 'uDzm9BWSa0J3ePufHnwOjxzKWO2hpW5P', // an application
-      redirect_uri: "http://20.94.137.143/", // angular deployment url
+      redirect_uri: this.urlService.FrontendUrl, // angular deployment url
       audience: 'https://cinephiliacs-api/' // an API
     })
   ) as Observable<Auth0Client>).pipe(
@@ -59,6 +63,8 @@ export class AuthService {
   );
   constructor(
     private router: Router,
+    private urlService: UrlService,
+    private userService: UserService
   ) {
     // On initial load, check authentication state with authorization server
     // Set up local auth streams if user is already authenticated
@@ -108,51 +114,58 @@ export class AuthService {
       console.log("subscribed to token silent");
       console.log(reply);
       console.log("subscribed to token silent");
-      this.tryRetrieveUser();
+      // this.tryRetrieveUser();
+    });
+    this.userProfile$.subscribe(reply => {
+      console.log("subscribed to user profile in auth");
+      console.log(reply);
+      console.log("subscribed to user profile in auth");
+      if (reply != null) {
+        this.tryRetrieveUser(reply.sub);
+
+      }
     });
     checkAuth$.subscribe((reply) => {
       console.log("in checkAuth$ subscription");
       console.log(reply);
       console.log("in checkAuth$ subscription");
-      this.tryRetrieveUser();
+      // this.tryRetrieveUser(reply.sub);
     }, () => { }, () => {
     });
   }
 
   // call the users api to get the current user
   // call this when
-  private tryRetrieveUser() {
-    // call to user service to call user api should go here.
-    // this code should be used once services and apis are ready
+  private tryRetrieveUser(userid: string) {
+    this.userService.getUser(userid).then(reply => {
+      this.authModel$.next(reply);
 
-    // this.userService.checkIfNewUser().then(reply => {
-    //   this.authModel$.next(reply);
-    //   if (reply.firstName == null && window.location.pathname != "/register") {
-    //     console.log("firstname null");
-    //     this.router.navigate(["register"]);
-    //   }
-    //   else {
-    //     this.isUserAdmin();
-    //   }
-    // }).catch(err => {
-    //   console.error(err);
-    //   console.log("error getting user data" + err.message);
-    //   this.isAdmin$.next(false);
-    // });
+      console.log(reply);
+      if (reply.firstName == null && window.location.pathname != "/register") {
+        console.log("firstname null");
+        this.router.navigate(["register"]);
+      }
+      else {
+        this.isUserAdmin(userid);
+      }
+    }).catch(err => {
+      console.error(err);
+      console.log("error getting user data" + err.message);
+      this.isAdmin$.next(false);
+    });
   }
 
   // send a request to check if user is an admin
   // if user isn't then set isadmin to false
-  private isUserAdmin() {
-    // this code should be used once services and apis are ready
-
-    // this.userService.isUserAdmin().then(reply => {
-    //   this.isAdmin$.next(true);
-    //   this.isAdmin = reply;
-    // }).catch(err => {
-    //   this.isAdmin$.next(false);
-    //   this.isAdmin = false;
-    // });
+  private isUserAdmin(userid: string) {
+    return;
+    this.userService.isAdmin(userid).then(reply => {
+      this.isAdmin$.next(true);
+      this.isAdmin = reply;
+    }).catch(err => {
+      this.isAdmin$.next(false);
+      this.isAdmin = false;
+    });
   }
 
   login(redirectPath: string = '/') {
