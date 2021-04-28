@@ -21,8 +21,6 @@ export class UserService {
   }
 
   isAdmin(userid: string): Promise<any> {
-    return this.http.get(this.baseURL + `/${userid}/isadmin`).toPromise();
+    return this.http.get(this.baseURL + `/isadmin`).toPromise();
   }
-
-
 }

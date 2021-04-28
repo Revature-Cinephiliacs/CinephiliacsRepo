@@ -150,11 +150,12 @@ export class AuthService {
   // send a request to check if user is an admin
   // if user isn't then set isadmin to false
   private isUserAdmin(userid: string) {
-    return;
     this.userService.isAdmin(userid).then(reply => {
+      this.logger.log("isadmin", reply);
       this.isAdmin$.next(true);
       this.isAdmin = reply;
     }).catch(err => {
+      this.logger.error("isadmin", err);
       this.isAdmin$.next(false);
       this.isAdmin = false;
     });
