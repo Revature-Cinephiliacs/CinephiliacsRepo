@@ -29,7 +29,7 @@ List of current features
 
 ## Contributors
 
-> Tristyn Linde, Beau Crumley, Roger Plyler, Sagar Luitel, Catherine Cheatle, and Nour Kamel.
+> Tristyn Linde, Christopher Larson, Nicholas Wong, Beau Crumley, Roger Plyler, Sagar Luitel, Catherine Cheatle, Nour Kamel, Matthew Grimsley, Christopher Trimmer, Muhammad Tahir Monir, and Anis Medini.
 
 ## License
 
