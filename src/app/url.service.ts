@@ -14,11 +14,7 @@ export class UrlService {
   FrontendUrl: string = "http://20.94.137.143/";
   RecommendationsAPIUrl: string = "http://20.189.28.203/";
   GroupsAPIUrl: string = "http://20.45.0.67/";
-
-  dotnetBaseUrl = '';
-  angularBaseUrl = '';
-  // dotnetBaseUrl = 'https://localhost:5001/';
-  // angularBaseUrl = 'http://localhost:4200/';
+  ReviewsAPIUrl: string = "http://20.189.30.176/";
 
   constructor() {
     if (environment.production) {
@@ -30,6 +26,7 @@ export class UrlService {
       this.FrontendUrl = "http://20.94.137.143/";
       this.RecommendationsAPIUrl = "http://20.189.28.203/";
       this.GroupsAPIUrl = "http://20.45.0.67/";
+      this.ReviewsAPIUrl = "http://20.189.30.176/";
     } else {
       this.UserAPIUrl = "https://localhost:5001/";
       this.ForumAPIUrl = "https://localhost:5002/";
@@ -39,6 +36,7 @@ export class UrlService {
       this.FrontendUrl = "http://localhost:4200/";
       this.RecommendationsAPIUrl = "https://localhost:5007/";
       this.GroupsAPIUrl = "https://localhost:5008/";
+      this.ReviewsAPIUrl = "https://localhost:5009/";
     }
   }
 }
