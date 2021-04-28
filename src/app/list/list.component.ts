@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router'
-import { HttpService} from '../http.service';
+import { HttpService } from '../http.service';
+import { LoggerService } from '../logger.service';
 
 @Component({
   selector: 'app-list',
@@ -9,7 +10,7 @@ import { HttpService} from '../http.service';
   styleUrls: ['./list.component.scss']
 })
 export class ListComponent implements OnInit {
- //object | undefined is what the example gave
+  //object | undefined is what the example gave
   movies: any = [];
   searches: any;
 
@@ -22,43 +23,43 @@ export class ListComponent implements OnInit {
 
   searchForm!: FormGroup;
 
-  constructor(private router :ActivatedRoute, private _http: HttpService) { }
+  constructor(
+    private logger: LoggerService,
+    private router: ActivatedRoute, private _http: HttpService) { }
 
   ngOnInit(): void {
 
     this.searchForm = new FormGroup({
       search: new FormControl('', Validators.minLength(2))
     });
-    
-    console.log(this.router.snapshot.params);
+
+    this.logger.log("", this.router.snapshot.params);
     this.searchTerm = this.router.snapshot.params.search;
-    this.pageNum = (this.router.snapshot.params.page -1 ) * 2 + 1;
-    if (this.pageNum < 75)
-    {  
+    this.pageNum = (this.router.snapshot.params.page - 1) * 2 + 1;
+    if (this.pageNum < 75) {
       this.nextPg = parseInt(this.router.snapshot.params.page) + 1;
     }
-    if (this.pageNum > 1)
-    {
+    if (this.pageNum > 1) {
       this.prevPg = this.router.snapshot.params.page - 1;
     }
-    this._http.getMovies(this.searchTerm,this.pageNum).subscribe(data => {
+    this._http.getMovies(this.searchTerm, this.pageNum).subscribe(data => {
       this.movies = data;
       this.searches = this.movies.Search;
-      console.log("this is movies now just so you know");
-      console.log(this.movies.Search);
-      
+      this.logger.log("", "this is movies now just so you know");
+      this.logger.log("", this.movies.Search);
+
     });
-    this._http.getMovies(this.searchTerm,(this.pageNum + 1)).subscribe(data => {
-      this.movies2 =  data;
-      
+    this._http.getMovies(this.searchTerm, (this.pageNum + 1)).subscribe(data => {
+      this.movies2 = data;
+
       this.searches2 = this.movies2.Search;
-      console.log("this is movies now just so you know");
-      console.log(this.movies2);
+      this.logger.log("", "this is movies now just so you know");
+      this.logger.log("", this.movies2);
     });
 
   }
-  myNumber:number = 0;
-  myStrings:string = '';
+  myNumber: number = 0;
+  myStrings: string = '';
   function1(): void {
     this.myNumber++;
   }
@@ -69,43 +70,42 @@ export class ListComponent implements OnInit {
     return myString + myString;
   }
 
-  increasePage(){
+  increasePage() {
     this.pageNum++;
     return this.pageNum;
   }
 
-  decreasePage(){
+  decreasePage() {
     this.pageNum--;
     return this.pageNum;
   }
-  getPreviousPageNum(){
+  getPreviousPageNum() {
     this.prevPg = this.pageNum - 1;
-    console.log(this.prevPg);
+    this.logger.log("", this.prevPg);
     return this.prevPg;
   }
 
-  getNextPageNum(){
+  getNextPageNum() {
     this.nextPg = this.pageNum + 1;
-    console.log(this.nextPg);
+    this.logger.log("", this.nextPg);
     return this.nextPg;
   }
 
-  getPageNum(){
-    console.log("PageNum" + this.pageNum);
+  getPageNum() {
+    this.logger.log("", "PageNum" + this.pageNum);
     return this.pageNum;
   }
 
-  
-  getSearchTerm(){
-    console.log("Search Term" + this.searchTerm);
+
+  getSearchTerm() {
+    this.logger.log("", "Search Term" + this.searchTerm);
     return this.searchTerm;
   }
-  
+
   onSubmit() {
-    if (this.searchForm.get('search')!.value != "")
-    {
+    if (this.searchForm.get('search')!.value != "") {
       let searchParam = JSON.stringify(this.searchForm.get('search')!.value).substring(1, JSON.stringify(this.searchForm.get('search')!.value).length - 1);
-      window.location.href = "/list/" +  searchParam + "/1";
+      window.location.href = "/list/" + searchParam + "/1";
     }
   }
 

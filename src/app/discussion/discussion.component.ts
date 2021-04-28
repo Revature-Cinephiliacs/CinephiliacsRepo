@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { LoggerService } from '../logger.service';
 import { LoginService } from '../login.service';
 
 @Component({
@@ -11,7 +12,7 @@ import { LoginService } from '../login.service';
 export class DiscussionComponent implements OnInit {
 
   comments: any;
-  disscussionID:string = "";
+  disscussionID: string = "";
   discussion: any;
   subject: any;
   displaySpoilers: any = false;
@@ -24,16 +25,18 @@ export class DiscussionComponent implements OnInit {
     isspoiler: false
   };
 
-  constructor(private _login:LoginService,private router :ActivatedRoute) { }
+  constructor(
+    private logger: LoggerService,
+    private _login: LoginService, private router: ActivatedRoute) { }
 
   ngOnInit(): void {
 
-    this.disscussionID =  this.router.snapshot.params.id;
+    this.disscussionID = this.router.snapshot.params.id;
     this.newComment.discussionid = this.router.snapshot.params.id;
     this.displayInput();
     this.getComments();
     this._login.getCurrentDiscussion(this.disscussionID).subscribe(data => {
-      console.log(data);
+      this.logger.log("", data);
       this.discussion = data;
       this.subject = this.discussion.subject;
     });
@@ -41,49 +44,48 @@ export class DiscussionComponent implements OnInit {
 
   async getComments() {
     setTimeout(() => {
-      this._login.getDiscussionComments(this.disscussionID).subscribe(data =>{ 
-        console.log(data);
+      this._login.getDiscussionComments(this.disscussionID).subscribe(data => {
+        this.logger.log("", data);
         this.comments = data;
       });
     }, 1000);
   }
 
-  displayInput(){
-    if(localStorage.getItem("loggedin"))
-    {
+  displayInput() {
+    if (localStorage.getItem("loggedin")) {
       this.user = localStorage.getItem("loggedin");
-      this.newComment.username= JSON.parse(this.user).username;
-      console.log("User Logged In");
-    }else{
-      console.log("Hide inputs");
+      this.newComment.username = JSON.parse(this.user).username;
+      this.logger.log("", "User Logged In");
+    } else {
+      this.logger.log("", "Hide inputs");
     }
   }
 
-  getDicussionID(){
-    console.log("Dicussion ID " +this.disscussionID);
+  getDicussionID() {
+    this.logger.log("", "Dicussion ID " + this.disscussionID);
     return this.disscussionID;
   }
 
-  postComment(){
-    if(this.isEmpty(this.newComment.text)){
-      console.log("Please enter a comment");
-    }else{
-      this._login.postComment(this.newComment).subscribe(data => console.log(data));
+  postComment() {
+    if (this.isEmpty(this.newComment.text)) {
+      this.logger.log("", "Please enter a comment");
+    } else {
+      this._login.postComment(this.newComment).subscribe(data => this.logger.log("", data));
       this.getComments();
     }
-    console.log(this.newComment);
+    this.logger.log("", this.newComment);
   }
 
   showSpoilers() {
     this.displaySpoilers = true;
-    console.log(this.displaySpoilers);
+    this.logger.log("", this.displaySpoilers);
   }
 
   spoilersShown() {
     return this.displaySpoilers;
   }
 
-  isEmpty(testSTR:string){
+  isEmpty(testSTR: string) {
     return (testSTR == "");
   }
 

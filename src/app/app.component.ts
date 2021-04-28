@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { AuthService } from './auth.service';
+import { LoggerService } from './logger.service';
 
 @Component({
   selector: 'app-root',
@@ -19,32 +20,27 @@ export class AppComponent {
   isUserAdmin: boolean;
   // use this to determine if user is logged in
 
-  constructor(public auth: AuthService) { }
+  constructor(public auth: AuthService, private logger: LoggerService) { }
 
   ngOnInit(): void {
     this.headerSearch = new FormGroup({
       headSearch: new FormControl('', Validators.minLength(2))
     });
     this.auth.userProfile$.subscribe(reply => {
-      console.log("user profile");
-      console.log(reply);
-      console.log("user profile");
+      this.logger.log("userprofile", reply);
     });
     this.auth.authModel$.subscribe(reply => {
-      console.log("app component reply");
-      console.log(reply);
-      console.log("app component reply");
+      this.logger.log("authmodel", reply);
       this.authModel = reply;
     });
     this.auth.isAdmin$.subscribe(reply => {
-      console.log("app component is admin?");
-      console.log(reply);
+      this.logger.log("is admin", reply);
       this.isUserAdmin = reply;
     });
   }
 
   reloadPage() {
-    console.log("reload?");
+    this.logger.log("reloading", "");
     window.location.reload();
   }
 

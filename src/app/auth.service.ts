@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import createAuth0Client, { Auth0Client } from '@auth0/auth0-spa-js';
 import { BehaviorSubject, combineLatest, from, Observable, of, Subject, throwError } from 'rxjs';
 import { catchError, concatMap, shareReplay, tap } from 'rxjs/operators';
+import { LoggerService } from './logger.service';
 import { LoginService } from './login.service';
 import { UrlService } from './url.service';
 import { UserService } from './user.service';
@@ -56,15 +57,16 @@ export class AuthService {
     tap(res => {
       this.loggedIn = res;
       this.notLoading = true;
-      console.log("loggedIn is authenticated pipe" + this.loggedIn);
-      console.log("notLoading " + this.notLoading);
+      this.logger.log("isAuthenticated loggedin", this.loggedIn);
+      this.logger.log("isAuthenticated notloading", this.notLoading);
       // this.loading$.next(false);
     })
   );
   constructor(
     private router: Router,
     private urlService: UrlService,
-    private userService: UserService
+    private userService: UserService,
+    private logger: LoggerService,
   ) {
     // On initial load, check authentication state with authorization server
     // Set up local auth streams if user is already authenticated
@@ -98,8 +100,8 @@ export class AuthService {
     const checkAuth$ = this.isAuthenticated$.pipe(
       concatMap((loggedIn: boolean) => {
         if (loggedIn) {
-          console.log("loggedIn in checkauth pipe " + this.loggedIn);
-          console.log("notLoading " + this.notLoading);
+          this.logger.log("loggedIn in checkauth$", this.loggedIn);
+          this.logger.log("notloading", this.notLoading);
           // If authenticated, get user and set in app
           // NOTE: you could pass options here if needed
           return this.getUser$();
@@ -111,24 +113,17 @@ export class AuthService {
 
     const temp = this.getTokenSilently$();
     temp.subscribe(reply => {
-      console.log("subscribed to token silent");
-      console.log(reply);
-      console.log("subscribed to token silent");
+      this.logger.log("token", reply);
       // this.tryRetrieveUser();
     });
     this.userProfile$.subscribe(reply => {
-      console.log("subscribed to user profile in auth");
-      console.log(reply);
-      console.log("subscribed to user profile in auth");
+      this.logger.log("userprofile", reply);
       if (reply != null) {
         this.tryRetrieveUser(reply.sub);
-
       }
     });
     checkAuth$.subscribe((reply) => {
-      console.log("in checkAuth$ subscription");
-      console.log(reply);
-      console.log("in checkAuth$ subscription");
+      this.logger.log("in checkAuth$", reply);
       // this.tryRetrieveUser(reply.sub);
     }, () => { }, () => {
     });
@@ -139,18 +134,15 @@ export class AuthService {
   private tryRetrieveUser(userid: string) {
     this.userService.getUser(userid).then(reply => {
       this.authModel$.next(reply);
-
-      console.log(reply);
       if (reply.firstName == null && window.location.pathname != "/register") {
-        console.log("firstname null");
+        this.logger.log("new user", "");
         this.router.navigate(["register"]);
       }
       else {
         this.isUserAdmin(userid);
       }
     }).catch(err => {
-      console.error(err);
-      console.log("error getting user data" + err.message);
+      this.logger.error("in checkAuth$", err);
       this.isAdmin$.next(false);
     });
   }
@@ -171,11 +163,10 @@ export class AuthService {
   login(redirectPath: string = '/') {
     // A desired redirect path can be passed to login method
     // (e.g., from a route guard)
-    console.log("in login outside subscribe");
+    this.logger.log("logging in auth", "");
     // Ensure Auth0 client instance exists
     this.auth0Client$.subscribe((client: Auth0Client) => {
-      console.log("in login - this.auth0Client$.subscribe(");
-      console.log(client);
+      this.logger.log("auth0Client$", client);
       // Call method to log in
       client.loginWithRedirect({
         redirect_uri: `${window.location.origin}`,
@@ -206,8 +197,8 @@ export class AuthService {
       // Subscribe to authentication completion observable
       // Response will be an array of user and login status
       authComplete$.subscribe(([user, loggedIn]) => {
-        console.log("loggedIn in authcomplete " + this.loggedIn);
-        console.log("notLoading " + this.notLoading);
+        this.logger.log("loggedIn in authcomplete", this.loggedIn);
+        this.logger.log("notLoading", this.notLoading);
 
         // Redirect to target route after callback processing
         this.router.navigate([targetRoute]);

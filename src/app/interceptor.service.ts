@@ -9,6 +9,7 @@ import {
 import { AuthService } from './auth.service';
 import { Observable, of, throwError } from 'rxjs';
 import { mergeMap, catchError } from 'rxjs/operators';
+import { LoggerService } from './logger.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,11 +20,9 @@ import { mergeMap, catchError } from 'rxjs/operators';
 export class InterceptorService implements HttpInterceptor {
   loggedIn: boolean;
 
-  constructor(private auth: AuthService) {
+  constructor(private auth: AuthService, private logger: LoggerService) {
     auth.userProfile$.subscribe((reply) => {
-      console.log("in interceptor: " + reply);
-      console.log(reply);
-
+      this.logger.log("in interceptor", reply);
       this.loggedIn = reply;
     });
   }
@@ -31,7 +30,7 @@ export class InterceptorService implements HttpInterceptor {
   // runs on every request being made
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if (this.loggedIn) {
-      console.log("yes logged in in interceptor");
+      this.logger.log("loggedin into interceptor", "");
       return this.auth.getTokenSilently$().pipe(
         mergeMap(token => {
           const tokenReq = req.clone({
@@ -40,12 +39,12 @@ export class InterceptorService implements HttpInterceptor {
           return next.handle(tokenReq);
         }),
         catchError(err => {
-          console.log("injector error");
+          this.logger.error("injector error", "");
           return throwError(err);
         })
       );
     } else {
-      console.log("not logged in in interceptor");
+      this.logger.log("not loggedin into interceptor", "");
       return next.handle(req);
     }
   }

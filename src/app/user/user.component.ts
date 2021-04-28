@@ -3,6 +3,7 @@ import { Review, Discussion, Comment } from '../models';
 import { ActivatedRoute } from '@angular/router';
 import { LoginService } from '../login.service';
 import { HttpService } from '../http.service';
+import { LoggerService } from '../logger.service';
 
 @Component({
   selector: 'app-user',
@@ -25,7 +26,9 @@ export class UserComponent implements OnInit {
 
   displaySpoilers: any = false;
 
-  constructor(private router :ActivatedRoute, private _http: HttpService, private _login: LoginService, ) { }
+  constructor(
+    private logger: LoggerService,
+    private router: ActivatedRoute, private _http: HttpService, private _login: LoginService,) { }
 
   ngOnInit(): void {
 
@@ -34,8 +37,7 @@ export class UserComponent implements OnInit {
     this._login.getUserMovies(this.userName).subscribe(data => {
       this.userMovieNames = data;
 
-      if(this.userMovieNames)
-      {
+      if (this.userMovieNames) {
         this.userMovieNames.forEach(movieName => {
           // Get the Movie information for each favorited movie, for the poster image.
           this._http.getMovie(movieName).subscribe(movieData => {
@@ -47,55 +49,52 @@ export class UserComponent implements OnInit {
     });
 
     this._login.getUserDiscussions(this.userName).subscribe(data => {
-      if(data != null)
-      {
+      if (data != null) {
         this.userDiscussions = data;
       }
       this.discussionsAreLoaded = true;
     });
 
     this._login.getUserComments(this.userName).subscribe(data => {
-      if(data != null)
-      {
+      if (data != null) {
         this.userComments = data;
       }
       this.commentsAreLoaded = true;
     });
 
     this._login.getUserReviews(this.userName).subscribe(data => {
-      if(data != null)
-      {
+      if (data != null) {
         this.userReviews = data;
       }
       this.reviewsAreLoaded = true;
     });
   }
 
-  moviesLoaded(){
-  this.moviesAreLoaded = true;
-  console.log("movies are loaded");
+  moviesLoaded() {
+    this.moviesAreLoaded = true;
+    this.logger.log("", "movies are loaded");
   }
-  reviewsLoaded(){
+  reviewsLoaded() {
     this.reviewsAreLoaded = true;
-    console.log("reviews are loaded");
+    this.logger.log("", "reviews are loaded");
   }
-  discussionsLoaded(){
+  discussionsLoaded() {
     this.discussionsAreLoaded = true;
-    console.log("discussionsAreLoaded");
+    this.logger.log("", "discussionsAreLoaded");
   }
-  commentsLoaded(){
+  commentsLoaded() {
     this.commentsAreLoaded = true;
-    console.log("commentsAreLoaded");
+    this.logger.log("", "commentsAreLoaded");
   }
 
-  getUsername(){
-    console.log("username" + this.userName);
+  getUsername() {
+    this.logger.log("", "username" + this.userName);
     return this.userName;
   }
 
   showSpoilers() {
     this.displaySpoilers = true;
-    console.log(this.displaySpoilers);
+    this.logger.log("", this.displaySpoilers);
   }
 
   spoilersShown() {

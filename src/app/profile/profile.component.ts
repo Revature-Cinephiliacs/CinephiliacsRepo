@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { User, Review, Discussion, Comment } from '../models';
 import { LoginService } from '../login.service';
 import { HttpService } from '../http.service';
+import { LoggerService } from '../logger.service';
 
 @Component({
   selector: 'app-profile',
@@ -10,19 +11,19 @@ import { HttpService } from '../http.service';
 })
 export class ProfileComponent implements OnInit {
   @Input() currentUser: User = {
-    username:'',
-    firstname:'',
-    lastname:'',
-    email:'',
-    permissions:1
+    username: '',
+    firstname: '',
+    lastname: '',
+    email: '',
+    permissions: 1
   }
 
   editedUser: User = {
-    username:'',
-    firstname:'',
-    lastname:'',
-    email:'',
-    permissions:1
+    username: '',
+    firstname: '',
+    lastname: '',
+    email: '',
+    permissions: 1
   }
 
   userIsEditable: boolean = false;
@@ -39,7 +40,9 @@ export class ProfileComponent implements OnInit {
   userDiscussions: Discussion[] = [];
   userComments: Comment[] = [];
 
-  constructor(private _http: HttpService, private _login: LoginService) { }
+  constructor(
+    private logger: LoggerService,
+    private _http: HttpService, private _login: LoginService) { }
 
   ngOnInit(): void {
 
@@ -51,8 +54,7 @@ export class ProfileComponent implements OnInit {
     this._login.getUserMovies(this.currentUser.username).subscribe(data => {
       this.userMovieNames = data;
 
-      if(this.userMovieNames)
-      {
+      if (this.userMovieNames) {
         this.userMovieNames.forEach(movieName => {
           // Get the Movie information for each favorited movie, for the poster image.
           this._http.getMovie(movieName).subscribe(movieData => {
@@ -64,56 +66,52 @@ export class ProfileComponent implements OnInit {
     });
 
     this._login.getUserDiscussions(this.currentUser.username).subscribe(data => {
-      if(data != null)
-      {
+      if (data != null) {
         this.userDiscussions = data;
       }
       this.discussionsAreLoaded = true;
     });
 
     this._login.getUserComments(this.currentUser.username).subscribe(data => {
-      if(data != null)
-      {
+      if (data != null) {
         this.userComments = data;
       }
       this.commentsAreLoaded = true;
     });
 
     this._login.getUserReviews(this.currentUser.username).subscribe(data => {
-      if(data != null)
-      {
+      if (data != null) {
         this.userReviews = data;
       }
       this.reviewsAreLoaded = true;
     });
   }
 
-  moviesLoaded(){
-    console.log(this.moviesAreLoaded);
+  moviesLoaded() {
+    this.logger.log("", this.moviesAreLoaded);
     this.moviesAreLoaded = true;
     return this.moviesAreLoaded;
   }
-  reviewsLoaded(){
-    console.log(this.reviewsAreLoaded);
+  reviewsLoaded() {
+    this.logger.log("", this.reviewsAreLoaded);
     this.reviewsAreLoaded = true;
     return this.reviewsAreLoaded;
   }
-  dicussionsLoaded(){
-    console.log(this.discussionsAreLoaded);
+  dicussionsLoaded() {
+    this.logger.log("", this.discussionsAreLoaded);
     this.discussionsAreLoaded = true;
     return this.discussionsAreLoaded
   }
 
-  commentsLoaded(){
-    console.log(this.commentsAreLoaded);
+  commentsLoaded() {
+    this.logger.log("", this.commentsAreLoaded);
     this.commentsAreLoaded = true;
     return this.commentsAreLoaded;
   }
 
 
   updateUser(): void {
-    if(this.userIsEditable)
-    {
+    if (this.userIsEditable) {
       this.userIsUpdating = true;
       this.userIsEditable = false;
       this._login.postUpdateUser(this.currentUser.username, this.editedUser).subscribe(response => {
@@ -122,7 +120,7 @@ export class ProfileComponent implements OnInit {
           this.currentUser.firstname = data.firstname;
           this.currentUser.lastname = data.lastname;
           this.currentUser.email = data.email;
-          localStorage.setItem("loggedin",JSON.stringify(this.currentUser));
+          localStorage.setItem("loggedin", JSON.stringify(this.currentUser));
         });
         this.userIsUpdating = false;
       });
@@ -137,8 +135,7 @@ export class ProfileComponent implements OnInit {
   }
 
   editUser(): void {
-    if(!this.userIsUpdating)
-    {
+    if (!this.userIsUpdating) {
       this.userIsEditable = true;
     }
   }
