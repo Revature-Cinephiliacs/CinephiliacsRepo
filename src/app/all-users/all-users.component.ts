@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { LoggerService } from '../logger.service';
 
 @Component({
   selector: 'app-all-users',
@@ -8,14 +9,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AllUsersComponent implements OnInit {
 
-  users:any;
-  constructor(private http:HttpClient) { }
+  users: any;
+  constructor(private http: HttpClient,
+    private logger: LoggerService,
+  ) { }
 
   ngOnInit(): void {
     this.http.get("https://cinephiliacsapi.azurewebsites.net/user/users").subscribe(data => {
-      console.log(data);
-      this.users=data;
-  });
+      this.logger.log("", data);
+      this.users = data;
+    });
   }
 
 }

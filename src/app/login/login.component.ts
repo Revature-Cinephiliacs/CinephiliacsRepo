@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { LoggerService } from '../logger.service';
 import { LoginService } from '../login.service';
 import { User } from '../models';
 
@@ -9,11 +10,11 @@ import { User } from '../models';
 })
 export class LoginComponent implements OnInit {
   @Input() currentUser: User = {
-    username:'',
-    firstname:'',
-    lastname:'',
-    email:'',
-    permissions:1
+    username: '',
+    firstname: '',
+    lastname: '',
+    email: '',
+    permissions: 1
   }
   @Output() currentUserChange = new EventEmitter<User>();
 
@@ -24,51 +25,50 @@ export class LoginComponent implements OnInit {
   isLoginPage: boolean = true;
 
   newUser: any = {
-    username:'',
-    firstname:'',
-    lastname:'',
-    email:'',
-    permissions:1
+    username: '',
+    firstname: '',
+    lastname: '',
+    email: '',
+    permissions: 1
   }
 
-  constructor(private _login: LoginService) { }
+  constructor(
+    private logger: LoggerService,
+    private _login: LoginService) { }
 
   ngOnInit(): void {
   }
 
-  login(){
-    console.log("Login attempt" + this.userName);
+  login() {
+    this.logger.log("", "Login attempt" + this.userName);
     this._login.loginUser(this.userName).subscribe((data: User) => {
-      console.log(data);
-      if (data.lastname == this.password)
-      {
+      this.logger.log("", data);
+      if (data.lastname == this.password) {
         this.passwordNotOk = false;
         this.currentUser = data;
       }
       else {
         this.passwordNotOk = true;
-        setTimeout(() => { 
+        setTimeout(() => {
           this.passwordNotOk = false;
         }, 3000);
       }
-      console.log(this.currentUser.username);
+      this.logger.log("", this.currentUser.username);
       this.currentUserChange.emit(this.currentUser);
-      localStorage.setItem("loggedin",JSON.stringify(this.currentUser));
+      localStorage.setItem("loggedin", JSON.stringify(this.currentUser));
       return data;
     });
   }
 
   createUser() {
-    console.log("In Create");
-    if(!this.newUser.firstname || !this.newUser.lastname || !this.newUser.username ||!this.newUser.email)
-    {
-      console.log("Please fill in all data")
+    this.logger.log("", "In Create");
+    if (!this.newUser.firstname || !this.newUser.lastname || !this.newUser.username || !this.newUser.email) {
+      this.logger.log("", "Please fill in all data")
     }
-    else
-    {
-      console.log(JSON.stringify(this.newUser));
+    else {
+      this.logger.log("", JSON.stringify(this.newUser));
       this._login.createUser(this.newUser).subscribe(data => {
-        console.log(data);
+        this.logger.log("", data);
         this.currentUser = this.newUser;
         this.userName = this.currentUser.username;
         this.password = this.currentUser.lastname;
@@ -77,14 +77,14 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  getUserName(){
-    console.log(this.userName);
+  getUserName() {
+    this.logger.log("", this.userName);
     return this.userName;
   }
-  
 
-  isPasswordRigt(pass:string){
-    console.log("Checking");
+
+  isPasswordRigt(pass: string) {
+    this.logger.log("", "Checking");
     return (pass == this.password);
   }
 

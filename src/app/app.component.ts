@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, Validators} from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, Validators } from '@angular/forms';
+import { AuthService } from './auth.service';
+import { LoggerService } from './logger.service';
 
 @Component({
   selector: 'app-root',
@@ -12,28 +14,52 @@ export class AppComponent {
 
   headerSearch!: FormGroup;
 
-  constructor() { }
+  // use this to know who the user is
+  authModel: any;
+  // use this to determine if user is an admin
+  isUserAdmin: boolean;
+  // use this to determine if user is logged in
 
-  ngOnInit (): void {
+  constructor(public auth: AuthService, private logger: LoggerService) { }
+
+  ngOnInit(): void {
     this.headerSearch = new FormGroup({
       headSearch: new FormControl('', Validators.minLength(2))
     });
+    this.auth.userProfile$.subscribe(reply => {
+      this.logger.log("userprofile", reply);
+    });
+    this.auth.authModel$.subscribe(reply => {
+      this.logger.log("authmodel", reply);
+      this.authModel = reply;
+    });
+    this.auth.isAdmin$.subscribe(reply => {
+      this.logger.log("is admin", reply);
+      this.isUserAdmin = reply;
+    });
   }
-  
-  reloadPage(){
-    console.log("reload?");
+
+  reloadPage() {
+    this.logger.log("reloading", "");
     window.location.reload();
   }
 
   onSubmit() {
-    if (this.headerSearch.get('headSearch')!.value != "")
-    {
+    if (this.headerSearch.get('headSearch')!.value != "") {
       let searchParam = JSON.stringify(this.headerSearch.get('headSearch')!.value).substring(1, JSON.stringify(this.headerSearch.get('headSearch')!.value).length - 1);
-      window.location.href = "/list/" +  searchParam + "/1";
+      window.location.href = "/list/" + searchParam + "/1";
     }
   }
 
-  testCode(num:Number){
+  testLogin() {
+    this.auth.login();
+  }
+
+  testLogout() {
+    this.auth.logout();
+  }
+
+  testCode(num: Number) {
     return num;
   }
 }

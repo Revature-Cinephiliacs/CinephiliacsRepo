@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { LoggerService } from '../logger.service';
 import { User } from '../models'
 
 @Component({
@@ -9,41 +10,44 @@ import { User } from '../models'
 })
 export class HomeComponent implements OnInit {
   currentUser: User = {
-    username:'',
-    firstname:'',
-    lastname:'',
-    email:'',
-    permissions:1
+    username: '',
+    firstname: '',
+    lastname: '',
+    email: '',
+    permissions: 1
   }
 
-  constructor( ) { }
+  constructor(
+    private logger: LoggerService,
+
+  ) { }
 
   ngOnInit(): void {
 
     let userData = localStorage.getItem("loggedin");
-    if(userData != null) {
+    if (userData != null) {
       this.currentUser = JSON.parse(userData);
     }
   }
 
-  getCurrentUser(){
-    console.log(this.currentUser);
+  getCurrentUser() {
+    this.logger.log("", this.currentUser);
     return this.currentUser.username;
   }
-  getName(){
-    console.log(this.currentUser.firstname);
+  getName() {
+    this.logger.log("", this.currentUser.firstname);
     return this.currentUser.firstname;
   }
-  getEmail(){
-    console.log(this.currentUser.email);
+  getEmail() {
+    this.logger.log("", this.currentUser.email);
     return this.currentUser.email;
   }
-  getPermissions(){
-    console.log(this.currentUser.permissions);
+  getPermissions() {
+    this.logger.log("", this.currentUser.permissions);
     return this.currentUser.permissions;
   }
 
-  logout(){
+  logout() {
     this.currentUser.username = "";
     this.currentUser.firstname = "";
     this.currentUser.lastname = "";

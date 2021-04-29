@@ -3,116 +3,119 @@ import { Injectable } from '@angular/core';
 import { HttpService } from './http.service';
 import { AppComponent } from './app.component';
 import { User, Review, Discussion, Comment } from './models';
+import { LoggerService } from './logger.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
 
-  currentUser:string ="";
-  askingUser:string = "";
-  connection:string ="";
-  loggedIn:any;
+  currentUser: string = "";
+  askingUser: string = "";
+  connection: string = "";
+  loggedIn: any;
 
-  baseURL:string = "https://cinephiliacsapi.azurewebsites.net/";
+  baseURL: string = "https://cinephiliacsapi.azurewebsites.net/";
 
-  constructor(private http:HttpClient) { }
+  constructor(
+    private logger: LoggerService,
+    private http: HttpClient) { }
 
-  createUser(newUser:string){
-    return this.http.post(this.baseURL+ "user/",newUser);
+  createUser(newUser: string) {
+    return this.http.post(this.baseURL + "user/", newUser);
   }
 
-  loginUser(userName:string){
-    this.connection =  this.baseURL +"user/" + userName;
-    console.log(this.connection);
+  loginUser(userName: string) {
+    this.connection = this.baseURL + "user/" + userName;
+    this.logger.log("", this.connection);
     return this.http.get<User>(this.connection);
   }
 
-  getURL(){
+  getURL() {
     return this.baseURL;
   }
 
-  getTopics(){
-    return this.http.get( this.baseURL + "forum/topics");
+  getTopics() {
+    return this.http.get(this.baseURL + "forum/topics");
   }
 
 
-  getDiscussion(movieId:String){
-    return this.http.get( this.baseURL + "forum/discussions/"+movieId);
+  getDiscussion(movieId: String) {
+    return this.http.get(this.baseURL + "forum/discussions/" + movieId);
   }
 
-  getReviews(movieId:String){
-    return this.http.get( this.baseURL + "movie/reviews/"+movieId);
+  getReviews(movieId: String) {
+    return this.http.get(this.baseURL + "movie/reviews/" + movieId);
   }
 
-  getReviewsPage(movieId:String, page:number, sortOrder:string){
-    return this.http.get<Review[]>( this.baseURL + "movie/reviews/"+movieId+"/"+page+"/"+sortOrder);
+  getReviewsPage(movieId: String, page: number, sortOrder: string) {
+    return this.http.get<Review[]>(this.baseURL + "movie/reviews/" + movieId + "/" + page + "/" + sortOrder);
   }
 
-  submitDiscussion(discussion:any){
-    return this.http.post( this.baseURL + "forum/discussion", discussion);
+  submitDiscussion(discussion: any) {
+    return this.http.post(this.baseURL + "forum/discussion", discussion);
   }
 
-  postMovieId(movieID:string){
-    return this.http.post( this.baseURL + "movie/" +movieID,null);
+  postMovieId(movieID: string) {
+    return this.http.post(this.baseURL + "movie/" + movieID, null);
   }
 
-  postReview(sumbitReview:any){
-    return this.http.post( this.baseURL + "movie/review", sumbitReview);
+  postReview(sumbitReview: any) {
+    return this.http.post(this.baseURL + "movie/review", sumbitReview);
   }
 
-  getUser(username:string){
-    return this.http.get( this.baseURL + "user/"+ username);
+  getUser(username: string) {
+    return this.http.get(this.baseURL + "user/" + username);
   }
 
-  getConnection(){
-    console.log(this.connection);
+  getConnection() {
+    this.logger.log("", this.connection);
     return this.connection;
   }
 
-  getCurrentUser(){
-    console.log(this.currentUser);
+  getCurrentUser() {
+    this.logger.log("", this.currentUser);
     return this.currentUser;
   }
 
-  getAskingUser(){
-    console.log(this.askingUser);
+  getAskingUser() {
+    this.logger.log("", this.askingUser);
     return this.askingUser;
   }
 
-  getUserReviews(username:string){
-    return this.http.get<Review[]>( this.baseURL + "user/reviews/" + username);
+  getUserReviews(username: string) {
+    return this.http.get<Review[]>(this.baseURL + "user/reviews/" + username);
   }
 
-  getUserDiscussions(username:string){
-    return this.http.get<Discussion[]>( this.baseURL + "user/discussions/" + username);
+  getUserDiscussions(username: string) {
+    return this.http.get<Discussion[]>(this.baseURL + "user/discussions/" + username);
   }
 
-  getUserMovies(username:string){
-    return this.http.get<string[]>( this.baseURL + "user/movies/" + username);
+  getUserMovies(username: string) {
+    return this.http.get<string[]>(this.baseURL + "user/movies/" + username);
   }
 
-  getUserComments(username:string){
-    return this.http.get<Comment[]>( this.baseURL + "user/comments/" + username);
+  getUserComments(username: string) {
+    return this.http.get<Comment[]>(this.baseURL + "user/comments/" + username);
   }
 
-  postUpdateUser(username:string, updatedUser:User){
-    return this.http.post<User>( this.baseURL + "user/update/" + username, updatedUser);
+  postUpdateUser(username: string, updatedUser: User) {
+    return this.http.post<User>(this.baseURL + "user/update/" + username, updatedUser);
   }
 
-  getDiscussionComments(discussionID:string){
-    return this.http.get( this.baseURL + "forum/comments/" + discussionID);
+  getDiscussionComments(discussionID: string) {
+    return this.http.get(this.baseURL + "forum/comments/" + discussionID);
   }
 
-  getCurrentDiscussion(discussionID:string){
-    return this.http.get( this.baseURL + "forum/discussion/" + discussionID);
+  getCurrentDiscussion(discussionID: string) {
+    return this.http.get(this.baseURL + "forum/discussion/" + discussionID);
   }
 
-  postComment(newComment:any){
-    return this.http.post( this.baseURL + "Forum/comment",newComment);
+  postComment(newComment: any) {
+    return this.http.post(this.baseURL + "Forum/comment", newComment);
   }
-  followMovie(follower:string,follMovie:string){
-    return this.http.post(this.baseURL+"user/movie/" + follower + "/"+ follMovie,null);
+  followMovie(follower: string, follMovie: string) {
+    return this.http.post(this.baseURL + "user/movie/" + follower + "/" + follMovie, null);
   }
 
 }
