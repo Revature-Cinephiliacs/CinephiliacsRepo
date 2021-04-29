@@ -7,6 +7,14 @@ import { LoggerService } from '../logger.service';
 import { LoginService } from '../login.service';
 import { Review } from '../models';
 
+interface SubmiteReview {
+  rating: number,
+  movieid: string,
+  username: string,
+  text: string
+}
+
+
 @Component({
   selector: 'app-movie',
   templateUrl: './movie.component.html',
@@ -36,10 +44,10 @@ export class MovieComponent implements OnInit {
   reviewsBusy: boolean = false;
   lastPage: boolean = false;
 
-  sumbitReview: any = {
+  sumbitReview: SubmiteReview = {
     rating: 0,
     movieid: this.router.snapshot.params.id,
-    username: 0,
+    username: "0",
     text: ""
   }
 
