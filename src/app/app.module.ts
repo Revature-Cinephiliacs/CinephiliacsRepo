@@ -14,6 +14,7 @@ import { UserComponent } from './user/user.component';
 import { DiscussionComponent } from './discussion/discussion.component';
 import { LoginComponent } from './login/login.component';
 import { ProfileComponent } from './profile/profile.component';
+import { AdmintoolsComponent } from './admintools/admintools.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { ProfileComponent } from './profile/profile.component';
     UserComponent,
     DiscussionComponent,
     LoginComponent,
-    ProfileComponent
+    ProfileComponent,
+    AdmintoolsComponent
   ],
   imports: [
     BrowserModule,
