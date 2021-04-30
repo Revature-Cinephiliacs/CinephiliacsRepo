@@ -1,3 +1,5 @@
+//import { Moment } from "moment";
+
 export interface User {
   username: string,
   firstname: string,
@@ -27,4 +29,30 @@ export interface Comment {
   username: string,
   text: string,
   isspoiler: boolean
+}
+
+
+export interface ReportedItem {
+  ReportId?: number, // optional
+  ReportEntityType: ReportType,
+  ReportDescription: string,
+  ReportEnitityId: string,
+  //ReportTime: Moment,
+  Item: any
+}
+
+export enum ReportType {
+  Review = "Review",
+  Comment = "Comment",
+  Discussion = "Discussion"
+}
+
+export interface NewUser {
+  userid: string,
+  username: string,
+  firstname: string,
+  lastname: string,
+  email: string,
+  dateofbirth: string,
+  permissions: number
 }

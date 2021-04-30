@@ -11,60 +11,42 @@ import { UrlService } from './url.service';
 })
 export class UserService {
   // baseURL: string = "https://localhost:5001/user";
-  baseURL: string = "";
+  
   
 
   currentUser: string = "";
   askingUser: string = "";
   connection: string = "";
 
+  usersUrl: string = "";
+  movieUrl: string = "";
+  forumsUrl: string = "";
+  reviewsUrl: string = "";
+
   constructor(private http: HttpClient,
     private logger: LoggerService,
     private urlService: UrlService) {
-    this.baseURL = urlService.UserAPIUrl + "user";
+    this.usersUrl = urlService.UserAPIUrl;
+    this.movieUrl = urlService.MovieAPIUrl;
+    this.forumsUrl = urlService.ForumAPIUrl;
+    this.reviewsUrl = urlService.ReviewsAPIUrl;
   }
 
   getUser(userid: string): Promise<any> {
-    return this.http.get(this.baseURL + `/${userid}`).toPromise();
+    return this.http.get(this.usersUrl + `/${userid}`).toPromise();
   }
 
   isAdmin(userid: string): Promise<any> {
-    return this.http.get(this.baseURL + `/isadmin`).toPromise();
+    return this.http.get(this.usersUrl + `/isadmin`).toPromise();
+  }
+
+  postUpdateUser(username: string, updatedUser: User) {
+    return this.http.post<User>(this.usersUrl + "user/update/" + username, updatedUser);
   }
 
   getURL() {
-    return this.baseURL;
+    return this.usersUrl;
   }
-
-  getTopics() {
-    return this.http.get(this.baseURL + "forum/topics");
-  }
-
-
-  getDiscussion(movieId: String) {
-    return this.http.get(this.baseURL + "forum/discussions/" + movieId);
-  }
-
-  getReviews(movieId: String) {
-    return this.http.get(this.baseURL + "movie/reviews/" + movieId);
-  }
-
-  getReviewsPage(movieId: String, page: number, sortOrder: string) {
-    return this.http.get<Review[]>(this.baseURL + "movie/reviews/" + movieId + "/" + page + "/" + sortOrder);
-  }
-
-  submitDiscussion(discussion: any) {
-    return this.http.post(this.baseURL + "forum/discussion", discussion);
-  }
-
-  postMovieId(movieID: string) {
-    return this.http.post(this.baseURL + "movie/" + movieID, null);
-  }
-
-  postReview(sumbitReview: any) {
-    return this.http.post(this.baseURL + "movie/review", sumbitReview);
-  }
-
 
   getConnection() {
     this.logger.log("", this.connection);
@@ -81,32 +63,56 @@ export class UserService {
     return this.askingUser;
   }
 
-  getUserReviews(username: string) {
-    return this.http.get<Review[]>(this.baseURL + "user/reviews/" + username);
+//---------------------Review API ------------------------
+  postReview(sumbitReview: any) {
+    return this.http.post(this.reviewsUrl + "movie/review", sumbitReview);
   }
 
-  getUserDiscussions(username: string) {
-    return this.http.get<Discussion[]>(this.baseURL + "user/discussions/" + username);
+  getUserReviews(userId: string) {
+    return this.http.get<Review[]>(this.reviewsUrl + "reviews/ByUserId/" + userId);
   }
 
-  getUserMovies(username: string) {
-    return this.http.get<string[]>(this.baseURL + "user/movies/" + username);
+  //---------------------Forum API ------------------------
+  getTopics() {
+    return this.http.get(this.forumsUrl + "forum/topics");
   }
 
-  getUserComments(username: string) {
-    return this.http.get<Comment[]>(this.baseURL + "user/comments/" + username);
+  getUserDiscussions(userId: string) {
+    return this.http.get<Discussion[]>(this.forumsUrl + "forum/discussions/" + userId);
   }
 
-  postUpdateUser(username: string, updatedUser: User) {
-    return this.http.post<User>(this.baseURL + "user/update/" + username, updatedUser);
+  getUserComments(userId: string) {
+    return this.http.get<Comment[]>(this.forumsUrl + "forum/comments/" + userId);
   }
 
   postComment(newComment: any) {
-    return this.http.post(this.baseURL + "Forum/comment", newComment);
+    return this.http.post(this.forumsUrl + "forum/comment", newComment);
   }
-  
+
+  submitDiscussion(discussion: any) {
+    return this.http.post(this.forumsUrl + "forum/discussion", discussion);
+  }
+
+
+  //---------------------MOVIE API ------------------------
   followMovie(follower: string, follMovie: string) {
-    return this.http.post(this.baseURL + "user/movie/" + follower + "/" + follMovie, null);
+    return this.http.put(this.movieUrl + "movie/follow" + follMovie + "/"  + follower, null);
+  }
+
+  getUserMovies(userId: string) {
+    return this.http.get<string[]>(this.movieUrl + "movie/follow/" + userId);
+  }
+
+  postMovieId(movieID: string) {
+    return this.http.post(this.movieUrl + "movie/" + movieID, null);
+  }
+
+  getReviews(movieId: String) {
+    return this.http.get(this.movieUrl + "movie/reviews/" + movieId);
+  }
+
+  getReviewsPage(movieId: String, page: number, sortOrder: string) {
+    return this.http.get<Review[]>(this.movieUrl + "movie/reviews/" + movieId + "/" + page + "/" + sortOrder);
   }
 
 }

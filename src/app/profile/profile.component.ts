@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { User, Review, Discussion, Comment } from '../models';
 import { LoginService } from '../login.service';
+import { UserService } from '../user.service';
 import { HttpService } from '../http.service';
 import { LoggerService } from '../logger.service';
 
@@ -42,7 +43,9 @@ export class ProfileComponent implements OnInit {
 
   constructor(
     private logger: LoggerService,
-    private _http: HttpService, private _login: LoginService) { }
+    private _http: HttpService,
+    private _login: LoginService,
+     private _user: UserService) { }
 
   ngOnInit(): void {
 
@@ -51,7 +54,7 @@ export class ProfileComponent implements OnInit {
     this.editedUser.lastname = this.currentUser.lastname;
     this.editedUser.email = this.currentUser.email;
 
-    this._login.getUserMovies(this.currentUser.username).subscribe(data => {
+    this._user.getUserMovies(this.currentUser.username).subscribe(data => {
       this.userMovieNames = data;
 
       if (this.userMovieNames) {
@@ -65,21 +68,21 @@ export class ProfileComponent implements OnInit {
       this.moviesAreLoaded = true;
     });
 
-    this._login.getUserDiscussions(this.currentUser.username).subscribe(data => {
+    this._user.getUserDiscussions(this.currentUser.username).subscribe(data => {
       if (data != null) {
         this.userDiscussions = data;
       }
       this.discussionsAreLoaded = true;
     });
 
-    this._login.getUserComments(this.currentUser.username).subscribe(data => {
+    this._user.getUserComments(this.currentUser.username).subscribe(data => {
       if (data != null) {
         this.userComments = data;
       }
       this.commentsAreLoaded = true;
     });
 
-    this._login.getUserReviews(this.currentUser.username).subscribe(data => {
+    this._user.getUserReviews(this.currentUser.username).subscribe(data => {
       if (data != null) {
         this.userReviews = data;
       }
@@ -114,7 +117,7 @@ export class ProfileComponent implements OnInit {
     if (this.userIsEditable) {
       this.userIsUpdating = true;
       this.userIsEditable = false;
-      this._login.postUpdateUser(this.currentUser.username, this.editedUser).subscribe(response => {
+      this._user.postUpdateUser(this.currentUser.username, this.editedUser).subscribe(response => {
         // Once the update request has processed, use an API call to get the updated user information
         this._login.loginUser(this.currentUser.username).subscribe((data: User) => {
           this.currentUser.firstname = data.firstname;

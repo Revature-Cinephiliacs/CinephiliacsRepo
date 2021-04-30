@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Review, Discussion, Comment } from '../models';
+import { Review, Discussion, Comment, NewUser } from '../models';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../auth.service';
 
@@ -20,7 +20,7 @@ export class UserComponent implements OnInit {
   discussionsAreLoaded: boolean = false;
   commentsAreLoaded: boolean = false;
 
-  authModel: any;
+  authModel: NewUser;
 
   userMovieNames: string[] = [];
   userMovies: any[] = [];
@@ -29,7 +29,7 @@ export class UserComponent implements OnInit {
   userComments: Comment[] = [];
 
   displaySpoilers: any = false;
-
+  userID: string = '';
   constructor(
     private auth: AuthService,
     private logger: LoggerService,
@@ -42,10 +42,10 @@ export class UserComponent implements OnInit {
     this.auth.authModel$.subscribe(reply => {
       this.logger.log("authmodel", reply);
       this.authModel = reply;
-      console.log(this.authModel);
+      this.userID = reply.userid;
     });
 
-    this._user.getUserMovies(this.userName).subscribe(data => {
+    this._user.getUserMovies(this.userID).subscribe(data => {
       this.userMovieNames = data;
       console.log(data);
       if (this.userMovieNames) {
@@ -61,7 +61,7 @@ export class UserComponent implements OnInit {
 
 
 
-    this._user.getUserDiscussions(this.userName).subscribe(data => {
+    this._user.getUserDiscussions(this.userID).subscribe(data => {
       if (data != null) {
         this.userDiscussions = data;
         
@@ -69,14 +69,14 @@ export class UserComponent implements OnInit {
       this.discussionsAreLoaded = true;
     });
 
-    this._user.getUserComments(this.userName).subscribe(data => {
+    this._user.getUserComments(this.userID).subscribe(data => {
       if (data != null) {
         this.userComments = data;
       }
       this.commentsAreLoaded = true;
     });
 
-    this._user.getUserReviews(this.userName).subscribe(data => {
+    this._user.getUserReviews(this.userID).subscribe(data => {
       if (data != null) {
         this.userReviews = data;
       }

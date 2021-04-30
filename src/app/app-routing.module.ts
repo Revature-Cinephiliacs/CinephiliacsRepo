@@ -8,6 +8,7 @@ import { InterceptorService } from './interceptor.service';
 import { ListComponent } from './list/list.component';
 import { MovieComponent } from './movie/movie.component';
 import { UserComponent } from './user/user.component';
+import {ProfileComponent} from './profile/profile.component';
 
 
 
@@ -17,7 +18,9 @@ const routes: Routes = [
   { path: 'movie/:id', component: MovieComponent },
   { path: 'alluser', component: AllUsersComponent },
   { path: 'user/:username', component: UserComponent },
-  { path: 'discussion/:id', component: DiscussionComponent }
+  { path: 'discussion/:id', component: DiscussionComponent },
+  { path: 'profile/:username', component: ProfileComponent},
+  { path: '**', component: HomeComponent },
 ];
 
 @NgModule({
