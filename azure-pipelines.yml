@@ -22,7 +22,7 @@ steps:
   inputs:
     command: 'install'
 
-- script: npx ng build --prod
+- script: npx ng build
   displayName: ng build
 
 # below is azure deploy
