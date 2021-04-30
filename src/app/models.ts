@@ -46,3 +46,13 @@ export enum ReportType {
   Comment = "Comment",
   Discussion = "Discussion"
 }
+
+export interface NewUser {
+  userid: string,
+  username: string,
+  firstname: string,
+  lastname: string,
+  email: string,
+  dateofbirth: string,
+  permissions: number
+}
