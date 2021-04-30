@@ -27,7 +27,7 @@ steps:
   displayName: ng build
 
 # below is azure deploy
-tasks:
+
 - task: AzureRmWebAppDeployment@4
   inputs:
     ConnectionType: 'AzureRM'
