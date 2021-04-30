@@ -13,6 +13,11 @@ export class ReviewService {
     this.reviewBaseURL = urlService.ReviewsAPIUrl + "review/";
   }
 
+  //Gets a list of reviews for a given userid
+  getUserReviews(userid: string)
+  {
+    return this.http.get<Review[]>( this.reviewBaseURL + "ByUserId/" + userid);
+  }
   //Function that will call the Review Microservice API review page endpoint
   //to get a page of reviews
   getMovieReviewsPage(movieId: String, page: number, sortOrder: string){
@@ -25,4 +30,6 @@ export class ReviewService {
   {
     return this.http.post( this.reviewBaseURL + "reviewDto", review);
   }
+
+
 }
