@@ -4,6 +4,7 @@ import { HttpService } from './http.service';
 import { AppComponent } from './app.component';
 import { User, Review, Discussion, Comment } from './models';
 import { LoggerService } from './logger.service';
+import { UrlService } from './url.service'
 
 @Injectable({
   providedIn: 'root'
@@ -15,11 +16,12 @@ export class LoginService {
   connection: string = "";
   loggedIn: any;
 
-  baseURL: string = "https://cinephiliacsapi.azurewebsites.net/";
+  baseURL: string = "http://20.45.2.119/";
 
   constructor(
     private logger: LoggerService,
-    private http: HttpClient) { }
+    private http: HttpClient,
+    private urlService: UrlService) { }
 
   createUser(newUser: string) {
     return this.http.post(this.baseURL + "user/", newUser);

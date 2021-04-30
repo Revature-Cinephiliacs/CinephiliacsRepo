@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Review, Discussion, Comment } from '../models';
 import { ActivatedRoute } from '@angular/router';
-import { LoginService } from '../login.service';
+import { AuthService } from '../auth.service';
+
 import { HttpService } from '../http.service';
 import { LoggerService } from '../logger.service';
+import {UserService} from '../user.service'
 
 @Component({
   selector: 'app-user',
@@ -18,6 +20,8 @@ export class UserComponent implements OnInit {
   discussionsAreLoaded: boolean = false;
   commentsAreLoaded: boolean = false;
 
+  authModel: any;
+
   userMovieNames: string[] = [];
   userMovies: any[] = [];
   userReviews: Review[] = [];
@@ -27,16 +31,23 @@ export class UserComponent implements OnInit {
   displaySpoilers: any = false;
 
   constructor(
+    private auth: AuthService,
     private logger: LoggerService,
-    private router: ActivatedRoute, private _http: HttpService, private _login: LoginService,) { }
+    private router: ActivatedRoute, private _http: HttpService, private _user: UserService,) { }
 
   ngOnInit(): void {
 
     this.userName = this.router.snapshot.params.username;
 
-    this._login.getUserMovies(this.userName).subscribe(data => {
-      this.userMovieNames = data;
+    this.auth.authModel$.subscribe(reply => {
+      this.logger.log("authmodel", reply);
+      this.authModel = reply;
+      console.log(this.authModel);
+    });
 
+    this._user.getUserMovies(this.userName).subscribe(data => {
+      this.userMovieNames = data;
+      console.log(data);
       if (this.userMovieNames) {
         this.userMovieNames.forEach(movieName => {
           // Get the Movie information for each favorited movie, for the poster image.
@@ -48,21 +59,24 @@ export class UserComponent implements OnInit {
       this.moviesAreLoaded = true;
     });
 
-    this._login.getUserDiscussions(this.userName).subscribe(data => {
+
+
+    this._user.getUserDiscussions(this.userName).subscribe(data => {
       if (data != null) {
         this.userDiscussions = data;
+        
       }
       this.discussionsAreLoaded = true;
     });
 
-    this._login.getUserComments(this.userName).subscribe(data => {
+    this._user.getUserComments(this.userName).subscribe(data => {
       if (data != null) {
         this.userComments = data;
       }
       this.commentsAreLoaded = true;
     });
 
-    this._login.getUserReviews(this.userName).subscribe(data => {
+    this._user.getUserReviews(this.userName).subscribe(data => {
       if (data != null) {
         this.userReviews = data;
       }
@@ -74,14 +88,17 @@ export class UserComponent implements OnInit {
     this.moviesAreLoaded = true;
     this.logger.log("", "movies are loaded");
   }
+
   reviewsLoaded() {
     this.reviewsAreLoaded = true;
     this.logger.log("", "reviews are loaded");
   }
+
   discussionsLoaded() {
     this.discussionsAreLoaded = true;
     this.logger.log("", "discussionsAreLoaded");
   }
+
   commentsLoaded() {
     this.commentsAreLoaded = true;
     this.logger.log("", "commentsAreLoaded");

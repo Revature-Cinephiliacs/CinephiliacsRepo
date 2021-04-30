@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
 
   login() {
     this.logger.log("", "Login attempt" + this.userName);
-    this._login.loginUser(this.userName).subscribe((data: User) => {
+    this._login.getUser(this.userName).subscribe((data: User) => {
       this.logger.log("", data);
       if (data.lastname == this.password) {
         this.passwordNotOk = false;
