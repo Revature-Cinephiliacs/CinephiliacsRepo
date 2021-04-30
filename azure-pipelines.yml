@@ -9,7 +9,6 @@ pool:
   vmImage: windows-latest
 
 variables:
-  solution: "CinephiliacsRepo"
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
@@ -34,4 +33,4 @@ steps:
     azureSubscription: 'Project-3-Training(e37a1117-750a-4552-bb20-e84ed6f3c85d)'
     appType: 'webApp'
     WebAppName: 'cinephiliacsapp'
-    packageForLinux: '$(solution)/dist/CinephiliacsRepo'
+    packageForLinux: 'dist/CinephiliacsRepo'
