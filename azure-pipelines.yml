@@ -49,5 +49,5 @@ steps:
     azureSubscription: 'Project-3-Training(e37a1117-750a-4552-bb20-e84ed6f3c85d)'
     appType: 'webApp'
     WebAppName: 'cinephiliacsapp'
-    package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip 
+    package: $(Pipeline.Workspace)/drop
     # packageForLinux: 'dist/CinephiliacsRepo'
