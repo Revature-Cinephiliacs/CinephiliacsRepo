@@ -1,5 +1,6 @@
 <div *ngIf="selectedMovie" class="movieinfo">
-    <h1>{{ selectedMovie.Title }}</h1>
+  {{movieFollowed}}
+    <h1>{{ selectedMovie.title }}</h1>
     <div *ngIf="user">
       <div *ngIf="movieFollowed then thenFBlock else elseFBlock"></div>
       <ng-template #thenFBlock>
@@ -12,23 +13,24 @@
 
     <ul>
         <li>
-            <img src="{{selectedMovie.Poster}}" alt="Movie Poster">
+            <img src="{{selectedMovie.posterURL}}" alt="Movie Poster">
             <div class="information">
-                <p class="name"><strong>Title:</strong> {{ selectedMovie.Title }}</p>
+                <p class="name"><strong>Title:</strong> {{ selectedMovie.title }}</p>
                 <p *ngIf="reviews.length > 0" class="reviewscore"><strong>User Review Score: </strong>{{ reviewScore.toFixed(1) }}</p>
-                <p class="year"><strong>Year(s):</strong> {{ selectedMovie.Year }}<span *ngIf="selectedMovie.Year.substring(selectedMovie.Year.length - 1)=='–'">present</span></p>
-                <p class="date"><strong>Release Date:</strong> {{ selectedMovie.Released }}</p>
-                <p class="runtime"><strong>Runtime:</strong> {{ selectedMovie.Runtime }}</p>
-                <p class="genre"><strong>Genre:</strong> {{ selectedMovie.Genre }}</p>
-                <p class="directors"><strong>Director(s):</strong> {{ selectedMovie.Director }}</p>
+                <p class = "year"><strong>Year: </strong> {{ selectedMovie.releaseDate | date: 'yyyy' }} </p>
+                <p class="date"><strong>Release Date</strong>: {{ selectedMovie.releaseDate}} </p>
+                <p class="runtime"><strong>Runtime:</strong> {{ selectedMovie.runtimeMinutes }}</p>
+                <p class="genre"><strong>Genre:</strong> {{ selectedMovie.movieGenres }}</p>
+                <p class="directors"><strong>Director(s):</strong> {{ selectedMovie.movieDirectors }}</p>
                 <p class="writers"><strong>Writer(s):</strong> {{ selectedMovie.Writer }}</p>
-                <p class="actors"><strong>Actors:</strong> {{ selectedMovie.Actors }}</p>
+                <p class="actors"><strong>Actors:</strong> {{ selectedMovie.movieActors }}</p>
                 <p class="awards"><strong>Awards:</strong> {{ selectedMovie.Awards }}</p>
-                <p class="plot"><strong>Plot Summary:</strong> {{ selectedMovie.Plot }}</p>
+                <p class="plot"><strong>Plot Summary:</strong> {{selectedMovie.plot}}</p>
                 <!-- <p class="id">{{ selectedMovie.imdbID }}</p> -->
             </div>
         </li>
     </ul>
+    
 </div>
 
 <div class="left">
@@ -40,9 +42,9 @@
       <span class="sort lastchild" (click)="ratingSortNext()" [class.selected]="ratingActive">{{ratingSortString}}</span>
       <ul>
           <li *ngFor="let review of reviews">
-              <p class="rating">{{ review.rating}}</p>
-              <u routerLink ="/user/{{review.username}}" class="username">{{ review.username}}</u>
-              <p >{{ review.text}}</p>
+              <p class="rating">{{ review.score}}</p>
+              <u routerLink ="/user/{{review.usernameid}}" class="username">{{ review.usernameid}}</u>
+              <p >{{ review.review}}</p>
 
           </li>
       </ul>

@@ -1,6 +1,7 @@
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AdmintoolsComponent } from './admintools/admintools.component';
 import { AllUsersComponent } from './all-users/all-users.component';
 import { DiscussionComponent } from './discussion/discussion.component';
 import { HomeComponent } from './home/home.component';
@@ -21,6 +22,7 @@ const routes: Routes = [
   { path: 'discussion/:id', component: DiscussionComponent },
   { path: 'profile/:username', component: ProfileComponent},
   { path: '**', component: HomeComponent },
+  { path: 'admin', component: AdmintoolsComponent  },
 ];
 
 @NgModule({

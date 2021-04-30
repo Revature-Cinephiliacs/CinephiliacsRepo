@@ -6,6 +6,8 @@ import { AuthService } from '../auth.service';
 import { HttpService } from '../http.service';
 import { LoggerService } from '../logger.service';
 import {UserService} from '../user.service'
+import { MoviepageService} from '../moviepage.service';
+import {ReviewService} from '../review.service';
 
 @Component({
   selector: 'app-user',
@@ -32,6 +34,8 @@ export class UserComponent implements OnInit {
   userID: string = '';
   constructor(
     private auth: AuthService,
+    private _review: ReviewService,
+    private _movie: MoviepageService,
     private logger: LoggerService,
     private router: ActivatedRoute, private _http: HttpService, private _user: UserService,) { }
 
@@ -45,7 +49,7 @@ export class UserComponent implements OnInit {
       this.userID = reply.userid;
     });
 
-    this._user.getUserMovies(this.userID).subscribe(data => {
+    this._movie.getUserFollowingMovies(this.userID).subscribe(data => {
       this.userMovieNames = data;
       console.log(data);
       if (this.userMovieNames) {
@@ -76,7 +80,7 @@ export class UserComponent implements OnInit {
       this.commentsAreLoaded = true;
     });
 
-    this._user.getUserReviews(this.userID).subscribe(data => {
+    this._review.getUserReviews(this.userID).subscribe(data => {
       if (data != null) {
         this.userReviews = data;
       }

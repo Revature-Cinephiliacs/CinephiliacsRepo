@@ -9,10 +9,12 @@ export interface User {
 }
 
 export interface Review {
-  movieid: string,
-  username: string,
-  rating: string,
-  text: string
+  creationTime: string,
+  imdbid: string,
+  review: string,
+  reviewid: string,
+  score: string,
+  usernameid: string
 }
 
 export interface Discussion {
@@ -29,6 +31,36 @@ export interface Comment {
   username: string,
   text: string,
   isspoiler: boolean
+}
+
+export class Movie {
+  imdbId: string;
+  title: string;
+  ratingName: string;
+  releaseDate: string;
+  releaseCountry: string;
+  runtimeMinutes: number;
+  isReleased: boolean;
+  plot: string;  
+  posterURL: string[];
+  movieDirectors: string[];
+  movieGenres: string[];
+  movieLanguages: string[];
+  movieTags: string[];
+}
+
+export class PostDiscussion {
+  movieid: string;
+  userid: string;
+  subject: string;
+  topic: string;
+}
+
+export class PostReview {
+  imdbid: string;
+  usernameid: string;
+  score: number;
+  review: string;
 }
 
 

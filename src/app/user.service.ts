@@ -11,8 +11,6 @@ import { UrlService } from './url.service';
 })
 export class UserService {
   // baseURL: string = "https://localhost:5001/user";
-  
-  
 
   currentUser: string = "";
   askingUser: string = "";
@@ -32,16 +30,44 @@ export class UserService {
     this.reviewsUrl = urlService.ReviewsAPIUrl;
   }
 
+  //Funtion that call User MSA to get userinfo by sending userID
   getUser(userid: string): Promise<any> {
     return this.http.get(this.usersUrl + `/${userid}`).toPromise();
   }
 
-  isAdmin(userid: string): Promise<any> {
-    return this.http.get(this.usersUrl + `/isadmin`).toPromise();
+  //Functio that call User MSA to get all users
+  getAlUser(){
+    return this.http.get<User[]>(this.usersUrl + "user/users")
   }
 
+  //Function that call User MSA to check if user is admin or not
+  isAdmin(userid: string): Promise<any> {
+    return this.http.get(this.usersUrl + `user/isadmin`).toPromise();
+  }
+
+  //Function that call User MSA to updae user infromation.
   postUpdateUser(username: string, updatedUser: User) {
     return this.http.post<User>(this.usersUrl + "user/update/" + username, updatedUser);
+  }
+
+  // Function that call User MSA to post/creat new user
+  postUser(user: User){
+    return this.http.post<User>(this.usersUrl + "user/", user);
+  }
+
+  //Function to get user's age
+  getUerAge(userId: string){
+    return this.http.get(this.usersUrl + "/user/age" + userId)
+  }
+
+  //Function to Add a new follower->followee relationship for a user
+  followUser(follower: string, followee: string){
+    return this.http.post<User>(this.usersUrl + "user/" + follower + followee, null);
+  }
+
+  // Function to get list of all the users someone is following from their userid
+  getFollowedUserList(userId: string){
+    return this.http.get(this.usersUrl + "/user/followlist" + userId);
   }
 
   getURL() {
@@ -63,15 +89,6 @@ export class UserService {
     return this.askingUser;
   }
 
-//---------------------Review API ------------------------
-  postReview(sumbitReview: any) {
-    return this.http.post(this.reviewsUrl + "movie/review", sumbitReview);
-  }
-
-  getUserReviews(userId: string) {
-    return this.http.get<Review[]>(this.reviewsUrl + "reviews/ByUserId/" + userId);
-  }
-
   //---------------------Forum API ------------------------
   getTopics() {
     return this.http.get(this.forumsUrl + "forum/topics");
@@ -91,28 +108,6 @@ export class UserService {
 
   submitDiscussion(discussion: any) {
     return this.http.post(this.forumsUrl + "forum/discussion", discussion);
-  }
-
-
-  //---------------------MOVIE API ------------------------
-  followMovie(follower: string, follMovie: string) {
-    return this.http.put(this.movieUrl + "movie/follow" + follMovie + "/"  + follower, null);
-  }
-
-  getUserMovies(userId: string) {
-    return this.http.get<string[]>(this.movieUrl + "movie/follow/" + userId);
-  }
-
-  postMovieId(movieID: string) {
-    return this.http.post(this.movieUrl + "movie/" + movieID, null);
-  }
-
-  getReviews(movieId: String) {
-    return this.http.get(this.movieUrl + "movie/reviews/" + movieId);
-  }
-
-  getReviewsPage(movieId: String, page: number, sortOrder: string) {
-    return this.http.get<Review[]>(this.movieUrl + "movie/reviews/" + movieId + "/" + page + "/" + sortOrder);
   }
 
 }

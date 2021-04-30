@@ -4,6 +4,8 @@ import { LoginService } from '../login.service';
 import { UserService } from '../user.service';
 import { HttpService } from '../http.service';
 import { LoggerService } from '../logger.service';
+import { MoviepageService } from '../moviepage.service';
+import { ReviewService } from '../review.service';
 
 @Component({
   selector: 'app-profile',
@@ -45,6 +47,8 @@ export class ProfileComponent implements OnInit {
     private logger: LoggerService,
     private _http: HttpService,
     private _login: LoginService,
+    private _movie: MoviepageService,
+    private _review: ReviewService,
      private _user: UserService) { }
 
   ngOnInit(): void {
@@ -54,7 +58,7 @@ export class ProfileComponent implements OnInit {
     this.editedUser.lastname = this.currentUser.lastname;
     this.editedUser.email = this.currentUser.email;
 
-    this._user.getUserMovies(this.currentUser.username).subscribe(data => {
+    this._movie.getUserFollowingMovies(this.currentUser.username).subscribe(data => {
       this.userMovieNames = data;
 
       if (this.userMovieNames) {
@@ -82,7 +86,7 @@ export class ProfileComponent implements OnInit {
       this.commentsAreLoaded = true;
     });
 
-    this._user.getUserReviews(this.currentUser.username).subscribe(data => {
+    this._review.getUserReviews(this.currentUser.username).subscribe(data => {
       if (data != null) {
         this.userReviews = data;
       }

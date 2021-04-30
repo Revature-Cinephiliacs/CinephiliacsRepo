@@ -17,26 +17,55 @@ export class AdminService {
     this.reviewsUrl = urlService.ReviewsAPIUrl;
   }
 
+  /**
+   * Get all reports from admin tools
+   * @returns 
+   */
   getReports(): Promise<ReportedItem> {
     return this.http.get<ReportedItem>(this.adminUrl + "Tickets").toPromise();
   }
 
+  /**
+   * Report any item in a model of a ReportedItem
+   * @param item 
+   * @returns 
+   */
   ReportItem(item: ReportedItem): Promise<any> {
     return this.http.post<any>(this.adminUrl + "Reports", item).toPromise();
   }
 
+  /**
+   * delete a comment
+   * @param commentId 
+   * @returns
+   */
   deleteComment(commentId: string) {
     return this.http.delete<any>(this.forumsUrl + `forum/comment/${commentId}`).toPromise();
   }
 
+  /**
+   * delete a discussion
+   * @param discussionId 
+   * @returns 
+   */
   deleteDiscussion(discussionId: string) {
     return this.http.delete<any>(this.forumsUrl + `forum/discussion/${discussionId}`).toPromise();
   }
 
+  /**
+   * delete a review
+   * @param reviewId 
+   * @returns 
+   */
   deleteReview(reviewId: string) {
     return this.http.delete<any>(this.reviewsUrl + `Review/delete/${reviewId}`).toPromise();
   }
 
+  /**
+   * Transform the list of combined Reported Items
+   * @param reportedItemsList 
+   * @returns 
+   */
   GetFromReportedItems(reportedItemsList: ReportedItem[]) {
     return {
       "comments": reportedItemsList.filter(item => { item.ReportEntityType == ReportType.Comment }),
