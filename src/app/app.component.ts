@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { AuthService } from './auth.service';
 import { LoggerService } from './logger.service';
-import { NewUser } from './models';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +15,7 @@ export class AppComponent {
   headerSearch!: FormGroup;
 
   // use this to know who the user is
-  authModel: NewUser;
+  authModel: any;
   // use this to determine if user is an admin
   isUserAdmin: boolean;
   // use this to determine if user is logged in

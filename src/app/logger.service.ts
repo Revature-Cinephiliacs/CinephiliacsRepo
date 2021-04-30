@@ -8,12 +8,10 @@ export class LoggerService {
   constructor() { }
 
   log(subject: string, info: any) {
-    console.log("", new Date() + ": " + subject + ":");
-    console.log(info);
+    console.log("", new Date() + ": " + subject + " - " + info);
   }
 
   error(subject: string, info: any) {
-    console.error(new Date() + ": " + subject + ":");
-    console.error(info);
+    console.error(new Date() + ": " + subject + " - " + info);
   }
 }
