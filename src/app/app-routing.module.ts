@@ -17,7 +17,8 @@ const routes: Routes = [
   { path: 'movie/:id', component: MovieComponent },
   { path: 'alluser', component: AllUsersComponent },
   { path: 'user/:username', component: UserComponent },
-  { path: 'discussion/:id', component: DiscussionComponent }
+  { path: 'discussion/:id', component: DiscussionComponent },
+  { path: '**', component: HomeComponent },
 ];
 
 @NgModule({
