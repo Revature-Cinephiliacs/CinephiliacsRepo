@@ -9,6 +9,7 @@ pool:
   vmImage: windows-latest
 
 variables:
+  solution: "CinephiliacsRepo"
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
