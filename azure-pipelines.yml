@@ -21,12 +21,14 @@ steps:
 - task: Npm@1
   inputs:
     command: 'install'
+    #may need 'workingDir: $(solution)'
 
 - task: Npm@1
   inputs:
     command: 'custom'
-    customCommand: 'run build'
-    verbose: true
+    #may need 'workingDir: $(solution)'
+    customCommand: 'run build --prod'
+    #verbose: true
 
 - task: ArchiveFiles@2
   inputs:
@@ -36,8 +38,14 @@ steps:
     archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
     replaceExistingArchive: true
 
-# below is azure deploy
+# Publish Artifacts
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    artifactName: 'dist'
+    # publishLocation: 'Container'
 
+# below is azure deploy
 # - task: AzureRmWebAppDeployment@4
 #   inputs:
 #     ConnectionType: 'AzureRM'
@@ -54,4 +62,4 @@ steps:
     azureSubscription: 'Project-3-Training(1)(e37a1117-750a-4552-bb20-e84ed6f3c85d)'
     appType: 'webApp'
     WebAppName: 'cinephiliacsapp'
-    packageForLinux: '$(Build.ArtifactStagingDirectory)/**/*.zip'
+    packageForLinux: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
