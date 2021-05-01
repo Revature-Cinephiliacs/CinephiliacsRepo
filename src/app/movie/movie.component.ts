@@ -9,6 +9,9 @@ import { LoginService } from '../login.service';
 import { Movie, PostDiscussion, PostReview, Review } from '../models';
 import { MoviepageService } from '../moviepage.service';
 import { ReviewService } from '../review.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { AdminService } from '../admin.service';
+import {ReportedItem, ReportType,Comment} from '../models';
 
 interface SubmiteReview {
   rating: number,
@@ -46,6 +49,9 @@ export class MovieComponent implements OnInit {
   reviewsBusy: boolean = false;
   lastPage: boolean = false;
 
+  reportReview:FormGroup;
+  newReport: ReportedItem;
+
   sumbitReview: PostReview = {
     imdbid: this.router.snapshot.params.id,
     usernameid: "0",
@@ -70,7 +76,9 @@ export class MovieComponent implements OnInit {
     private router: ActivatedRoute, private _http: HttpService,
     private authService: AuthService,
     private movieService: MoviepageService,
-    private reviewService: ReviewService) { }
+    private fb: FormBuilder,
+    private reviewService: ReviewService,
+    private admin: AdminService) { }
 
   ngOnInit(): void {
 
@@ -80,6 +88,8 @@ export class MovieComponent implements OnInit {
       this.username = reply.username;
       console.log(this.authModel);
     });
+    
+
     
     this.logger.log("", this.router.snapshot.params);
     this.inputFields();
@@ -120,6 +130,11 @@ export class MovieComponent implements OnInit {
     else {
       this.logger.log("", "user isn't set");
     }
+
+    //Creating Form for Reporting
+    this.reportReview = this.fb.group({
+      reportComment:['']
+    });
 
     //saving a reference to the database of movies interacted with
     // this._login.postMovieId(this.movieID).subscribe(data => this.logger.log("", "submitted"));
@@ -311,6 +326,31 @@ export class MovieComponent implements OnInit {
 
       this.logger.log("", "no User");
     }
+  }
+
+  //DeleteReviewby id
+  deleteDiscussion(reviewID){
+    this.admin.deleteReview(reviewID);
+  }
+
+  //Report Review
+  reviewReport(reportedReview,reportDescription){
+        //clear report
+        this.newReport ={
+          ReportId: null,
+           ReportEntityType: ReportType.Review,
+          ReportDescription: "",
+          ReportEnitityId: "",
+          ReportTime: new Date,
+           Item: null
+          };
+          console.log(this.reportReview);
+          this.newReport.Item = reportedReview;
+          this.newReport.ReportEntityType = ReportType.Review;
+          this.newReport.ReportDescription = reportDescription;
+          this.newReport.ReportEnitityId = reportedReview.reviewid.toString();
+          console.log(this.newReport);
+          this.admin.ReportItem(this.newReport);
   }
 
 }

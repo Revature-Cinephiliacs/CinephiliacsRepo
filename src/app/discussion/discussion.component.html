@@ -1,4 +1,13 @@
 <h1>{{subject}}</h1>
+<!--Admin Tools-->
+<button (click)="deleteDiscussion()">Delete Discussion</button>
+<!--Report Tools-->
+<form [formGroup]="discussionReport" (ngSubmit)="reportDiscussion(discussionReport.value.disReport)" >
+    <label for="fname">Report Discussion</label><br>
+    <input type="text" formControlName="disReport"><br>
+    <input type="submit" value="Submit">
+</form> 
+
 
 <div *ngIf="comments">
     <ul>
@@ -10,7 +19,16 @@
                 <a routerLink="/user/{{comment.username}}" class="username">{{ comment.username }}</a>
                 <div class="commenttext">{{comment.text}}</div>
                 <button (click)="deleteComment(comment.commentid)">deleteComment</button>
+
+                <!--Admin Tools-->
                 <button (click)="reportComment(comment,'test')">Report Comment</button>
+
+                <!--Report Tools-->
+                <form [formGroup]="commentReport" (ngSubmit)="reportComment(comment,commentReport.value.comReport)" >
+                    <label for="fname">CommentReport</label><br>
+                    <input type="text" formControlName="comReport"><br>
+                    <input type="submit" value="Submit">
+                </form> 
             </div>
         </li>
     </ul>

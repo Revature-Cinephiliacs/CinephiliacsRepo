@@ -41,7 +41,14 @@
               <p class="rating">{{ review.rating}}</p>
               <u routerLink ="/user/{{review.username}}" class="username">{{ review.username}}</u>
               <p >{{ review.text}}</p>
-
+              <!--Admin Tools-->
+              <button (click)="deleteReview(review.reviewid)">Delete Review</button>
+              <!--Report Tools-->
+              <form [formGroup]="reviewReport" (ngSubmit)="reportReview(review,reviewReport.value.revReport)" >
+                <label>Report Review</label><br>
+                <input type="text" formControlName="revReport"><br>
+                <input type="submit" value="Submit">
+              </form> 
           </li>
       </ul>
       <button *ngIf="!lastPage" (click)="loadNextPage()">More Reviews</button>
