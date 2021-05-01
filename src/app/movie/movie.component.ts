@@ -4,9 +4,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpService } from '../http.service';
 import { LoggerService } from '../logger.service';
-import { AuthService} from '../auth.service';
+import { AuthService } from '../auth.service';
 import { LoginService } from '../login.service';
-import { Movie, PostDiscussion, PostReview, Review } from '../models';
+import { Movie, NewUser, PostDiscussion, PostReview, Review } from '../models';
 import { MoviepageService } from '../moviepage.service';
 import { ReviewService } from '../review.service';
 
@@ -63,7 +63,7 @@ export class MovieComponent implements OnInit {
   topics: any;
   userId: string;
   username: string;
-  authModel: any;
+  authModel: NewUser;
 
   constructor(
     private logger: LoggerService,
@@ -76,11 +76,12 @@ export class MovieComponent implements OnInit {
 
     this.authService.authModel$.subscribe(reply => {
       this.logger.log("authmodel", reply);
+      this.authModel = reply
       this.userId = reply.userid;
       this.username = reply.username;
-      console.log(this.authModel);
+      this.logger.log("this authmodel", this.authModel)
     });
-    
+
     this.logger.log("", this.router.snapshot.params);
     this.inputFields();
     this.movieService.getMovieTags().subscribe(data => {
@@ -263,7 +264,7 @@ export class MovieComponent implements OnInit {
   //Function for a user to follow a given movie
   followMovie() {
     if (this.userId) {
-      this.movieService.addMovieToFollowing( this.movieID, this.userId).subscribe(data => {
+      this.movieService.addMovieToFollowing(this.movieID, this.userId).subscribe(data => {
         this.movieFollowed = true;
       });
     }

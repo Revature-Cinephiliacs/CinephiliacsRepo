@@ -272,10 +272,24 @@ u:hover {
   }
 }
 
+@media screen and (max-width: 800px) {
+
+  //todo: fix when in small screen (use grid?)
+  .right {
+    float: none;
+    display: block;
+    width: 90%;
+  }
+
+  .left {
+    float: none;
+    display: block;
+    width: 90%;
+  }
+}
+
 app-movie-discussions {
-  background-color: lightgrey;
   display: block;
-  padding: 5%;
-  width: 85%;
+  width: 95%;
   margin-bottom: 5vh;
 }
