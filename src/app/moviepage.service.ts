@@ -31,7 +31,7 @@ export class MoviepageService {
   //that will get movies user is following
   getUserFollowingMovies(userid: string)
   {
-    return this.http.get( this.movieBaseURL + "follow/" + userid);
+    return this.http.get<string[]>( this.movieBaseURL + "follow/" + userid);
   }
 
   //Function that will call the Movie Microservice API follow/movieid/userid endpoint
@@ -67,7 +67,7 @@ export class MoviepageService {
     return this.http.get( this.forumBaseURL + "topics");
   }
 
-  followMovie(){
+  followMovie(movieid: string, userid: string){
     return this.http.put( this.movieBaseURL + "/" +  movieid + "/" + userid, null);
   }
 
