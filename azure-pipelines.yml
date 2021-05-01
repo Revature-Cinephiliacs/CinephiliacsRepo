@@ -56,10 +56,18 @@ steps:
 #     enableCustomDeployment: true
 #     DeploymentType: runFromZip
 
+# - task: AzureRmWebAppDeployment@4
+#   inputs:
+#     ConnectionType: 'AzureRM'
+#     azureSubscription: 'Project-3-Training(1)(e37a1117-750a-4552-bb20-e84ed6f3c85d)'
+#     appType: 'webApp'
+#     WebAppName: 'cinephiliacsapp'
+#     packageForLinux: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+
 - task: AzureRmWebAppDeployment@4
   inputs:
     ConnectionType: 'AzureRM'
-    azureSubscription: 'Project-3-Training(1)(e37a1117-750a-4552-bb20-e84ed6f3c85d)'
+    azureSubscription: 'Project-3-Training(e37a1117-750a-4552-bb20-e84ed6f3c85d)'
     appType: 'webApp'
     WebAppName: 'cinephiliacsapp'
-    packageForLinux: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
