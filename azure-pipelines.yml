@@ -40,13 +40,13 @@ steps:
   displayName: ng build
   # workingDirectory: $(appDirectory)
 
-- task: ArchiveFiles@2
-  inputs:
-    rootFolderOrFile: 'dist'
-    includeRootFolder: false
-    archiveType: 'zip'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-    replaceExistingArchive: true
+# - task: ArchiveFiles@2
+#   inputs:
+#     rootFolderOrFile: 'dist'
+#     includeRootFolder: false
+#     archiveType: 'zip'
+#     archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+#     replaceExistingArchive: true
 
 # Publish Artifacts
 # - task: PublishBuildArtifacts@1
@@ -81,4 +81,5 @@ steps:
     azureSubscription: 'Project-3-Training(e37a1117-750a-4552-bb20-e84ed6f3c85d)'
     appType: 'webApp'
     WebAppName: 'cinephiliacsapp'
-    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+    # packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*'
