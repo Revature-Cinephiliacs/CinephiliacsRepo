@@ -6,6 +6,7 @@ import { BehaviorSubject, combineLatest, from, Observable, of, Subject, throwErr
 import { catchError, concatMap, shareReplay, tap } from 'rxjs/operators';
 import { LoggerService } from './logger.service';
 import { LoginService } from './login.service';
+import { NewUser } from './models';
 import { UrlService } from './url.service';
 import { UserService } from './user.service';
 // import { UserService } from './user.service';
@@ -15,7 +16,7 @@ import { UserService } from './user.service';
 })
 export class AuthService {
   // todo: change these to user model
-  public authModel$ = new Subject<any>();
+  public authModel$ = new Subject<NewUser>();
   public authModel = {};
   public isAdmin$ = new Subject<boolean>();
   public isAdmin = false;

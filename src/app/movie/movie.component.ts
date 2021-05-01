@@ -4,8 +4,14 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpService } from '../http.service';
 import { LoggerService } from '../logger.service';
+import { AuthService} from '../auth.service';
 import { LoginService } from '../login.service';
-import { Review } from '../models';
+import { Movie, PostDiscussion, PostReview, Review } from '../models';
+import { MoviepageService } from '../moviepage.service';
+import { ReviewService } from '../review.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { AdminService } from '../admin.service';
+import {ReportedItem, ReportType,Comment} from '../models';
 
 interface SubmiteReview {
   rating: number,
@@ -24,12 +30,11 @@ export class MovieComponent implements OnInit {
 
   reviewScoreSum: number = 0;
   reviewScore: number = 0;
-  selectedMovie: any;
-  movieID: any;
+  selectedMovie: Movie;
+  movieID: string;
   discussions: any;
   reviews: Review[] = [];
   input: any;
-  user: any;
   movieFollowed: boolean = false;
 
   reviewPage: number = 1;
@@ -44,49 +49,76 @@ export class MovieComponent implements OnInit {
   reviewsBusy: boolean = false;
   lastPage: boolean = false;
 
-  sumbitReview: SubmiteReview = {
-    rating: 0,
-    movieid: this.router.snapshot.params.id,
-    username: "0",
-    text: ""
+  reportReview:FormGroup;
+  newReport: ReportedItem;
+
+  sumbitReview: PostReview = {
+    imdbid: this.router.snapshot.params.id,
+    usernameid: "0",
+    score: 0,
+    review: ""
   }
 
-  submitDiscussion: any = {
+  submitDiscussion: PostDiscussion = {
     movieid: this.router.snapshot.params.id,
     topic: "",
-    username: "",
+    userid: "",
     subject: ""
   }
 
   topics: any;
+  userId: string;
+  username: string;
+  authModel: any;
 
   constructor(
     private logger: LoggerService,
-    private router: ActivatedRoute, private _http: HttpService, private _login: LoginService) { }
+    private router: ActivatedRoute, private _http: HttpService,
+    private authService: AuthService,
+    private movieService: MoviepageService,
+    private fb: FormBuilder,
+    private reviewService: ReviewService,
+    private admin: AdminService) { }
 
   ngOnInit(): void {
+
+    this.authService.authModel$.subscribe(reply => {
+      this.logger.log("authmodel", reply);
+      this.userId = reply.userid;
+      this.username = reply.username;
+      console.log(this.authModel);
+    });
+    
+
+    
     this.logger.log("", this.router.snapshot.params);
     this.inputFields();
-    this._login.getTopics().subscribe(data => {
+    this.movieService.getMovieTags().subscribe(data => {
       this.logger.log("", data);
       this.topics = data;
     });
 
     //will get the details of the movie from the IMDB API
     this.movieID = this.router.snapshot.params.id;
-    this._http.getMovie(this.movieID).subscribe(data => {
+    this.movieService.getMovieDetails(this.movieID).subscribe(data => {
       this.selectedMovie = data;
-      this.logger.log("", "this is movies now just so you know");
+      console.log(this.selectedMovie);
+      console.log("Movie Details");
+      console.log(this.selectedMovie.plot);
+      this.logger.log("", "this is getting movie details");
       this.logger.log("", this.selectedMovie);
-    });
+    })
 
     //Will get the discussions for the movie
     this.showDiscussion();
 
     //Movie Reviews
     this.loadReviews(this.reviewPage);
-    if (this.user) {
-      this._login.getUserMovies(JSON.parse(this.user).username).subscribe((usersMovieNames: string[]) => {
+
+    if (this.userId) {
+      this.movieService.getUserFollowingMovies(this.userId).subscribe((usersMovieNames: string[]) => {
+        console.log("get follow")
+        console.log(usersMovieNames)
         if (typeof usersMovieNames.find(m => m == this.movieID) === 'undefined') {
           this.movieFollowed = false;
         }
@@ -99,13 +131,22 @@ export class MovieComponent implements OnInit {
       this.logger.log("", "user isn't set");
     }
 
+    //Creating Form for Reporting
+    this.reportReview = this.fb.group({
+      reportComment:['']
+    });
+
     //saving a reference to the database of movies interacted with
-    this._login.postMovieId(this.movieID).subscribe(data => this.logger.log("", "submitted"));
+    // this._login.postMovieId(this.movieID).subscribe(data => this.logger.log("", "submitted"));
   }
 
+  //Function that will load reviews in page format for a given movie
   loadReviews(page: number) {
-    this._login.getReviewsPage(this.movieID, page, this.reviewSortOrder)
+    console.log("Review")
+    this.reviewService.getMovieReviewsPage(this.movieID, page, this.reviewSortOrder)
       .subscribe((data: Review[]) => {
+        console.log("Review")
+        console.log(data)
         if (data.length == 0) {
           this.lastPage = true;
           this.reviewPage = page - 1;
@@ -114,7 +155,7 @@ export class MovieComponent implements OnInit {
           data.forEach((review: Review) => {
             this.logger.log("", review);
             this.reviews.push(review);
-            this.reviewScoreSum += Number(review.rating);
+            this.reviewScoreSum += Number(review.score);
           });
           this.reviewScore = this.reviewScoreSum / this.reviews.length;
           this.logger.log("", this.reviewScore);
@@ -127,6 +168,7 @@ export class MovieComponent implements OnInit {
       });
   }
 
+  //Function that will get the next page of reviews
   loadNextPage() {
     if (!this.lastPage && !this.reviewsBusy) {
       this.reviewsBusy = true;
@@ -136,6 +178,7 @@ export class MovieComponent implements OnInit {
     }
   }
 
+  //Function that will sort reviews by oldest, newest
   timeSortNext() {
     if (!this.reviewsBusy) {
       this.reviewsBusy = true;
@@ -167,6 +210,7 @@ export class MovieComponent implements OnInit {
     }
   }
 
+  //Function that will sort reviews by ratings
   ratingSortNext() {
     if (!this.reviewsBusy) {
       this.reviewsBusy = true;
@@ -198,6 +242,7 @@ export class MovieComponent implements OnInit {
     }
   }
 
+  //Function that will change the sort order of reviews
   changeReviewSortOrder(sortOrder: string) {
     if (sortOrder == "ratingasc" || sortOrder == "ratingdsc"
       || sortOrder == "timeasc" || sortOrder == "timedsc") {
@@ -208,6 +253,7 @@ export class MovieComponent implements OnInit {
     }
   }
 
+  //Function that will reload reviews
   reloadReviews(loadNew: boolean) {
     if (loadNew) {
       this.reviews = [];
@@ -218,23 +264,27 @@ export class MovieComponent implements OnInit {
     }
   }
 
+  //Function that will get a list of discussions for a given movie
   async showDiscussion() {
     setTimeout(() => {
-      this._login.getDiscussion(this.movieID).subscribe(data => {
-        this.logger.log("", data);
-        this.discussions = data;
-      });
+      // this.movieService.getMovieDiscussion(this.movieID).subscribe(data => {
+      //   console.log(data)
+      //   this.logger.log("", data);
+      //   this.discussions = data;
+      // });
     }, 2000);
   }
 
+  //Function for a user to follow a given movie
   followMovie() {
-    if (this.user) {
-      this._login.followMovie(JSON.parse(this.user).username, this.movieID).subscribe(data => {
+    if (this.userId) {
+      this.movieService.addMovieToFollowing( this.movieID, this.userId).subscribe(data => {
         this.movieFollowed = true;
       });
     }
   }
 
+  //Function for a user to post a discussion
   postDiscussion() {
     if (this.submitDiscussion.topic == "" || this.submitDiscussion.subject == "") {
       this.logger.log("", "didn't submit discussion");
@@ -242,19 +292,19 @@ export class MovieComponent implements OnInit {
       alert("Discussion should be less than 250 Characters")
     } else {
 
-      this._login.submitDiscussion(this.submitDiscussion).subscribe(data => this.logger.log("", data));
+      // this.movieService.postDiscussion(this.submitDiscussion).subscribe(data => this.logger.log("", data));
       this.showDiscussion();
     }
     this.logger.log("", this.submitDiscussion);
   }
 
   postReview() {
-    if (this.sumbitReview.rating == 0 || this.sumbitReview.text == "") {
+    if (this.sumbitReview.score == 0 || this.sumbitReview.review == "") {
       this.logger.log("", "Review Not Sumbitted");
-    } else if (this.sumbitReview.text.length >= 250) {
+    } else if (this.sumbitReview.review.length >= 250) {
       alert("Reviews should be less than 250 Characters")
     } else {
-      this._login.postReview(this.sumbitReview).subscribe(data => this.logger.log("", data));
+      this.reviewService.postMovieReview(this.sumbitReview).subscribe(data => this.logger.log("", data));
       this.lastPage = false;
       this.reloadReviews(true);
     }
@@ -264,12 +314,12 @@ export class MovieComponent implements OnInit {
   inputFields() {
     if (localStorage.getItem("loggedin")) {
       this.logger.log("", "userset");
-      this.user = localStorage.getItem("loggedin")
-
-      this.logger.log("", JSON.parse(this.user).username + "USER");
-      this.logger.log("", this.user);
-      this.submitDiscussion.username = JSON.parse(this.user).username;
-      this.sumbitReview.username = JSON.parse(this.user).username;
+      // this.user = localStorage.getItem("loggedin")
+      this.userId = "";
+      // this.logger.log("", JSON.parse(this.user).username + "USER");
+      // this.logger.log("", this.user);
+      this.submitDiscussion.userid = this.userId;
+      this.sumbitReview.usernameid = this.username;
       this.logger.log("", this.sumbitReview);
 
     } else {
@@ -277,4 +327,30 @@ export class MovieComponent implements OnInit {
       this.logger.log("", "no User");
     }
   }
+
+  //DeleteReviewby id
+  deleteDiscussion(reviewID){
+    this.admin.deleteReview(reviewID);
+  }
+
+  //Report Review
+  reviewReport(reportedReview,reportDescription){
+        //clear report
+        this.newReport ={
+          ReportId: null,
+           ReportEntityType: ReportType.Review,
+          ReportDescription: "",
+          ReportEnitityId: "",
+          ReportTime: new Date,
+           Item: null
+          };
+          console.log(this.reportReview);
+          this.newReport.Item = reportedReview;
+          this.newReport.ReportEntityType = ReportType.Review;
+          this.newReport.ReportDescription = reportDescription;
+          this.newReport.ReportEnitityId = reportedReview.reviewid.toString();
+          console.log(this.newReport);
+          this.admin.ReportItem(this.newReport);
+  }
+
 }

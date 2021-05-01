@@ -9,10 +9,12 @@ export interface User {
 }
 
 export interface Review {
-  movieid: string,
-  username: string,
-  rating: string,
-  text: string
+  creationTime: string,
+  imdbid: string,
+  review: string,
+  reviewid: string,
+  score: string,
+  usernameid: string
 }
 
 export interface Discussion {
@@ -37,7 +39,7 @@ export interface ReportedItem {
   ReportEntityType: ReportType,
   ReportDescription: string,
   ReportEnitityId: string,
-  ReportTime: Moment,
+  ReportTime: Date,
   Item: any
 }
 
@@ -45,4 +47,44 @@ export enum ReportType {
   Review = "Review",
   Comment = "Comment",
   Discussion = "Discussion"
+}
+
+export interface NewUser {
+  userid: string,
+  username: string,
+  firstname: string,
+  lastname: string,
+  email: string,
+  dateofbirth: string,
+  permissions: number
+}
+
+export class Movie {
+  imdbId: string;
+  title: string;
+  ratingName: string;
+  releaseDate: string;
+  releaseCountry: string;
+  runtimeMinutes: number;
+  isReleased: boolean;
+  plot: string;  
+  posterURL: string[];
+  movieDirectors: string[];
+  movieGenres: string[];
+  movieLanguages: string[];
+  movieTags: string[];
+}
+
+export class PostDiscussion {
+  movieid: string;
+  userid: string;
+  subject: string;
+  topic: string;
+}
+
+export class PostReview {
+  imdbid: string;
+  usernameid: string;
+  score: number;
+  review: string;
 }
