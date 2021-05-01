@@ -20,7 +20,7 @@ export class ReviewService {
   }
 
   getUserReviews(userId: string) {
-    return this.http.get<Review[]>(this.reviewBaseURL + "reviews/ByUserId/" + userId);
+    return this.http.get<Review[]>(this.reviewBaseURL + `ByUserId/` + userId);
   }
 
   //Function that will call the Review Microservice API to add a review

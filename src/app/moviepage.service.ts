@@ -4,8 +4,7 @@ import { UrlService } from './url.service';
 import { Observable } from 'rxjs';
 import { Movie, PostReview } from './models'
 import { Review } from './models'
-import { PostDiscussion } from './models'
-import { htmlPrefilter } from 'jquery';
+import { PostDiscussion } from './models';
 
 @Injectable({
   providedIn: 'root'
