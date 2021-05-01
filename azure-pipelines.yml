@@ -28,6 +28,14 @@ steps:
     customCommand: 'run build'
     verbose: true
 
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: 'dist/'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    replaceExistingArchive: true
+
 # below is azure deploy
 
 - task: AzureRmWebAppDeployment@4
@@ -36,4 +44,4 @@ steps:
     azureSubscription: 'Project-3-Training(e37a1117-750a-4552-bb20-e84ed6f3c85d)'
     appType: 'webApp'
     WebAppName: 'cinephiliacsapp'
-    packageForLinux: 'dist/CinephiliacsRepo'
+    packageForLinux: '$(Build.ArtifactStagingDirectory)/**/*.zip'
