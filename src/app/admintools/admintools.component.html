@@ -1,0 +1,26 @@
+<p>admintools works!</p>
+
+
+<ul *ngIf="tickets">
+    <li *ngFor="let ticket of tickets"> 
+        {{ticket.number}}
+        {{ticket.ReportType}}
+        {{ticket.ReportDescription}}
+        {{ticket.ReportEnitityId}}
+        {{ticket.ReportTime}}
+        {{ticket.Item}}
+    </li>
+</ul>
+
+<form [formGroup]="form" (ngSubmit)="submitUserChanges()" >
+    <label for="fname">UserName</label><br>
+    <input type="text" formControlName="UserName"><br>
+    <label for="options">options</label><br>
+    <input type="radio" formControlName="Rights" value="admin">Admin Rights<br>
+    <input type="radio" formControlName="Rights" value="moderator">Moderator Rights<br>
+    <input type="submit" value="Submit">
+</form> 
+
+
+
+

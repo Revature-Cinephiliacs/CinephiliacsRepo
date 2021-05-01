@@ -14,6 +14,9 @@ import { UserComponent } from './user/user.component';
 import { DiscussionComponent } from './discussion/discussion.component';
 import { LoginComponent } from './login/login.component';
 import { ProfileComponent } from './profile/profile.component';
+import { AdmintoolsComponent } from './admintools/admintools.component';
+import { MovieDiscussionsComponent } from './movie-discussions/movie-discussions.component';
+import { DiscussionListComponent } from './discussion-list/discussion-list.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +28,10 @@ import { ProfileComponent } from './profile/profile.component';
     UserComponent,
     DiscussionComponent,
     LoginComponent,
-    ProfileComponent
+    ProfileComponent,
+    AdmintoolsComponent,
+    MovieDiscussionsComponent,
+    DiscussionListComponent
   ],
   imports: [
     BrowserModule,
