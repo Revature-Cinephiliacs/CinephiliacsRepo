@@ -19,17 +19,26 @@ steps:
     versionSpec: '14.x'
   
 
-- task: Npm@1
-  inputs:
-    command: 'install'
-    #may need 'workingDir: $(solution)'
+# - task: Npm@1
+#   displayName: 
+#   inputs:
+#     command: 'install'
+#     #may need 'workingDir: $(solution)'
 
-- task: Npm@1
-  inputs:
-    command: 'custom'
-    #may need 'workingDir: $(solution)'
-    customCommand: 'npx ng build --prod'
-    #verbose: true
+# - task: Npm@1
+#   inputs:
+#     command: 'custom'
+#     #may need 'workingDir: $(solution)'
+#     customCommand: 'npx ng build --prod'
+#     #verbose: true
+
+- script: npm ci
+  displayName: npm install
+  # workingDirectory: $(appDirectory)
+
+- script: npx ng build --prod
+  displayName: ng build
+  # workingDirectory: $(appDirectory)
 
 - task: ArchiveFiles@2
   inputs:
@@ -40,10 +49,10 @@ steps:
     replaceExistingArchive: true
 
 # Publish Artifacts
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    artifactName: 'dist'
+# - task: PublishBuildArtifacts@1
+#   inputs:
+#     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+#     artifactName: 'dist'
     # publishLocation: 'Container'
 
 # below is azure deploy
