@@ -6,7 +6,7 @@ import { BehaviorSubject, combineLatest, from, Observable, of, Subject, throwErr
 import { catchError, concatMap, shareReplay, tap } from 'rxjs/operators';
 import { LoggerService } from './logger.service';
 import { LoginService } from './login.service';
-import { NewUser } from './models';
+import { NewUser } from './models/models';
 import { UrlService } from './url.service';
 import { UserService } from './user.service';
 // import { UserService } from './user.service';

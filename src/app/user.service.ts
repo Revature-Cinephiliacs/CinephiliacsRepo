@@ -2,7 +2,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { HttpService } from './http.service';
 import { AppComponent } from './app.component';
-import { User, Review, Discussion, Comment } from './models';
+import { User, Review, Discussion, Comment } from './models/models';
 import { LoggerService } from './logger.service';
 import { UrlService } from './url.service';
 

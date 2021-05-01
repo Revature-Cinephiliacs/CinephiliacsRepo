@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { AuthService } from './auth.service';
 import { LoggerService } from './logger.service';
-import { NewUser } from './models';
+import { NewUser } from './models/models';
 
 @Component({
   selector: 'app-root',

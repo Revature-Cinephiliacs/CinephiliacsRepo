@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { LoggerService } from '../logger.service';
-import { User } from '../models'
+import { User } from '../models/models'
 
 @Component({
   selector: 'app-home',

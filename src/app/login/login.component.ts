@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { LoggerService } from '../logger.service';
 import { LoginService } from '../login.service';
-import { User } from '../models';
+import { User } from '../models/models';
 
 @Component({
   selector: 'app-login',

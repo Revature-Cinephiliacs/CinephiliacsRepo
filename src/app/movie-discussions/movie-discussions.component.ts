@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DiscussionService } from '../discussion.service';
 import { LoggerService } from '../logger.service';
-import { Discussion } from '../models';
+import { Discussion } from '../models/models';
 
 @Component({
   selector: 'app-movie-discussions',

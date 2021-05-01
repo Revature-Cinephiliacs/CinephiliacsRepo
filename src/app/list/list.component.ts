@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { ActivatedRoute } from '@angular/router'
 import { HttpService } from '../http.service';
 import { LoggerService } from '../logger.service';
+import { Movie } from '../models/models';
 
 @Component({
   selector: 'app-list',
@@ -10,9 +11,8 @@ import { LoggerService } from '../logger.service';
   styleUrls: ['./list.component.scss']
 })
 export class ListComponent implements OnInit {
-  //object | undefined is what the example gave
   movies: any = [];
-  searches: any;
+  searches: string;
 
   movies2: any;
   searches2: any;

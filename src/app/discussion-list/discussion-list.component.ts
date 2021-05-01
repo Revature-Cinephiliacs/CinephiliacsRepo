@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {ForumService } from '../forum.service';
 import { ActivatedRoute } from '@angular/router';
-import { Discussion } from '../models'
+import { Discussion } from '../models/models'
 
 @Component({
   selector: 'app-discussion-list',

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AdminService } from '../admin.service';
-import {ReportedItem } from "../models";
+import {ReportedItem } from "../models/models";
 import { FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
 
 @Component({
