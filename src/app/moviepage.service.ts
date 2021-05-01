@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { UrlService } from './url.service';
-import { Movie, PostReview } from './models'
-import { Review } from './models'
+import { Movie, PostReview } from './models/models';
+import { Review } from './models/models';
 
 @Injectable({
   providedIn: 'root'
