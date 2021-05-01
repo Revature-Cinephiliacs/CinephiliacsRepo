@@ -1,9 +1,11 @@
+import { getLocaleDateTimeFormat } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { AdminService } from '../admin.service';
 import { LoggerService } from '../logger.service';
 import { LoginService } from '../login.service';
-
+import {ReportedItem, ReportType,Comment} from '../models'
 @Component({
   selector: 'app-discussion',
   templateUrl: './discussion.component.html',
@@ -18,6 +20,8 @@ export class DiscussionComponent implements OnInit {
   displaySpoilers: any = false;
   user: any;
 
+
+  newReport: ReportedItem;
   newComment: any = {
     discussionid: 0,
     username: "",
@@ -26,7 +30,7 @@ export class DiscussionComponent implements OnInit {
   };
 
   constructor(
-    private logger: LoggerService,
+    private logger: LoggerService, private admin: AdminService,
     private _login: LoginService, private router: ActivatedRoute) { }
 
   ngOnInit(): void {
@@ -87,6 +91,49 @@ export class DiscussionComponent implements OnInit {
 
   isEmpty(testSTR: string) {
     return (testSTR == "");
+  }
+
+  deleteComment( commentID){
+    console.log("Delete Comment" + commentID);
+    //this.admin.deleteComment(commentID);
+  }
+
+  reportComment(reportedComment,reportDescription:string){
+    //clear report
+  this.newReport ={
+    ReportId: null,
+     ReportEntityType: ReportType.Comment,
+    ReportDescription: "",
+    ReportEnitityId: "",
+    ReportTime: new Date,
+     Item: null
+    };
+    console.log(reportedComment);
+    this.newReport.Item = reportedComment;
+    this.newReport.ReportEntityType = ReportType.Comment;
+    this.newReport.ReportDescription = reportDescription;
+    this.newReport.ReportEnitityId = reportedComment.commentid.toString();
+    console.log(this.newReport);
+    this.admin.ReportItem(this.newReport);
+  }
+
+  reportDiscussion(reportedDicussion,reportDescription:string){
+        //clear report
+  this.newReport ={
+    ReportId: null,
+     ReportEntityType: ReportType.Comment,
+    ReportDescription: "",
+    ReportEnitityId: "",
+    ReportTime: new Date,
+     Item: null
+    };
+    console.log(reportedDicussion);
+    this.newReport.Item = reportedDicussion;
+    this.newReport.ReportEntityType = ReportType.Discussion;
+    this.newReport.ReportDescription = reportDescription;
+    this.newReport.ReportEnitityId = this.disscussionID;
+    console.log(this.newReport);
+    //this.admin.ReportItem(this.newReport);
   }
 
 }

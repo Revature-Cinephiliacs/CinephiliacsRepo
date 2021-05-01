@@ -9,6 +9,8 @@
             <div class="commentContent" *ngIf="!comment.isspoiler || spoilersShown()">
                 <a routerLink="/user/{{comment.username}}" class="username">{{ comment.username }}</a>
                 <div class="commenttext">{{comment.text}}</div>
+                <button (click)="deleteComment(comment.commentid)">deleteComment</button>
+                <button (click)="reportComment(comment,'test')">Report Comment</button>
             </div>
         </li>
     </ul>

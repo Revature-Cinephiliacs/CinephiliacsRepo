@@ -39,7 +39,7 @@ export interface ReportedItem {
   ReportEntityType: ReportType,
   ReportDescription: string,
   ReportEnitityId: string,
-  ReportTime: Moment,
+  ReportTime: Date,
   Item: any
 }
 
