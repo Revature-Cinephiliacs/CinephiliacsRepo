@@ -67,7 +67,7 @@ export class Movie {
   releaseCountry: string;
   runtimeMinutes: number;
   isReleased: boolean;
-  plot: string;  
+  plot: string;
   posterURL: string[];
   movieDirectors: string[];
   movieGenres: string[];
@@ -87,4 +87,35 @@ export class PostReview {
   usernameid: string;
   score: number;
   review: string;
+}
+
+export class Discussion {
+  discussionId: string;
+  movieId: string;
+  userId: string;
+  creationTime: Moment;
+  subject: string;
+  totalikes: number;
+  comments: Comment[];
+  discussionFollows: DiscussionFollow[];
+  discussionTopics: DiscussionTopic[];
+}
+
+export class DiscussionTopic {
+  discussionId: string;
+  topicId: string;
+  discussion: Discussion;
+  topic: Topic;
+}
+
+export class Topic {
+  topicId: string;
+  topicName: string;
+  discussionTopics: DiscussionTopic[];
+}
+
+export class DiscussionFollow {
+  discussionId: string;
+  userId: string;
+  discussion: Discussion;
 }
