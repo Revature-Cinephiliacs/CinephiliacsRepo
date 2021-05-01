@@ -5,75 +5,49 @@
 trigger:
 - main
 
-resources:
-- repo: self
+pool:
+  vmImage: windows-latest
 
 variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
 
-  # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: 'd7f2ca32-4e3a-4d73-97fe-3aaf3197505b'
-  imageRepository: 'revaturecinephiliacscinephiliacsrepo'
-  containerRegistry: '03012021batchp3acr.azurecr.io'
-  dockerfilePath: '**/Dockerfile'
-  tag: '$(Build.BuildId)'
-  imagePullSecret: '03012021batchp3acr8322ae6b-auth'
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '10.x'
+  displayName: 'Install Node.js'
 
-  # Agent VM image name
-  vmImageName: 'ubuntu-latest'
+- task: Npm@1
+  inputs:
+    command: 'install'
 
+- script: npx ng build
+  displayName: ng build
 
-stages:
-- stage: Build
-  displayName: Build stage
-  jobs:
-  - job: Build
-    displayName: Build
-    pool:
-      vmImage: $(vmImageName)
-    steps:
-    - task: Docker@2
-      displayName: Build and push an image to container registry
-      inputs:
-        command: buildAndPush
-        repository: $(imageRepository)
-        dockerfile: $(dockerfilePath)
-        containerRegistry: $(dockerRegistryServiceConnection)
-        tags: |
-          $(tag)
+- task: ArchiveFiles@2
+  displayName: 'Archive files'
+  inputs:
+    rootFolderOrFile: '$(System.DefaultWorkingDirectory)/dist/CinephiliacsRepo'
+    includeRootFolder: false
+    archiveType: zip
+    archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+    replaceExistingArchive: true
+        
 
-    - upload: manifests
-      artifact: manifests
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
 
-- stage: Deploy
-  displayName: Deploy stage
-  dependsOn: Build
+# below is azure deploy
 
-  jobs:
-  - deployment: Deploy
-    displayName: Deploy
-    pool:
-      vmImage: $(vmImageName)
-    environment: 'RevatureCinephiliacsCinephiliacsRepo.default'
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - task: KubernetesManifest@0
-            displayName: Create imagePullSecret
-            inputs:
-              action: createSecret
-              secretName: $(imagePullSecret)
-              dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
-
-          - task: KubernetesManifest@0
-            displayName: Deploy to Kubernetes cluster
-            inputs:
-              action: deploy
-              manifests: |
-                $(Pipeline.Workspace)/manifests/deployment.yml
-                $(Pipeline.Workspace)/manifests/service.yml
-              imagePullSecrets: |
-                $(imagePullSecret)
-              containers: |
-                $(containerRegistry)/$(imageRepository):$(tag)
-
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'Project-3-Training(e37a1117-750a-4552-bb20-e84ed6f3c85d)'
+    appType: 'webApp'
+    WebAppName: 'cinephiliacsapp'
+    package: $(Pipeline.Workspace)/drop
+    # packageForLinux: 'dist/CinephiliacsRepo'

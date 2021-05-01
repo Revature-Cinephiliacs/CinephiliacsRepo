@@ -16,6 +16,7 @@ import { LoginComponent } from './login/login.component';
 import { ProfileComponent } from './profile/profile.component';
 import { AdmintoolsComponent } from './admintools/admintools.component';
 import { MovieDiscussionsComponent } from './movie-discussions/movie-discussions.component';
+import { DiscussionListComponent } from './discussion-list/discussion-list.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { MovieDiscussionsComponent } from './movie-discussions/movie-discussions
     LoginComponent,
     ProfileComponent,
     AdmintoolsComponent,
-    MovieDiscussionsComponent
+    MovieDiscussionsComponent,
+    DiscussionListComponent
   ],
   imports: [
     BrowserModule,
