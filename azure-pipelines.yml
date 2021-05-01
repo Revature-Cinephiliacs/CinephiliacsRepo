@@ -30,7 +30,7 @@ steps:
 
 - task: ArchiveFiles@2
   inputs:
-    rootFolderOrFile: 'dist/'
+    rootFolderOrFile: 'dist'
     includeRootFolder: false
     archiveType: 'zip'
     archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
@@ -46,4 +46,4 @@ steps:
     WebAppName: 'cinephiliacsapp'
     packageForLinux: '$(Build.ArtifactStagingDirectory)/**/*.zip'
     enableCustomDeployment: true
-    DeploymentType: zipDeploy
+    DeploymentType: runFromZip
