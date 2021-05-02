@@ -11,8 +11,8 @@ import { Review } from './models'
 export class MoviepageService {
   movieBaseURL: string = "";
   constructor(private http: HttpClient, private urlService: UrlService) { 
-    // this.movieBaseURL = urlService.MovieAPIUrl + "movie";
-    this.movieBaseURL = "https://localhost:5003/movie";// for testing
+    this.movieBaseURL = urlService.MovieAPIUrl + "movie";
+    // this.movieBaseURL = "https://localhost:5003/movie";// for testing
   }
 
   //Function that will call the Movie Microservice API movie/movieid end point

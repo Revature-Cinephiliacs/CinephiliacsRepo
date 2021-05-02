@@ -11,8 +11,8 @@ export class ReviewService {
   reviewBaseURL: string = "";
 
   constructor(private http: HttpClient, private urlService: UrlService) { 
-    // this.reviewBaseURL = urlService.ReviewsAPIUrl + "review/";
-    this.reviewBaseURL = "https://localhost:5009/review/"; //for testing
+    this.reviewBaseURL = urlService.ReviewsAPIUrl + "review/";
+    // this.reviewBaseURL = "https://localhost:5009/review/"; //for testing
   }
 
   //Gets a list of reviews for a given userid
