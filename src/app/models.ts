@@ -82,6 +82,13 @@ export class PostReview {
   review: string;
 }
 
+export class TagVote {
+  movieId: string;
+  userId: string;
+  tagName: string;
+  isUpvote: boolean;
+}
+
 export class Discussion {
   discussionId: string;
   movieId: string;

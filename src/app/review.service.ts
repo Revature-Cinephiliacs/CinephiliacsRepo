@@ -12,6 +12,7 @@ export class ReviewService {
 
   constructor(private http: HttpClient, private urlService: UrlService) { 
     this.reviewBaseURL = urlService.ReviewsAPIUrl + "review/";
+    // this.reviewBaseURL = "https://localhost:5009/review/"; //for testing
   }
 
   //Gets a list of reviews for a given userid
@@ -59,7 +60,7 @@ export class ReviewService {
   //Will return a list of all reviews based on score rating for a given movie
   getMovieScoreReview(movieid: string, score: number)
   {
-    return this.http.get( this.reviewBaseURL + "/byRating/" + movieid + "/" + score);
+    return this.http.get( "https://localhost:5009/byRating/" + movieid + "/" + score);
   }
 
   //get a list of reported reviews

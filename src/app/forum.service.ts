@@ -15,7 +15,7 @@ export class ForumService {
    }
 
   getDiscussion(movieId: String) {
-    return this.http.get<Discussion[]>(this.forumsUrl + "forum/discussionsmovie/" + movieId);
+    return this.http.get<Discussion[]>(this.forumsUrl + "forum/discussion/" + movieId);
   }
 
   //Function that will make a call to the Forum API discussions/movieid endpoint

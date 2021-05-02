@@ -1,77 +1,35 @@
 <div *ngIf="selectedMovie" class="movieinfo">
-  <h1>{{ selectedMovie.Title }}</h1>
-  <div *ngIf="userId">
-    <div *ngIf="movieFollowed then thenFBlock else elseFBlock"></div>
-    <ng-template #thenFBlock>
-      <button class="deactived">Following Movie</button>
-    </ng-template>
-    <ng-template #elseFBlock>
-      <button (click)="followMovie()">Follow Movie</button>
-    </ng-template>
-  </div>
+    <h1>{{ selectedMovie.title }}</h1>
+    <div *ngIf="userId">
+      <div *ngIf="movieFollowed then thenFBlock else elseFBlock"></div>
+      <ng-template #thenFBlock>
+        <button class="deactived">Following Movie</button>
+      </ng-template>
+      <ng-template #elseFBlock>
+        <button (click)="followMovie()">Follow Movie</button>
+      </ng-template>
+    </div>
 
-  <ul>
-    <li>
-      <img src="{{selectedMovie.Poster}}" alt="Movie Poster">
-      <div class="information">
-        <p class="name"><strong>Title:</strong> {{ selectedMovie.title  }}</p>
-        <p *ngIf="reviews.length > 0" class="reviewscore"><strong>User Review Score:
-          </strong>{{ reviewScore.toFixed(1) }}</p>
-        <p class="year"><strong>Year: </strong> {{ selectedMovie.releaseDate | date: 'yyyy' }} </p>
-        <p class="date"><strong>Release Date:</strong> {{ selectedMovie.releaseDate }}</p>
-        <p class="runtime"><strong>Runtime:</strong> {{ selectedMovie.runtimeMinutes  }}</p>
-        <p class="genre"><strong>Genre:</strong> {{ selectedMovie.movieGenres }}</p>
-        <p class="directors"><strong>Director(s):</strong> {{ selectedMovie.movieDirectors }}</p>
-        <p class="writers"><strong>Writer(s):</strong> {{ selectedMovie.Writer }}</p>
-        <p class="actors"><strong>Actors:</strong> {{ selectedMovie.movieActors }}</p>
-        <p class="plot"><strong>Plot Summary:</strong> {{ selectedMovie.plot }}</p>
-      </div>
-    </li>
-  </ul>
-</div>
-
-<div class="left">
-  <h3>Reviews</h3>
-  <div *ngIf="(reviews.length > 0) then thenRBlock else elseRBlock"></div>
-  <ng-template #thenRBlock>
-    <span>Sort By: </span>
-    <span class="sort" (click)="timeSortNext()" [class.selected]="timeActive">{{timeSortString}}</span>
-    <span class="sort lastchild" (click)="ratingSortNext()" [class.selected]="ratingActive">{{ratingSortString}}</span>
     <ul>
-      <li *ngFor="let review of reviews">
-        <p class="rating">{{ review.rating}}</p>
-        <u routerLink="/user/{{review.username}}" class="username">{{ review.username}}</u>
-        <p>{{ review.text}}</p>
-
-      </li>
+        <li>
+            <img src="{{selectedMovie.posterURL}}" alt="Movie Poster">
+            <div class="information">
+                <p class="name"><strong>Title:</strong> {{ selectedMovie.title  }}</p>
+                <p *ngIf="reviews.length > 0" class="reviewscore"><strong>User Review Score: </strong>{{ reviewScore.toFixed(1) }}</p>
+                <p class = "year"><strong>Year: </strong> {{ selectedMovie.releaseDate | date: 'yyyy' }} </p>
+                <p class="date"><strong>Release Date:</strong> {{ selectedMovie.releaseDate }}</p>
+                <p class="runtime"><strong>Runtime:</strong> {{ selectedMovie.runtimeMinutes  }}</p>
+                <p class="genre"><strong>Genre:</strong> {{ selectedMovie.movieGenres }}</p>
+                <p class="directors"><strong>Director(s):</strong> {{ selectedMovie.movieDirectors }}</p>
+                <p class="writers"><strong>Writer(s):</strong> {{ selectedMovie.Writer }}</p>
+                <p class="actors"><strong>Actors:</strong> {{ selectedMovie.movieActors }}</p>
+                <p class="plot"><strong>Plot Summary:</strong> {{ selectedMovie.plot }}</p>
+            </div>
+        </li>
     </ul>
-    <button *ngIf="!lastPage" (click)="loadNextPage()">More Reviews</button>
-  </ng-template>
-  <ng-template #elseRBlock>
-    <span>This movie has not be reviewed</span>
-  </ng-template>
-
-  <div *ngIf="userId" id="review">
-    <h4>New Review</h4>
-    <form>
-      <label>Rating:</label><br>
-      <select name="rating" id="rating" [(ngModel)]="sumbitReview.rating" [ngModelOptions]="{standalone: true}">
-        <option selected hidden disabled></option>
-        <option value="1">1</option>
-        <option value="1.5">1.5</option>
-        <option value="2">2</option>
-        <option value="2.5">2.5</option>
-        <option value="3">3</option>
-        <option value="3.5">3.5</option>
-        <option value="4">4</option>
-        <option value="4.5">4.5</option>
-        <option value="5">5</option>
-      </select><br>
-      <label>Review Text:</label><br>
-      <input type="text" [(ngModel)]="sumbitReview.text" [ngModelOptions]="{standalone: true}"><br>
-      <button type="reset" (click)="postReview()">Submit Review</button>
-    </form>
-  </div>
+</div>
+<div class= "left">
+  <app-review [movieid] = movieID></app-review>
 </div>
 
 <div class="right">

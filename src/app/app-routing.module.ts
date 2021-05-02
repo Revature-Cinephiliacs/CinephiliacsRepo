@@ -9,6 +9,8 @@ import { InterceptorService } from './interceptor.service';
 import { ListComponent } from './list/list.component';
 import { MovieComponent } from './movie/movie.component';
 import { UserComponent } from './user/user.component';
+import { ReviewComponent } from './review/review.component';
+
 import { DiscussionListComponent } from './discussion-list/discussion-list.component'
 import { ProfileComponent } from './profile/profile.component';
 
