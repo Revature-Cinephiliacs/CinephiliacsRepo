@@ -4,7 +4,7 @@ import { LoggerService } from '../logger.service';
 import { ReviewService } from '../review.service';
 import { HttpService } from '../http.service';
 import { AuthService} from '../auth.service';
-import { Movie, PostDiscussion, PostReview, ReportedItem, ReportType, Review } from '../models';
+import { Movie, NewUser, PostDiscussion, PostReview, ReportedItem, ReportType, Review } from '../models';
 import { ActivatedRoute } from '@angular/router';
 import { AdminService } from '../admin.service';
 import * as moment from 'moment';
@@ -39,6 +39,7 @@ export class ReviewComponent implements OnInit {
 
   userId: string;
   username: string;
+  authModel: NewUser;
 
   selectedFilter: string;
   filters: string[] =[
@@ -66,10 +67,12 @@ export class ReviewComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log("Review Component")
-    this.inputFields();
+    this.authService.authModel$.subscribe(reply => {
+      this.logger.log("authmodel", reply);
+      this.authModel = reply;
+      this.logger.log("this review authmodel", this.authModel)
+    });
     this.loadReviews(this.reviewPage);
-
   }
 
   //Function that will get a page of movie reviews
@@ -271,29 +274,16 @@ export class ReviewComponent implements OnInit {
 
   //Function to post a movie review
   postReview() {
-    if (this.sumbitReview.score == 0 || this.sumbitReview.review == "") {
-      this.logger.log("", "Review Not Sumbitted");
-    } else if (this.sumbitReview.review.length >= 250) {
-      alert("Reviews should be less than 250 Characters")
-    } else {
-      this.reviewService.postMovieReview(this.sumbitReview).subscribe(data => this.logger.log("", data));
-      this.lastPage = false;
-      this.reloadReviews(true);
-    }
-    this.logger.log("", this.sumbitReview);
+    // if (this.sumbitReview.score == 0 || this.sumbitReview.review == "") {
+    //   this.logger.log("", "Review Not Sumbitted");
+    // } else if (this.sumbitReview.review.length >= 250) {
+    //   alert("Reviews should be less than 250 Characters")
+    // } else {
+    //   this.reviewService.postMovieReview(this.sumbitReview).subscribe(data => this.logger.log("", data));
+    //   this.lastPage = false;
+    //   this.reloadReviews(true);
+    // }
+    // this.logger.log("", this.sumbitReview);
+    console.log(this.authModel.username)
   }
-
-  inputFields() {
-    if (localStorage.getItem("userid")) {
-      this.logger.log("", "userset");
-      this.userId = localStorage.getItem("userid");
-      this.sumbitReview.usernameid = this.userId;
-      this.logger.log("", this.sumbitReview);
-      this.sumbitReview.imdbid = this.movieid;
-
-    } else {
-      this.logger.log("", "no User");
-    }
-  }
-
 }

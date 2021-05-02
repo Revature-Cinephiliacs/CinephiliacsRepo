@@ -33,7 +33,7 @@ import { ErrorComponent } from './error/error.component';
     LoginComponent,
     ProfileComponent,
     AdmintoolsComponent,
-    ReviewComponent
+    ReviewComponent,
     MovieDiscussionsComponent,
     DiscussionListComponent,
     GetStartedBoxComponent,

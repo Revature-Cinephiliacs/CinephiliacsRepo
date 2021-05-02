@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { analyzeAndValidateNgModules } from '@angular/compiler';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpService } from '../http.service';
 import { LoggerService } from '../logger.service';
@@ -16,6 +16,7 @@ import { ReviewService } from '../review.service';
   styleUrls: ['./movie.component.scss']
 })
 export class MovieComponent implements OnInit {
+  @Input() authModel: any;
 
   reviewScoreSum: number = 0;
   reviewScore: number = 0;
@@ -49,7 +50,7 @@ export class MovieComponent implements OnInit {
   }
 
   topics: any;
-  authModel: NewUser;
+  //authModel: NewUser;
 
   constructor(
     private logger: LoggerService,
@@ -59,14 +60,13 @@ export class MovieComponent implements OnInit {
     private reviewService: ReviewService) { }
 
   ngOnInit(): void {
-
+    console.log("USERTEST")
     this.authService.authModel$.subscribe(reply => {
       this.logger.log("authmodel", reply);
       this.authModel = reply
-      this.userId = reply.userid;
-      this.username = reply.username;
-      this.logger.log("this authmodel", this.authModel)
+      this.logger.log("movie authmodel", this.authModel)
     });
+    console.log(this.authModel)
 
     this.logger.log("", this.router.snapshot.params);
     //this.inputFields();
@@ -99,6 +99,8 @@ export class MovieComponent implements OnInit {
     else {
       this.logger.log("", "user isn't set");
     }
+
+    this.test();
   }
 
   //Function that will get a list of discussions for a given movie (waiting for forum service)
@@ -151,5 +153,13 @@ export class MovieComponent implements OnInit {
   //     this.logger.log("", "no User");
   //   }
   // }
+
+  test()
+  {
+    console.log("USERID")
+    console.log(this.authModel.userid)
+    console.log("USERNAME")
+    console.log(this.authModel.username)
+  }
 
 }

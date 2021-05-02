@@ -38,8 +38,6 @@ export class AppComponent {
     this.auth.authModel$.subscribe(reply => {
       this.logger.log("authmodel", reply);
       this.authModel = reply;
-      localStorage.setItem("userid", reply.userid);
-      localStorage.setItem("username", reply.username);
     });
     this.auth.isAdmin$.subscribe(reply => {
       this.logger.log("is admin", reply);
