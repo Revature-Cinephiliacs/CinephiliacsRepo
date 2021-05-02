@@ -88,3 +88,10 @@ export class PostReview {
   score: number;
   review: string;
 }
+
+export class TagVote {
+  movieId: string;
+  userId: string;
+  tagName: string;
+  isUpvote: boolean;
+}

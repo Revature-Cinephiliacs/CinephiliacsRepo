@@ -9,6 +9,7 @@ import { InterceptorService } from './interceptor.service';
 import { ListComponent } from './list/list.component';
 import { MovieComponent } from './movie/movie.component';
 import { UserComponent } from './user/user.component';
+import { ReviewComponent } from './review/review.component';
 
 
 
@@ -20,6 +21,7 @@ const routes: Routes = [
   { path: 'user/:username', component: UserComponent },
   { path: 'discussion/:id', component: DiscussionComponent },
   { path: 'admin', component: AdmintoolsComponent  },
+  { path: 'review/:id', component: ReviewComponent}
 ];
 
 @NgModule({
