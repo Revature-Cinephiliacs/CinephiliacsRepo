@@ -16,10 +16,11 @@ import { UserService } from './user.service';
 })
 export class AuthService {
   // todo: change these to user model
-  public authModel$ = new Subject<NewUser>();
+  public authModel$ = new BehaviorSubject<NewUser>(null);
   public authModel = {};
-  public isAdmin$ = new Subject<boolean>();
+  public isAdmin$ = new BehaviorSubject<boolean>(false);
   public isAdmin = false;
+  public isANewUser$ = new BehaviorSubject<boolean>(false);
   public loading$ = new BehaviorSubject<boolean>(true);
 
   // Create subject and public observable of user profile data
@@ -137,14 +138,19 @@ export class AuthService {
       this.authModel$.next(reply);
       if (reply.firstName == null && window.location.pathname != "/register") {
         this.logger.log("new user", "");
-        this.router.navigate(["register"]);
+        this.router.navigate(["profile"]);
+        this.isANewUser$.next(true);
       }
       else {
         this.isUserAdmin(userid);
       }
     }).catch(err => {
-      this.logger.error("in checkAuth$", err);
+      this.logger.error("in retrieving user", err);
       this.isAdmin$.next(false);
+      if (err.status == 404) {
+        this.router.navigate(["profile"]);
+        this.isANewUser$.next(true);
+      }
     });
   }
 
