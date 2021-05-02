@@ -32,38 +32,66 @@
   <app-review [movieid] = movieID></app-review>
 </div>
 
-<div class="right">
-
-  <h3>Recent Discussions</h3>
-  <div *ngIf="discussions then thenDBlock else elseDBlock"></div>
-  <ng-template #thenDBlock>
+<div class="left">
+  <h3>Reviews</h3>
+  <div *ngIf="(reviews.length > 0) then thenRBlock else elseRBlock"></div>
+  <ng-template #thenRBlock>
+    <span>Sort By: </span>
+    <span class="sort" (click)="timeSortNext()" [class.selected]="timeActive">{{timeSortString}}</span>
+    <span class="sort lastchild" (click)="ratingSortNext()" [class.selected]="ratingActive">{{ratingSortString}}</span>
     <ul>
-        <li *ngFor="let discussion of discussions">
-            <!-- <p >{{ discussion.discussionid}}</p> -->
-            <u routerLink="/discussion/{{discussion.discussionid}}">{{discussion.subject}}</u>
-            <span *ngIf="discussion.topic != 'None'">{{discussion.topic}}</span>
-        </li>
+      <li *ngFor="let review of reviews">
+        <p class="rating">{{ review.rating}}</p>
+        <u routerLink="/user/{{review.username}}" class="username">{{ review.username}}</u>
+        <p>{{ review.text}}</p>
+
+      </li>
     </ul>
+    <button *ngIf="!lastPage" (click)="loadNextPage()">More Reviews</button>
   </ng-template>
-  <ng-template #elseDBlock>
-    <span>There are no discussions for this movie</span>
+  <ng-template #elseRBlock>
+    <span>This movie has not be reviewed</span>
   </ng-template>
 
-    <div *ngIf="userId" id="discussion">
-        <h4>New Discussion</h4>
-        <form>
-            <label>Topic: </label><br>
-            <select name="rating" id="rating" [(ngModel)]="submitDiscussion.topic" [ngModelOptions]="{standalone: true}">
-                <option selected hidden disabled></option>
-                <option *ngFor="let topic of topics"
-                        [value]="topic">
-                        {{topic}}
-                </option>
-            </select><br>
-            <label>Discussion Subject:</label><br>
-            <input type="text" [(ngModel)]="submitDiscussion.subject" [ngModelOptions]="{standalone: true}"><br>
-            <button type="reset" (click)="postDiscussion()">Submit Discussion</button>
-        </form>
-    </div>
+  <div *ngIf="userId" id="review">
+    <h4>New Review</h4>
+    <form>
+      <label>Rating:</label><br>
+      <select name="rating" id="rating" [(ngModel)]="sumbitReview.rating" [ngModelOptions]="{standalone: true}">
+        <option selected hidden disabled></option>
+        <option value="1">1</option>
+        <option value="1.5">1.5</option>
+        <option value="2">2</option>
+        <option value="2.5">2.5</option>
+        <option value="3">3</option>
+        <option value="3.5">3.5</option>
+        <option value="4">4</option>
+        <option value="4.5">4.5</option>
+        <option value="5">5</option>
+      </select><br>
+      <label>Review Text:</label><br>
+      <input type="text" [(ngModel)]="sumbitReview.text" [ngModelOptions]="{standalone: true}"><br>
+      <button type="reset" (click)="postReview()">Submit Review</button>
+    </form>
+  </div>
 </div>
 
+<div class="right">
+  <app-movie-discussions></app-movie-discussions>
+
+  <div *ngIf="userId" id="discussion">
+    <h4>New Discussion</h4>
+    <form>
+      <label>Topic: </label><br>
+      <select name="rating" id="rating" [(ngModel)]="submitDiscussion.topic" [ngModelOptions]="{standalone: true}">
+        <option selected hidden disabled></option>
+        <option *ngFor="let topic of topics" [value]="topic">
+          {{topic}}
+        </option>
+      </select><br>
+      <label>Discussion Subject:</label><br>
+      <input type="text" [(ngModel)]="submitDiscussion.subject" [ngModelOptions]="{standalone: true}"><br>
+      <button type="reset" (click)="postDiscussion()">Submit Discussion</button>
+    </form>
+  </div>
+</div>

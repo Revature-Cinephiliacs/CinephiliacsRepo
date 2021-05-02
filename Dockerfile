@@ -5,7 +5,7 @@ RUN npm cache clean --force
 RUN npm install
 COPY . .
 RUN npm run build
-WORKDIR /usr/src/app/dist/my-app
+WORKDIR /usr/src/app/dist/CinephiliacsRepo
 EXPOSE 80
 ENV PORT 80
 RUN npm install http-server -g

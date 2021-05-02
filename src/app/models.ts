@@ -17,20 +17,13 @@ export interface Review {
   usernameid: string
 }
 
-export interface Discussion {
-  discussionid: number,
-  movieid: string,
-  username: string,
-  subject: string,
-  topic: string
-}
-
 export interface Comment {
   commentid: number,
   discussionid: number,
   username: string,
   text: string,
-  isspoiler: boolean
+  isspoiler: boolean,
+  parentCommentid: number
 }
 
 
@@ -49,14 +42,14 @@ export enum ReportType {
   Discussion = "Discussion"
 }
 
-export interface NewUser {
-  userid: string,
-  username: string,
-  firstname: string,
-  lastname: string,
-  email: string,
-  dateofbirth: string,
-  permissions: number
+export class NewUser {
+  userid: string;
+  username: string;
+  firstname: string;
+  lastname: string;
+  email: string;
+  dateofbirth: string;
+  permissions: number;
 }
 
 export class Movie {
@@ -67,7 +60,7 @@ export class Movie {
   releaseCountry: string;
   runtimeMinutes: number;
   isReleased: boolean;
-  plot: string;  
+  plot: string;
   posterURL: string[];
   movieDirectors: string[];
   movieGenres: string[];
@@ -94,4 +87,35 @@ export class TagVote {
   userId: string;
   tagName: string;
   isUpvote: boolean;
+}
+
+export class Discussion {
+  discussionId: string;
+  movieId: string;
+  userId: string;
+  creationTime: Moment;
+  subject: string;
+  totalikes: number;
+  comments: Comment[];
+  discussionFollows: DiscussionFollow[];
+  discussionTopics: DiscussionTopic[];
+}
+
+export class DiscussionTopic {
+  discussionId: string;
+  topicId: string;
+  discussion: Discussion;
+  topic: Topic;
+}
+
+export class Topic {
+  topicId: string;
+  topicName: string;
+  discussionTopics: DiscussionTopic[];
+}
+
+export class DiscussionFollow {
+  discussionId: string;
+  userId: string;
+  discussion: Discussion;
 }
