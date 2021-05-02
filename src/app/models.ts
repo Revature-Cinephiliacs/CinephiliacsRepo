@@ -30,7 +30,8 @@ export interface Comment {
   discussionid: number,
   username: string,
   text: string,
-  isspoiler: boolean
+  isspoiler: boolean,
+  parentCommentid: number
 }
 
 
