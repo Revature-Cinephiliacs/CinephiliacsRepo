@@ -27,13 +27,13 @@ export interface Comment {
 }
 
 
-export interface ReportedItem {
-  ReportId?: number, // optional
-  ReportEntityType: ReportType,
-  ReportDescription: string,
-  ReportEnitityId: string,
-  ReportTime: Moment,
-  Item: any
+export class ReportedItem {
+  ReportId?: number; // optional
+  ReportEntityType: ReportType;
+  ReportDescription: string;
+  ReportEnitityId: string;
+  ReportTime: Moment;
+  Item: any;
 }
 
 export enum ReportType {
