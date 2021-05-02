@@ -11,8 +11,7 @@ export class ForumService {
   forumsUrl: string = "";
   constructor(private http: HttpClient,
     private urlService: UrlService) {
-    //this.forumsUrl = urlService.ForumAPIUrl;
-    this.forumsUrl = "https://localhost:5001/";
+    this.forumsUrl = urlService.ForumAPIUrl;
    }
 
   getDiscussion(movieId: String) {
