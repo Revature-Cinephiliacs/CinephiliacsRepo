@@ -1,0 +1,51 @@
+
+<h3>List of Discussions</h3>
+<div class="input-group">
+    <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
+    aria-describedby="search-addon" id="myInput" (keyup)="setTable()" placeholder="Search for names.." title="Type in a name">
+    <button type="button" class="btn btn-outline-primary">search</button>
+  </div>
+
+<button (click) = "sortByCreationA()">Sort By Creation Time Ascending</button>
+<button (click) = "sortByCreationB()">Sort BY Creation Time Descending</button>
+<button (click) = "sortDiscussionsByCommentsDesc()">Sort By Number of Comments Descending</button>
+<button (click) = "sortDiscussionsByCommentsAsc()">Sort By Number of Comments Ascending</button>
+<button (click) = "sortByRecent()">Sort By Recent Activity </button>
+<button (click) = "sortByLikeD()">Sort By Like D</button>
+<button (click) = "sortByLikeA()">Sort By Like A</button>
+<p>Filter by Topic</p>
+<div>
+    <ul *ngFor = "let t of topics">
+        <li><button (click) = "filterByTopic(t.topicId)">{{t.topicName}}</button></li>
+    </ul>
+</div>
+  
+<table id="myTable">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Username</th>
+            <th>Replies</th>
+            <th>Likes</th>
+            <th>Date Posted</th>
+        </tr>
+</thead>
+    <tbody>
+         <tr *ngFor = "let discussion of discussions">
+             
+                <a routerLink="/discussion/{{discussion.discussionId}}"><td>{{discussion.subject}}</td></a>
+                <td>{{discussion.userid}}</td>
+                <td>{{discussion.comments.length}}</td>
+                <td>{{ discussion.likes}}</td>
+                <td>{{ discussion.creationTime }}</td>
+            
+        </tr>
+        
+    </tbody>
+</table>
+
+<button *ngIf="1<pageNum" (click)="onPrev()">Previous</button>
+<button *ngIf="numOfDiscussion > (pageNum*10)" (click)="onNext()">Next</button>
+
+
+

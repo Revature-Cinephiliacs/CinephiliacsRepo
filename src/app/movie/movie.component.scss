@@ -1,98 +1,257 @@
 u:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .movieinfo {
-    margin-bottom: 5%;
-    margin-top: -35px;
+  margin-bottom: 5%;
+  margin-top: -35px;
 
-    h1 {
-        margin-bottom: 1%;
+  h1 {
+    margin-bottom: 1%;
+  }
+
+  button:not(.deactived) {
+    width: 150px;
+    height: 35px;
+    color: white;
+    border: none;
+    background-color: #357fc5;
+    border-radius: 5px;
+    margin-right: 20px;
+    margin-bottom: 2%;
+    cursor: pointer;
+  }
+
+  button.deactived {
+    width: 150px;
+    height: 35px;
+    color: white;
+    border: none;
+    background-color: #357fc5;
+    border-radius: 5px;
+    margin-right: 20px;
+    margin-bottom: 2%;
+  }
+
+  button:active:not(.deactived) {
+    background-color: #336da3;
+  }
+
+  .feedback {
+    font-size: .7em;
+    margin-top: -1.75%;
+    margin-bottom: 2%;
+    margin-left: 25px;
+  }
+
+  ul {
+    list-style-type: none;
+    padding-left: 0;
+
+    img {
+      float: left;
+      height: 450px;
+      margin-right: 5%;
     }
 
-    button:not(.deactived) {
-        width: 150px;
-        height: 35px;
-        color: white;
-        border: none;
-        background-color: #357fc5;
-        border-radius: 5px;
-        margin-right: 20px;
-        margin-bottom: 2%;
-        cursor: pointer;
+    .information {
+      height: 450px;
     }
-
-    button.deactived {
-      width: 150px;
-      height: 35px;
-      color: white;
-      border: none;
-      background-color: #357fc5;
-      border-radius: 5px;
-      margin-right: 20px;
-      margin-bottom: 2%;
-    }
-
-    button:active:not(.deactived) {
-        background-color: #336da3;
-    }
-
-    .feedback {
-        font-size: .7em;
-        margin-top: -1.75%;
-        margin-bottom: 2%;
-        margin-left: 25px;
-    }
-
-    ul {
-        list-style-type: none;
-        padding-left: 0;
-
-        img {
-            float: left;
-            height: 450px;
-            margin-right: 5%;
-        }
-
-        .information {
-            height: 450px;
-        }
-    }
+  }
 }
 
 .left {
-    float: left;
-    width: 55%;
+  float: left;
+  width: 55%;
+  margin-bottom: 7%;
+
+  h3 {
+    font-size: 1.5em;
+  }
+
+  h4 {
+    margin-bottom: 2%;
+    margin-top: 0;
+  }
+
+  span.sort {
+    background-color: lightgrey;
+    border: 1px solid grey;
+    font-size: .8em;
+    padding: 5px 10px;
+
+    &:not(.lastchild) {
+      border-right: none;
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    &.selected {
+      background-color: rgb(180, 179, 179);
+    }
+  }
+
+  button {
+    width: 150px;
+    height: 35px;
+    color: white;
+    border: none;
+    background-color: #357fc5;
+    border-radius: 5px;
+    margin-right: 20px;
+    margin-left: 37%;
+    margin-bottom: 5%;
+  }
+
+  button:hover {
+    cursor: pointer;
+  }
+
+  button:active {
+    background-color: #336da3;
+  }
+
+  #review {
+    background-color: lightgray;
+    padding: 5%;
+    width: 90%;
+
+    form {
+      label {
+        font-size: .75em;
+        margin-right: 10px;
+      }
+
+      select {
+        margin-right: 5px;
+        margin-bottom: 1%;
+        height: 30px;
+        border-radius: 5px;
+        border: 1px solid lightgray;
+        padding: 0 10px;
+      }
+
+      input {
+        height: 30px;
+        border-radius: 5px;
+        border: 1px solid lightgray;
+        width: 87%;
+        margin-bottom: 4%;
+        padding-left: 10px;
+      }
+
+      button {
+        margin-left: 0;
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  ul {
+    list-style-type: none;
+    padding-left: 0;
+
+    li {
+      border: 2px solid #d8d5d1;
+      background-color: #fffdfa;
+      padding: 2% 5%;
+
+      .rating {
+        margin-bottom: 0;
+        font-size: 1.1em;
+        font-weight: bold;
+      }
+
+      .username {
+        font-size: .75em;
+      }
+    }
+
+    li:not(:last-child) {
+      border-bottom: none;
+    }
+
+    li:first-child {
+      border-radius: 10px 10px 0 0;
+    }
+
+    li:last-child {
+      border-radius: 0 0 10px 10px;
+    }
+
+    li:first-child:last-child {
+      border-radius: 10px;
+    }
+  }
+}
+
+.right {
+  float: right;
+  width: 40%;
+
+  h3 {
+    font-size: 1.5em;
+  }
+
+  h4 {
+    margin-left: 5%;
+    margin-bottom: 2%;
+    margin-top: 0;
+  }
+
+  ul {
     margin-bottom: 7%;
 
-    h3 {
-        font-size: 1.5em;
+    li {
+      margin-bottom: 2%;
     }
 
-    h4 {
-        margin-bottom: 2%;
-        margin-top: 0;
+    span {
+      display: inline-block;
+      background-color: lightgray;
+      border: 1px solid rgb(180, 179, 179);
+      font-size: .6em;
+      padding: 4px 3px 2px 3px;
+      margin-left: 10px;
+
+      &:hover {
+        cursor: default;
+      }
     }
+  }
 
-    span.sort {
-        background-color: lightgrey;
-        border: 1px solid grey;
-        font-size: .8em;
-        padding: 5px 10px;
-        &:not(.lastchild) {
-            border-right: none;
-        }
+  #discussion {
+    background-color: lightgray;
+    padding: 5%;
+    display: inline-block;
+    width: 85%;
 
-        &:hover {
-            cursor: pointer;
-        }
+    form {
+      margin-left: 5%;
 
-        &.selected {
-            background-color: rgb(180, 179, 179);
-        }
-    }
+      label {
+        font-size: .75em;
+      }
 
-    button {
+      select {
+        margin-bottom: 1%;
+        height: 30px;
+        border-radius: 5px;
+        border: 1px solid lightgray;
+      }
+
+      input {
+        height: 30px;
+        border-radius: 5px;
+        border: 1px solid lightgray;
+        width: 80%;
+        margin-bottom: 6%;
+        padding-left: 10px;
+      }
+
+      button {
         width: 150px;
         height: 35px;
         color: white;
@@ -100,173 +259,37 @@ u:hover {
         background-color: #357fc5;
         border-radius: 5px;
         margin-right: 20px;
-        margin-left: 37%;
-        margin-bottom: 5%;
-    }
+      }
 
-    button:hover {
+      button:hover {
         cursor: pointer;
-    }
+      }
 
-    button:active {
+      button:active {
         background-color: #336da3;
+      }
     }
-
-    #review {
-        background-color: lightgray;
-        padding: 5%;
-        width: 90%;
-
-        form {
-            label {
-                font-size: .75em;
-                margin-right: 10px;
-            }
-
-            select {
-                margin-right: 5px;
-                margin-bottom: 1%;
-                height: 30px;
-                border-radius: 5px;
-                border: 1px solid lightgray;
-                padding: 0 10px;
-            }
-
-            input {
-                height: 30px;
-                border-radius: 5px;
-                border: 1px solid lightgray;
-                width: 87%;
-                margin-bottom: 4%;
-                padding-left: 10px;
-            }
-
-            button {
-                margin-left: 0;
-                margin-bottom: 0;
-            }
-        }
-    }
-
-    ul {
-        list-style-type: none;
-        padding-left: 0;
-
-        li {
-            border: 2px solid #d8d5d1;
-            background-color: #fffdfa;
-            padding: 2% 5%;
-
-            .rating {
-                margin-bottom: 0;
-                font-size: 1.1em;
-                font-weight: bold;
-            }
-
-            .username {
-                font-size: .75em;
-            }
-        }
-
-        li:not(:last-child) {
-            border-bottom: none;
-        }
-
-        li:first-child {
-            border-radius: 10px 10px 0 0;
-        }
-
-        li:last-child {
-            border-radius: 0 0 10px 10px;
-        }
-
-        li:first-child:last-child {
-            border-radius: 10px;
-        }
-    }
+  }
 }
 
-.right {
-    float: right;
-    width: 40%;
+@media screen and (max-width: 800px) {
 
-    h3 {
-        font-size: 1.5em;
-    }
+  //todo: fix when in small screen (use grid?)
+  .right {
+    float: none;
+    display: block;
+    width: 90%;
+  }
 
-    h4 {
-        margin-left: 5%;
-        margin-bottom: 2%;
-        margin-top: 0;
-    }
+  .left {
+    float: none;
+    display: block;
+    width: 90%;
+  }
+}
 
-    ul {
-        margin-bottom: 7%;
-
-        li {
-            margin-bottom: 2%;
-        }
-
-        span {
-            display: inline-block;
-            background-color: lightgray;
-            border: 1px solid rgb(180, 179, 179);
-            font-size: .6em;
-            padding: 4px 3px 2px 3px;
-            margin-left: 10px;
-
-            &:hover {
-                cursor: default;
-            }
-        }
-    }
-
-    #discussion {
-        background-color: lightgray;
-        padding: 5%;
-        display: inline-block;
-        width: 85%;
-
-        form {
-            margin-left: 5%;
-
-            label {
-                font-size: .75em;
-            }
-
-            select {
-                margin-bottom: 1%;
-                height: 30px;
-                border-radius: 5px;
-                border: 1px solid lightgray;
-            }
-
-            input {
-                height: 30px;
-                border-radius: 5px;
-                border: 1px solid lightgray;
-                width: 80%;
-                margin-bottom: 6%;
-                padding-left: 10px;
-            }
-
-            button {
-                width: 150px;
-                height: 35px;
-                color: white;
-                border: none;
-                background-color: #357fc5;
-                border-radius: 5px;
-                margin-right: 20px;
-            }
-
-            button:hover {
-                cursor: pointer;
-            }
-
-            button:active {
-                background-color: #336da3;
-            }
-        }
-    }
+app-movie-discussions {
+  display: block;
+  width: 95%;
+  margin-bottom: 5vh;
 }

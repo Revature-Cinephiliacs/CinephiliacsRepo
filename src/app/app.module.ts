@@ -15,6 +15,8 @@ import { DiscussionComponent } from './discussion/discussion.component';
 import { LoginComponent } from './login/login.component';
 import { ProfileComponent } from './profile/profile.component';
 import { AdmintoolsComponent } from './admintools/admintools.component';
+import { MovieDiscussionsComponent } from './movie-discussions/movie-discussions.component';
+import { DiscussionListComponent } from './discussion-list/discussion-list.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +29,9 @@ import { AdmintoolsComponent } from './admintools/admintools.component';
     DiscussionComponent,
     LoginComponent,
     ProfileComponent,
-    AdmintoolsComponent
+    AdmintoolsComponent,
+    MovieDiscussionsComponent,
+    DiscussionListComponent
   ],
   imports: [
     BrowserModule,

@@ -9,7 +9,7 @@ import { InterceptorService } from './interceptor.service';
 import { ListComponent } from './list/list.component';
 import { MovieComponent } from './movie/movie.component';
 import { UserComponent } from './user/user.component';
-
+import { DiscussionListComponent} from './discussion-list/discussion-list.component'
 
 
 const routes: Routes = [
@@ -19,6 +19,7 @@ const routes: Routes = [
   { path: 'alluser', component: AllUsersComponent },
   { path: 'user/:username', component: UserComponent },
   { path: 'discussion/:id', component: DiscussionComponent },
+  { path: 'discussionlist/:id', component: DiscussionListComponent},
   { path: 'admin', component: AdmintoolsComponent  },
 ];
 
