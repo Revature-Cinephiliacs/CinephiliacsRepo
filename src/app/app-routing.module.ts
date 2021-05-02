@@ -9,7 +9,8 @@ import { InterceptorService } from './interceptor.service';
 import { ListComponent } from './list/list.component';
 import { MovieComponent } from './movie/movie.component';
 import { UserComponent } from './user/user.component';
-import { DiscussionListComponent} from './discussion-list/discussion-list.component'
+import { DiscussionListComponent } from './discussion-list/discussion-list.component'
+import { ProfileComponent } from './profile/profile.component';
 
 
 const routes: Routes = [
@@ -19,8 +20,9 @@ const routes: Routes = [
   { path: 'alluser', component: AllUsersComponent },
   { path: 'user/:username', component: UserComponent },
   { path: 'discussion/:id', component: DiscussionComponent },
-  { path: 'discussionlist/:id', component: DiscussionListComponent},
-  { path: 'admin', component: AdmintoolsComponent  },
+  { path: 'discussionlist/:id', component: DiscussionListComponent },
+  { path: 'admin', component: AdmintoolsComponent },
+  { path: 'profile', component: ProfileComponent },
 ];
 
 @NgModule({

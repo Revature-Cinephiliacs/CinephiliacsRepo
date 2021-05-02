@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { AuthService } from './auth.service';
+import { CustomError, ErrorService } from './error.service';
 import { LoggerService } from './logger.service';
 import { NewUser } from './models';
 
@@ -21,9 +22,13 @@ export class AppComponent {
   isUserAdmin: boolean;
   // use this to determine if user is logged in
 
-  constructor(public auth: AuthService, private logger: LoggerService) { }
+  constructor(public auth: AuthService,
+    public errService: ErrorService,
+    private logger: LoggerService,
+  ) { }
 
   ngOnInit(): void {
+
     this.headerSearch = new FormGroup({
       headSearch: new FormControl('', Validators.minLength(2))
     });
@@ -38,6 +43,8 @@ export class AppComponent {
       this.logger.log("is admin", reply);
       this.isUserAdmin = reply;
     });
+    this.errService.addError("this is an error");
+    this.errService.addError("this is a second error");
   }
 
   reloadPage() {

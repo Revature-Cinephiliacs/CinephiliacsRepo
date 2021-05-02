@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../auth.service';
 import { LoggerService } from '../logger.service';
-import { User } from '../models'
+import { NewUser, User } from '../models'
 
 @Component({
   selector: 'app-home',
@@ -9,51 +10,17 @@ import { User } from '../models'
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  currentUser: User = {
-    username: '',
-    firstname: '',
-    lastname: '',
-    email: '',
-    permissions: 1
-  }
+  currentUser: NewUser = new NewUser();
 
   constructor(
     private logger: LoggerService,
-
+    public auth: AuthService,
   ) { }
 
   ngOnInit(): void {
-
-    let userData = localStorage.getItem("loggedin");
-    if (userData != null) {
-      this.currentUser = JSON.parse(userData);
-    }
+    this.auth.authModel$.subscribe(reply => {
+      this.logger.log("current user in home", reply);
+      this.currentUser = reply;
+    });
   }
-
-  getCurrentUser() {
-    this.logger.log("", this.currentUser);
-    return this.currentUser.username;
-  }
-  getName() {
-    this.logger.log("", this.currentUser.firstname);
-    return this.currentUser.firstname;
-  }
-  getEmail() {
-    this.logger.log("", this.currentUser.email);
-    return this.currentUser.email;
-  }
-  getPermissions() {
-    this.logger.log("", this.currentUser.permissions);
-    return this.currentUser.permissions;
-  }
-
-  logout() {
-    this.currentUser.username = "";
-    this.currentUser.firstname = "";
-    this.currentUser.lastname = "";
-    this.currentUser.email = "";
-    localStorage.clear();
-  }
-
-
 }

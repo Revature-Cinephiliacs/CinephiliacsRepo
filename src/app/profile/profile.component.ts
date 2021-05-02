@@ -1,8 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { User, Review, Discussion, Comment } from '../models';
+import { User, Review, Discussion, Comment, NewUser } from '../models';
 import { LoginService } from '../login.service';
 import { HttpService } from '../http.service';
 import { LoggerService } from '../logger.service';
+import { AuthService } from '../auth.service';
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'app-profile',
@@ -10,24 +12,13 @@ import { LoggerService } from '../logger.service';
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
-  @Input() currentUser: User = {
-    username: '',
-    firstname: '',
-    lastname: '',
-    email: '',
-    permissions: 1
-  }
-
-  editedUser: User = {
-    username: '',
-    firstname: '',
-    lastname: '',
-    email: '',
-    permissions: 1
-  }
+  currentUser: NewUser = new NewUser();
+  editedUser: NewUser = new NewUser();
 
   userIsEditable: boolean = false;
   userIsUpdating: boolean = false;
+
+  isNewUser: boolean = false;
 
   moviesAreLoaded: boolean = false;
   reviewsAreLoaded: boolean = false;
@@ -42,18 +33,38 @@ export class ProfileComponent implements OnInit {
 
   constructor(
     private logger: LoggerService,
-    private _http: HttpService, private _login: LoginService) { }
+    private _http: HttpService,
+    private userService: UserService,
+    private auth: AuthService,
+  ) { }
+
+  isANewUser(user: NewUser) {
+    if ((user == undefined || user == null) ||
+      ((user.firstname == null ||
+        user.firstname == null) &&
+        (user.lastname == null ||
+          user.lastname == null) &&
+        (user.dateofbirth == null ||
+          user.dateofbirth == null) &&
+        (user.username == null ||
+          user.username == null))
+    ) return true;
+    return false;
+  }
 
   ngOnInit(): void {
-
-    this.editedUser.username = this.currentUser.username;
-    this.editedUser.firstname = this.currentUser.firstname;
-    this.editedUser.lastname = this.currentUser.lastname;
-    this.editedUser.email = this.currentUser.email;
-
-    this._login.getUserMovies(this.currentUser.username).subscribe(data => {
+    this.auth.authModel$.subscribe(reply => {
+      this.logger.log("profile user", reply);
+      if (this.isANewUser(reply)) {
+        this.isNewUser = true;
+        this.userIsEditable = true;
+      }
+      this.currentUser = reply;
+      this.editedUser = reply;
+    });
+    //todo: change to current user calls
+    this.userService.getAUserFollowedMovies(this.currentUser.userid).then(data => {
       this.userMovieNames = data;
-
       if (this.userMovieNames) {
         this.userMovieNames.forEach(movieName => {
           // Get the Movie information for each favorited movie, for the poster image.
@@ -65,21 +76,21 @@ export class ProfileComponent implements OnInit {
       this.moviesAreLoaded = true;
     });
 
-    this._login.getUserDiscussions(this.currentUser.username).subscribe(data => {
+    this.userService.getAUserDiscussions(this.currentUser.username).then(data => {
       if (data != null) {
         this.userDiscussions = data;
       }
       this.discussionsAreLoaded = true;
     });
 
-    this._login.getUserComments(this.currentUser.username).subscribe(data => {
+    this.userService.getAUserComments(this.currentUser.username).then(data => {
       if (data != null) {
         this.userComments = data;
       }
       this.commentsAreLoaded = true;
     });
 
-    this._login.getUserReviews(this.currentUser.username).subscribe(data => {
+    this.userService.getAUserReviews(this.currentUser.username).then(data => {
       if (data != null) {
         this.userReviews = data;
       }
@@ -114,16 +125,35 @@ export class ProfileComponent implements OnInit {
     if (this.userIsEditable) {
       this.userIsUpdating = true;
       this.userIsEditable = false;
-      this._login.postUpdateUser(this.currentUser.username, this.editedUser).subscribe(response => {
-        // Once the update request has processed, use an API call to get the updated user information
-        this._login.loginUser(this.currentUser.username).subscribe((data: User) => {
-          this.currentUser.firstname = data.firstname;
-          this.currentUser.lastname = data.lastname;
-          this.currentUser.email = data.email;
-          localStorage.setItem("loggedin", JSON.stringify(this.currentUser));
+      //todo: update to new api calls
+      if (this.isNewUser) {
+        this.userService.createUser(this.editedUser).then(reply => {
+          this.userService.getUser(this.currentUser.username).then(reply => {
+            this.logger.log("new user", reply);
+            this.currentUser = reply;
+          }).catch(err => {
+            this.logger.error("in getting getting new user", err);
+          });
+          this.userIsUpdating = false;
+        }).catch(err => {
+          this.logger.error("in creating a new user", err);
+          this.userIsUpdating = false;
         });
-        this.userIsUpdating = false;
-      });
+      } else {
+        this.userService.postUpdateUser(this.currentUser.username, this.editedUser).toPromise().then(response => {
+          // Once the update request has processed, use an API call to get the updated user information
+          this.userService.getUser(this.currentUser.username).then(reply => {
+            this.logger.log("updated user", reply);
+            this.currentUser = reply;
+          }).catch(err => {
+            this.logger.error("in getting getting updated user", err);
+          });
+          this.userIsUpdating = false;
+        }).catch(err => {
+          this.logger.error("in updating user", err);
+          this.userIsUpdating = false;
+        });
+      }
     }
   }
 
@@ -131,6 +161,7 @@ export class ProfileComponent implements OnInit {
     this.editedUser.firstname = this.currentUser.firstname;
     this.editedUser.lastname = this.currentUser.lastname;
     this.editedUser.email = this.currentUser.email;
+    this.editedUser.dateofbirth = this.currentUser.dateofbirth;
     this.userIsEditable = false;
   }
 
@@ -138,5 +169,9 @@ export class ProfileComponent implements OnInit {
     if (!this.userIsUpdating) {
       this.userIsEditable = true;
     }
+  }
+
+  authLogout() {
+    this.auth.logout();
   }
 }
