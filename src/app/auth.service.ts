@@ -136,7 +136,7 @@ export class AuthService {
   private tryRetrieveUser(userid: string) {
     this.userService.getUser(userid).then(reply => {
       this.authModel$.next(reply);
-      if (reply.firstName == null && window.location.pathname != "/register") {
+      if (reply.firstname == null && window.location.pathname != "/profile") {
         this.logger.log("new user", "");
         this.router.navigate(["profile"]);
         this.isANewUser$.next(true);

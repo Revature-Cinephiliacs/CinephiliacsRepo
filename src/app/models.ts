@@ -17,14 +17,6 @@ export interface Review {
   usernameid: string
 }
 
-export interface Discussion {
-  discussionid: number,
-  movieid: string,
-  username: string,
-  subject: string,
-  topic: string
-}
-
 export interface Comment {
   commentid: number,
   discussionid: number,
@@ -50,14 +42,14 @@ export enum ReportType {
   Discussion = "Discussion"
 }
 
-export interface NewUser {
-  userid: string,
-  username: string,
-  firstname: string,
-  lastname: string,
-  email: string,
-  dateofbirth: string,
-  permissions: number
+export class NewUser {
+  userid: string;
+  username: string;
+  firstname: string;
+  lastname: string;
+  email: string;
+  dateofbirth: string;
+  permissions: number;
 }
 
 export class Movie {
