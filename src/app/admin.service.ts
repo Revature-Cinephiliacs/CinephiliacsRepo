@@ -27,6 +27,25 @@ export class AdminService {
 
   /**
    * Report any item in a model of a ReportedItem
+   * @param username
+   * @param permission
+   * @returns 
+   */
+  addPermisions(userID,permission){
+    this.http.post<any>(this.adminUrl+ "role/" + permission,userID);
+  }
+
+  /**
+   * Report any item in a model of a ReportedItem
+   * @param item 
+   * @returns 
+   */
+  removePermisions(userID,permission){
+    this.http.delete<any>(this.adminUrl+"role/" + permission,userID);
+  }
+
+  /**
+   * Report any item in a model of a ReportedItem
    * @param item 
    * @returns 
    */

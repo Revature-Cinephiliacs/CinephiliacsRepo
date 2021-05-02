@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { AdminService } from '../admin.service';
-import {ReportedItem } from "../models";
+import {ReportedItem ,User } from "../models";
 import { FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { AuthService } from '../auth.service';
+import { UserService } from '../user.service';
+
 
 @Component({
   selector: 'app-admintools',
@@ -18,8 +20,10 @@ export class AdmintoolsComponent implements OnInit {
   userId: string;
   username: string;
   authModel: any;
+
+  changeUser: User;
   
-  constructor(private auth: AuthService, private fb: FormBuilder,private admin: AdminService) {}
+  constructor(private auth: AuthService, private fb: FormBuilder,private admin: AdminService,private userServ: UserService) {}
 
   ngOnInit(): void {
 
@@ -46,24 +50,30 @@ export class AdmintoolsComponent implements OnInit {
     });
   }
 
-  submitUserChanges(username,rights) {
+  async submitUserChanges(username,rights) {
     if(this.form.value.UserName != ''){
       console.log(this.form.value);
+      await this.userServ.getUser(username).then(result=> this.changeUser = result);
       if(this.form.value.Rights = "admin"){
         //Add AdminRights
+        this.admin.addPermisions(username,"manage:awebsite");
       }else if(this.form.value.Rights = "moderator"){
         //Add ModeratorRights
+        this.admin.addPermisions(username,"manage:awebsite");
       }
     }
   }
 
-  submitRemoveChanges(username,rights){
+  async submitRemoveChanges(username,rights){
     if(this.removeform.value.UserName != ''){
       console.log(this.form.value);
+      await this.userServ.getUser(username).then(result=> this.changeUser = result);
       if(this.form.value.Rights = "admin"){
         //remove AdminRights
+        this.admin.removePermisions(username,"manage:awebsite");
       }else if(this.form.value.Rights = "moderator"){
         //remove ModeratorRights
+        this.admin.removePermisions(username,"manage:awebsite");
       }
     }
   }
