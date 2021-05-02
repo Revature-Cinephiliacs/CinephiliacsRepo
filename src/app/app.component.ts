@@ -43,8 +43,6 @@ export class AppComponent {
       this.logger.log("is admin", reply);
       this.isUserAdmin = reply;
     });
-    this.errService.addError("this is an error");
-    this.errService.addError("this is a second error");
   }
 
   reloadPage() {

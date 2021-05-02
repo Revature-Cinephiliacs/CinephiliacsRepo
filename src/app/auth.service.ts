@@ -20,6 +20,7 @@ export class AuthService {
   public authModel = {};
   public isAdmin$ = new Subject<boolean>();
   public isAdmin = false;
+  public isANewUser$ = new Subject<boolean>();
   public loading$ = new BehaviorSubject<boolean>(true);
 
   // Create subject and public observable of user profile data
@@ -137,6 +138,7 @@ export class AuthService {
       this.authModel$.next(reply);
       if (reply.firstname == null && window.location.pathname != "/profile") {
         this.logger.log("new user", "");
+        this.isANewUser$.next(true);
         this.router.navigate(["profile"]);
       }
       else {
@@ -145,6 +147,10 @@ export class AuthService {
     }).catch(err => {
       this.logger.error("in checkAuth$", err);
       this.isAdmin$.next(false);
+      if (err.status == 404) {
+        this.isANewUser$.next(true);
+        this.router.navigate(["profile"]);
+      }
     });
   }
 

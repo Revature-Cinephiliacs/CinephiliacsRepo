@@ -5,6 +5,7 @@ import { HttpService } from '../http.service';
 import { LoggerService } from '../logger.service';
 import { AuthService } from '../auth.service';
 import { UserService } from '../user.service';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-profile',
@@ -38,6 +39,29 @@ export class ProfileComponent implements OnInit {
     private auth: AuthService,
   ) { }
 
+  newfirstNameControl: FormControl;
+  newlastNameControl: FormControl;
+  newusernameControl: FormControl;
+  newdateofbirthControl: FormControl;
+
+  createFormControls() {
+    this.newfirstNameControl = new FormControl('', Validators.required);
+    this.newlastNameControl = new FormControl('', Validators.required);
+    this.newusernameControl = new FormControl('', Validators.required);
+    this.newdateofbirthControl = new FormControl('', Validators.required);
+  }
+
+  newUserForm: FormGroup;
+
+  createForm() {
+    this.newUserForm = new FormGroup({
+      newusernameControl: new FormControl('', Validators.required),
+      newfirstNameControl: new FormControl('', Validators.required),
+      newlastNameControl: new FormControl('', Validators.required),
+      newdateofbirthControl: new FormControl('', Validators.required)
+    });
+  }
+
   isANewUser(user: NewUser) {
     if ((user == undefined || user == null) ||
       ((user.firstname == null ||
@@ -53,16 +77,33 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.auth.authModel$.subscribe(reply => {
-      this.logger.log("profile user", reply);
-      if (this.isANewUser(reply)) {
-        this.isNewUser = true;
-        this.userIsEditable = true;
+    this.auth.isANewUser$.subscribe(isnew => {
+      if (isnew) {
+        this.createForm();
+        this.createFormControls();
+        this.isNewUser = isnew;
       }
-      this.currentUser = reply;
-      this.editedUser = reply;
+      this.logger.log("new user? ", this.isNewUser);
+    })
+    this.auth.userProfile$.subscribe(reply => {
+      this.currentUser = new NewUser();
+      this.currentUser.email = reply.email;
+      this.auth.authModel$.subscribe(reply => {
+        this.logger.log("profile user", reply);
+        if (this.isANewUser(reply)) {
+          this.isNewUser = true;
+          this.userIsEditable = true;
+        } else {
+          this.getAllUserData()
+          this.currentUser = reply;
+          this.editedUser = reply;
+        }
+        this.logger.log("is new user?", this.isNewUser)
+      });
     });
     //todo: change to current user calls
+  }
+  getAllUserData() {
     this.userService.getAUserFollowedMovies(this.currentUser.userid).then(data => {
       this.userMovieNames = data;
       if (this.userMovieNames) {
@@ -121,16 +162,28 @@ export class ProfileComponent implements OnInit {
   }
 
 
-  updateUser(): void {
-    if (this.userIsEditable) {
+  updateUser(newuser: boolean = false): void {
+    if (this.userIsEditable || newuser) {
       this.userIsUpdating = true;
       this.userIsEditable = false;
       //todo: update to new api calls
-      if (this.isNewUser) {
+      //2021-05-27 year, month, day
+      //2000-12-27 <-- should be correct form :(
+      // let splitDate = this.editedUser.dateofbirth.split("-");
+      // let year = splitDate[0];
+      // let month = splitDate[1];
+      // let day = splitDate[2];
+      // let correctDate = [year, day, month];
+      // this.editedUser.dateofbirth = correctDate.join("-");
+      // splitDate = splitDate.reverse();
+      // this.editedUser.dateofbirth = splitDate.join("-");
+      // this.editedUser.dateofbirth = this.editedUser.dateofbirth.replace("-", "/");
+      if (newuser) {
         this.userService.createUser(this.editedUser).then(reply => {
-          this.userService.getUser(this.currentUser.username).then(reply => {
+          this.userService.getUser(this.currentUser.userid).then(reply => {
             this.logger.log("new user", reply);
             this.currentUser = reply;
+            this.isNewUser = false;
           }).catch(err => {
             this.logger.error("in getting getting new user", err);
           });
@@ -140,9 +193,9 @@ export class ProfileComponent implements OnInit {
           this.userIsUpdating = false;
         });
       } else {
-        this.userService.postUpdateUser(this.currentUser.username, this.editedUser).toPromise().then(response => {
+        this.userService.postUpdateUser(this.currentUser.userid, this.editedUser).toPromise().then(response => {
           // Once the update request has processed, use an API call to get the updated user information
-          this.userService.getUser(this.currentUser.username).then(reply => {
+          this.userService.getUser(this.currentUser.userid).then(reply => {
             this.logger.log("updated user", reply);
             this.currentUser = reply;
           }).catch(err => {

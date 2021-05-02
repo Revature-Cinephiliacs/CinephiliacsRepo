@@ -1,3 +1,36 @@
+<div *ngIf="this.isNewUser" class="screen-cover">
+  <div class="new-user-popup">
+    <form action="" class="update" [formGroup]="newUserForm" (ngSubmit)="updateUser(true)">
+      <h2>Please enter your information</h2>
+      <label for="newusernameControl1">Username</label>
+      <input formControlName="newusernameControl" type="text" name="newusernameControl1"
+        [(ngModel)]="editedUser.username" required [ngClass]="{
+          'wrong':newusernameControl.invalid && (newusernameControl.dirty || newusernameControl.touched),
+          'correct':newusernameControl.valid && (newusernameControl.dirty || newusernameControl.touched)
+        }"><br>
+      <label for="newfirstNameControl1">First Name</label>
+      <input formControlName="newfirstNameControl" type="text" name="newfirstNameControl1"
+        [(ngModel)]="editedUser.firstname" required [ngClass]="{
+          'wrong':newfirstNameControl.invalid && (newfirstNameControl.dirty || newfirstNameControl.touched),
+          'correct':newfirstNameControl.valid && (newfirstNameControl.dirty || newfirstNameControl.touched)
+        }"><br>
+      <label for="newlastNameControl1">Last Name</label>
+      <input formControlName="newlastNameControl" type="text" name="newlastNameControl1"
+        [(ngModel)]="editedUser.lastname" required [ngClass]="{
+          'wrong':newlastNameControl.invalid && (newlastNameControl.dirty || newlastNameControl.touched),
+          'correct':newlastNameControl.valid && (newlastNameControl.dirty || newlastNameControl.touched)
+        }"><br>
+      <label for="newdateofbirthControl1">Date of Birth</label>
+      <input formControlName="newdateofbirthControl" type="date" name="newdateofbirthControl1"
+        [(ngModel)]="editedUser.dateofbirth" required [ngClass]="{
+          'wrong':newdateofbirthControl.invalid && (newdateofbirthControl.dirty || newdateofbirthControl.touched),
+          'correct':newdateofbirthControl.valid && (newdateofbirthControl.dirty || newdateofbirthControl.touched)
+        }"><br>
+      <p *ngIf="!newUserForm.valid && newUserForm.touched">Please fill in all the fields</p>
+      <input type="Submit" (submit)="updateUser(true)">
+    </form>
+  </div>
+</div>
 <div class="leftmovie">
   <h3>Movies</h3>
   <div *ngIf="moviesAreLoaded; then thenMBlock else elseMBlock"></div>
@@ -29,6 +62,10 @@
   <form class="update">
     <h3>Your Info</h3>
     <div class="container" (ngSubmit)="updateUser()">
+      <label for="uname">Email</label>
+      <p *ngIf="!userIsEditable">{{editedUser.email}}</p>
+      <input *ngIf="false" type="text" [(ngModel)]="editedUser.email" [ngModelOptions]="{standalone: true}"
+        required><br>
       <label for="uname">Username</label>
       <p>{{editedUser.username}}</p>
       <input *ngIf="isNewUser && userIsEditable" type="text" [(ngModel)]="editedUser.username"
@@ -41,13 +78,9 @@
       <p *ngIf="!userIsEditable">{{editedUser.lastname}}</p>
       <input *ngIf="userIsEditable" type="text" [(ngModel)]="editedUser.lastname" [ngModelOptions]="{standalone: true}"
         required><br>
-      <label for="uname">Email</label>
-      <p *ngIf="!userIsEditable">{{editedUser.email}}</p>
-      <input *ngIf="userIsEditable" type="text" [(ngModel)]="editedUser.email" [ngModelOptions]="{standalone: true}"
-        required><br>
       <button *ngIf="!userIsUpdating && !userIsEditable" (click)="editUser()">Edit Profile</button>
       <a *ngIf="userIsEditable" (click)="cancelUpdate()">Cancel Changes</a>
-      <button *ngIf="!userIsUpdating && userIsEditable" (click)="updateUser()">Submit</button>
+      <input *ngIf="!userIsUpdating && userIsEditable" type="Submit" (click)="updateUser(true)">
     </div>
   </form>
 </div>
