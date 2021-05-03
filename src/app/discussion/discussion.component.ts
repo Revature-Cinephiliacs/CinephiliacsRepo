@@ -3,7 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LoggerService } from '../logger.service';
 import { ForumService } from '../forum.service';
-import { Discussion, Comment } from '../models';
+import { Discussion, Comment, User} from '../models';
+import { AuthService } from '../auth.service';
+import { UserService } from "../user.service";
+
 
 @Component({
   selector: 'app-discussion',
@@ -25,7 +28,10 @@ export class DiscussionComponent implements OnInit {
   displayMessageForm = true;
   displayReplyForm = false;
 
-  user: string; //username 
+  username: string; //username 
+  userid: string;
+
+  displayFollow:boolean = true;
 
   displaySpoilers: boolean = false;
   pageComments: Comment[] = [];
@@ -35,6 +41,7 @@ export class DiscussionComponent implements OnInit {
   parentId: string;
   comments: Comment[];
 
+
   newComment: any = {
     discussionid: 0,
     userid: "",
@@ -43,25 +50,42 @@ export class DiscussionComponent implements OnInit {
     parentcommentid: null
   };
 
+  //for sorting buttons 
+  likesBtn: boolean = false;
+  createdBth: boolean = false;
+  movieTitle: string;
+
   constructor(
+    private _user: UserService,
+    private auth: AuthService,
     private logger: LoggerService,
     private _forum: ForumService, private router: ActivatedRoute) { }
 
   ngOnInit(): void {
-
+    this.auth.authModel$.subscribe(reply =>{
+      this.userid = reply.userid;
+    })
+    
     this.discussionID = this.router.snapshot.params.id;
     this.newComment.discussionid = this.router.snapshot.params.id;
     this.displayInput();
     this.getComments();
     this._forum.getCurrentDiscussion(this.discussionID).subscribe(data => {
       this.logger.log("", data);
+      console.log(data)
       this.discussion = data;
+      
       this.subject = this.discussion.subject;
     });
 
     this._forum.getDiscussionComments(this.discussionID).subscribe(data =>{ 
       this.comments = data;
       this.getParentSize();
+    });
+    this.getUserFollowedDis()
+    this._forum.getTopics().subscribe(data => {
+      console.log(data);
+      this.topics = data;
     });
   }
 
@@ -84,10 +108,20 @@ export class DiscussionComponent implements OnInit {
     if (this.isEmpty(this.newComment.text)) {
       this.logger.log("", "Please enter a comment");
     } else {
+      this.newComment.userid = this.userid;
       this._forum.postComment(this.newComment).subscribe(data => this.logger.log("", data));
       this.getComments();
     }
     this.logger.log("", this.newComment);
+  }
+
+  //Function that will show the reply form and hide the new comment form
+  showReplyForm(commentparentid:string){
+    this.displayReplyForm = true;
+    this.displayMessageForm = false;
+    this.parentId = commentparentid;
+    console.log("Reply to: " + commentparentid);
+    console.log("This parent id" + this.parentId);
   }
 
   //This function will add a reply to a comment and then
@@ -97,7 +131,7 @@ export class DiscussionComponent implements OnInit {
     if (this.isEmpty(this.newComment.text)) {
       console.log("Please enter a comment");
     } else {
-      this.newComment.userid = this.user; // just for testing purpose, need to remove it later.
+      this.newComment.userid = this.userid; 
       this.newComment.parentcommentid = this.parentId;
       this._forum.postComment(this.newComment).subscribe(data => console.log(data));
       this.getComments();
@@ -116,24 +150,44 @@ export class DiscussionComponent implements OnInit {
   // Sorting functions 
   // sort comments based on creation time in Ascending order
   sortByCreationA() {
+    if(this.createdBth){
+      this.createdBth = false;
+    }else{
+      this.createdBth = true;
+    }
     this.sortingOrder = "timeA";
     this.pageNum = 1;
     this.getComments();
   }
   //sort comments based on creation time in Descending order
   sortByCreationB() {
+    if(this.createdBth){
+      this.createdBth = false;
+    }else{
+      this.createdBth = true;
+    }
     this.sortingOrder = "timeD";
     this.pageNum = 1;
     this.getComments();
   }
   //sort comments based on number of like in Ascending order
   sortByLikeAsc() {
+    if(this.likesBtn){
+      this.likesBtn = false;
+    }else{
+      this.likesBtn = true;
+    }
     this.sortingOrder = "likesA";
     this.pageNum = 1;
     this.getComments();
   }
   //sort comments based on number of like in Descending order
   sortByLikeDesc() {
+    if(this.likesBtn){
+      this.likesBtn = false;
+    }else{
+      this.likesBtn = true;
+    }
     this.sortingOrder = "likesD";
     this.pageNum = 1;
     this.getComments();
@@ -172,8 +226,8 @@ export class DiscussionComponent implements OnInit {
 
   displayInput() {
     if (localStorage.getItem("loggedin")) {
-      this.user = localStorage.getItem("loggedin");
-      this.newComment.username = JSON.parse(this.user).username;
+      this.username = localStorage.getItem("loggedin");
+      this.newComment.username = JSON.parse(this.username).username;
       this.logger.log("", "User Logged In");
     } else {
       this.logger.log("", "Hide inputs");
@@ -248,4 +302,20 @@ export class DiscussionComponent implements OnInit {
     
   }
 
+  followDiscussion(){
+    this._forum.followDiscussion(this.discussionID, this.userid).subscribe(data =>{
+      console.log(data);
+      this.displayFollow = false;
+    })
+  }
+
+  getUserFollowedDis(){
+    this._forum.getUserFollowedDiscussion(this.userid).subscribe(data => {
+      data.forEach(dis => {
+        if(dis.discussionid == this.discussionID){
+          this.displayFollow = false;
+        }
+      });
+    })
+  }
 }

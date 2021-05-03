@@ -18,15 +18,16 @@ export interface Review {
 }
 
 export interface Discussion {
-  discussionid: number,
+  discussionid: string,
   movieid: string,
   username: string,
   subject: string,
-  topic: string
+  discussionTopics: string[]
+
 }
 
 export interface Comment {
-  commentid: number,
+  commentid: string,
   discussionid: number,
   username: string,
   text: string,
