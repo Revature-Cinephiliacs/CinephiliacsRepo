@@ -20,6 +20,7 @@ import { MovieDiscussionsComponent } from './movie-discussions/movie-discussions
 import { DiscussionListComponent } from './discussion-list/discussion-list.component';
 import { GetStartedBoxComponent } from './get-started-box/get-started-box.component';
 import { ErrorComponent } from './error/error.component';
+import { RecommendationsComponent } from './recommendations/recommendations.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { ErrorComponent } from './error/error.component';
     MovieDiscussionsComponent,
     DiscussionListComponent,
     GetStartedBoxComponent,
-    ErrorComponent
+    ErrorComponent,
+    RecommendationsComponent
   ],
   imports: [
     BrowserModule,
