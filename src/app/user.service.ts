@@ -2,7 +2,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { HttpService } from './http.service';
 import { AppComponent } from './app.component';
-import { User, Review, Discussion, Comment, NewUser, Movie } from './models/models';
+import { User, Review, Discussion, Comment, NewUser, Movie, UserNotification } from './models/models';
 import { LoggerService } from './logger.service';
 import { UrlService } from './url.service';
 
@@ -26,6 +26,10 @@ export class UserService {
     this.movieUrl = urlService.MovieAPIUrl;
     this.forumsUrl = urlService.ForumAPIUrl;
     this.reviewsUrl = urlService.ReviewsAPIUrl;
+  }
+
+  getUserNotifications(userid: string): Promise<UserNotification[]> {
+    return this.http.get<UserNotification[]>(this.usersUrl + `user/notification/${userid}`).toPromise();
   }
 
   //Funtion that call User MSA to get userinfo by sending userID

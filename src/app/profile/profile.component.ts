@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { User, Review, Discussion, Comment, NewUser } from '../models/models';
+import { User, Review, Discussion, Comment, NewUser, UserNotification } from '../models/models';
 import { LoginService } from '../login.service';
 import { HttpService } from '../http.service';
 import { LoggerService } from '../logger.service';
@@ -23,6 +23,7 @@ export class ProfileComponent implements OnInit {
 
   moviesAreLoaded: boolean = false;
   reviewsAreLoaded: boolean = false;
+  notificationsAreLoaded: boolean = false;
   discussionsAreLoaded: boolean = false;
   commentsAreLoaded: boolean = false;
 
@@ -31,6 +32,7 @@ export class ProfileComponent implements OnInit {
   userReviews: Review[] = [];
   userDiscussions: Discussion[] = [];
   userComments: Comment[] = [];
+  userNotifications: UserNotification[] = [];
 
   constructor(
     private logger: LoggerService,
@@ -151,6 +153,15 @@ export class ProfileComponent implements OnInit {
       }
       this.reviewsAreLoaded = true;
     });
+
+    // service: c = comments (user, discussion), d = disuccsion (user, movie), r = review (user, movie)
+    this.userService.getUserNotifications(this.currentUser.userid).then(notifs => {
+      this.logger.log("notifications", notifs);
+      if (notifs != null) {
+        this.userNotifications = notifs;
+      }
+      this.notificationsAreLoaded = true;
+    });
   }
 
   moviesLoaded() {
@@ -232,6 +243,12 @@ export class ProfileComponent implements OnInit {
     this.editedUser.email = this.currentUser.email;
     this.editedUser.dateofbirth = this.currentUser.dateofbirth;
     this.userIsEditable = false;
+  }
+
+  isCreatorNull(not: UserNotification) {
+    this.logger.log("notification", not);
+    this.logger.log("is null?", not.creatorId == null);
+    return not.creatorId == null;
   }
 
   editUser(): void {

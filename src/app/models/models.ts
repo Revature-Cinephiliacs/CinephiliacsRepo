@@ -52,6 +52,13 @@ export class NewUser {
   permissions: number; // 1 for normal user, 3 for admin
 }
 
+export class UserNotification {
+  notificationId: string;
+  otherId: string;
+  fromService: string;
+  creatorId: string;
+}
+
 export class Movie {
   imdbId: string;
   title: string;

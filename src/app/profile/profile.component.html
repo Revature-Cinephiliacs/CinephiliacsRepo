@@ -78,6 +78,10 @@
       <p *ngIf="!userIsEditable">{{editedUser.lastname}}</p>
       <input *ngIf="userIsEditable" type="text" [(ngModel)]="editedUser.lastname" [ngModelOptions]="{standalone: true}"
         required><br>
+      <label for="uname">Date of Birth</label>
+      <p *ngIf="!userIsEditable">{{editedUser.dateofbirth}}</p>
+      <input *ngIf="userIsEditable" type="date" [(ngModel)]="editedUser.dateofbirth"
+        [ngModelOptions]="{standalone: true}" required><br>
       <button *ngIf="!userIsUpdating && !userIsEditable" (click)="editUser()">Edit Profile</button>
       <a *ngIf="userIsEditable" (click)="cancelUpdate()">Cancel Changes</a>
       <input *ngIf="!userIsUpdating && userIsEditable" type="Submit" (click)="updateUser(true)">
@@ -137,6 +141,7 @@
             <a routerLink="/user/{{comment.username}}" class="username">{{ comment.username }}</a>
             <div routerLink="/discussion/{{comment.discussionid}}" class="commenttext">{{comment.text}}</div>
           </div>
+          {{comment|json}}
         </li>
       </ul>
     </div>
@@ -146,5 +151,40 @@
   </ng-template>
   <ng-template #elseCBlock>
     <h4>Loading Comments . . .</h4>
+  </ng-template>
+
+
+  <h3>Notifications</h3>
+  <div *ngIf="notificationsAreLoaded; then thenNBlock else elseNBlock"></div>
+  <ng-template #thenNBlock>
+    <div *ngIf="userNotifications.length">
+      <ul class="comments">
+        <li *ngFor="let notification of userNotifications">
+          <div *ngIf="!isCreatorNull(notification)">
+            <span>User {{notification.creatorId}} that you follow has created a&nbsp;</span>
+            <span *ngIf="notification.fromService=='c'">Comment {{notification.otherId}}</span>
+            <span *ngIf="notification.fromService=='r'">Review {{notification.otherId}}</span>
+            <span *ngIf="notification.fromService=='d'">Discussion {{notification.otherId}}</span>
+          </div>
+          <div *ngIf="isCreatorNull(notification)">
+            <div *ngIf="notification.fromService=='c'">
+              A Discussion that you followed has a new Comment {{notification.otherId}}
+            </div>
+            <div *ngIf="notification.fromService=='r'">
+              A Movie that you followed has a new Review {{notification.otherId}}
+            </div>
+            <div *ngIf="notification.fromService=='d'">
+              A Movie that you followed has a new Discussion {{notification.otherId}}
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div *ngIf="!userNotifications.length">
+      <h4 class="missing">No Notifications</h4>
+    </div>
+  </ng-template>
+  <ng-template #elseNBlock>
+    <h4>Loading Notifications . . .</h4>
   </ng-template>
 </div>
