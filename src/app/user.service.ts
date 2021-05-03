@@ -29,8 +29,8 @@ export class UserService {
   }
 
   //Funtion that call User MSA to get userinfo by sending userID
-  getUser(userid: string): Promise<any> {
-    return this.http.get(this.usersUrl + `user/${userid}`).toPromise();
+  getUser(): Promise<any> {
+    return this.http.get(this.usersUrl + `user/userinfo`).toPromise();
   }
 
   //Functio that call User MSA to get all users

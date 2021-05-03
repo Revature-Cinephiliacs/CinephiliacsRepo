@@ -134,7 +134,8 @@ export class AuthService {
   // call the users api to get the current user
   // call this when
   private tryRetrieveUser(userid: string) {
-    this.userService.getUser(userid).then(reply => {
+    this.userService.getUser().then(reply => {
+      this.logger.log("retrieving user", reply);
       this.authModel$.next(reply);
       if (reply.firstname == null && window.location.pathname != "/profile") {
         this.logger.log("new user in auth", reply);
@@ -152,6 +153,11 @@ export class AuthService {
         this.isANewUser$.next(true);
       }
     });
+    this.userService.getAlUser().toPromise().then(reply => {
+      this.logger.log("all users", reply);
+    }).catch(err => {
+      this.logger.error("all users", err);
+    })
   }
 
   // send a request to check if user is an admin

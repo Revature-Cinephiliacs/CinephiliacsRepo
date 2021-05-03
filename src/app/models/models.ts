@@ -17,13 +17,13 @@ export interface Review {
   usernameid: string
 }
 
-export interface Comment {
-  commentid: number,
-  discussionid: number,
-  username: string,
-  text: string,
-  isspoiler: boolean,
-  parentCommentid: number
+export class Comment {
+  commentid: number;
+  discussionid: number;
+  username: string;
+  text: string;
+  isspoiler: boolean;
+  parentCommentid: number;
 }
 
 
