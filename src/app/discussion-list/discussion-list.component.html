@@ -1,51 +1,95 @@
+<h3>{{movieTitle}} Discussions</h3>
 
-<h3>List of Discussions</h3>
-<div class="input-group">
-    <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
-    aria-describedby="search-addon" id="myInput" (keyup)="setTable()" placeholder="Search for names.." title="Type in a name">
-    <button type="button" class="btn btn-outline-primary">search</button>
-  </div>
 
-<button (click) = "sortByCreationA()">Sort By Creation Time Ascending</button>
-<button (click) = "sortByCreationB()">Sort BY Creation Time Descending</button>
-<button (click) = "sortDiscussionsByCommentsDesc()">Sort By Number of Comments Descending</button>
-<button (click) = "sortDiscussionsByCommentsAsc()">Sort By Number of Comments Ascending</button>
-<button (click) = "sortByRecent()">Sort By Recent Activity </button>
-<button (click) = "sortByLikeD()">Sort By Like D</button>
-<button (click) = "sortByLikeA()">Sort By Like A</button>
-<p>Filter by Topic</p>
 <div>
-    <ul *ngFor = "let t of topics">
-        <li><button (click) = "filterByTopic(t.topicId)">{{t.topicName}}</button></li>
+    Sort:
+    <button *ngIf="!createdBth" (click)="sortByCreationB()">Created &#9660; </button>
+    <button *ngIf="createdBth" (click)="sortByCreationA()">Created &#9650;</button>
+    <button *ngIf="!commentsBtn" (click)="sortDiscussionsByCommentsDesc()">Comments &#9660;</button>
+    <button *ngIf="commentsBtn" (click)="sortDiscussionsByCommentsAsc()">Comments &#9650;</button>
+    <button *ngIf="!likesBtn" (click)="sortByLikeD()">Likes &#9660;</button>
+    <button *ngIf="likesBtn" (click)="sortByLikeA()">Likes &#9650;</button>
+    <button (click)="sortByRecent()">Activity &#9660;</button>
+  
+         Filter: 
+        <select id="topics" name="topic" [(ngModel)]="selectedFilter" (change)="onChangeFilter()">
+            <option value=""></option>
+            <option *ngFor="let t of topics" [ngValue]="t.topicId">{{t.topicName}}</option>
+        </select>
+
+    
+        <label id="myInput">Discussion: </label>
+        <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
+            aria-describedby="search-addon"  (keyup)="searchDiscussion()" placeholder="Search for Discussion...">
+    <button (click)="displayPostDiscussion = true" class="creatDiscussio" >Create New Discussion</button>
+    
+    
+</div>
+
+<div *ngIf="displayPostDiscussion" class="psotDiscussion">
+    <h4>Create New Discussion</h4>
+    <form>
+        <label>Topic: </label><br>
+        <select name="rating" id="rating" [(ngModel)]="submitDiscussion.topic" [ngModelOptions]="{standalone: true}">
+            <option selected hidden disabled></option>
+            <option *ngFor="let topic of topics"
+                    [value]="topic">
+                    {{topic.topicName}}
+            </option>
+        </select><br>
+        <label>Discussion Subject:</label><br>
+        <input type="text" [(ngModel)]="submitDiscussion.subject" [ngModelOptions]="{standalone: true}"><br>
+        <button type="reset" (click)="postDiscussion()">Submit Discussion</button>
+    </form>
+</div>
+<div *ngIf="filterlist.length != 0" class="discussionList">
+    <ul *ngFor="let discussion of filterlist">
+        <li>
+            <div class="wrapper">
+                <div class="right">
+                    <a routerLink="/discussion/{{discussion.discussionId}}">
+                        {{discussion.subject}}
+                    </a>
+                    <br>
+                    <button *ngFor="let dt of discussion.discussionTopics">
+                        {{dt}}
+                    </button>
+                </div>
+                <div class="left">
+                    <label class="username">{{discussion.userid}}</label> <br>
+                    <label class="comments">Replys: {{discussion.comments.length}}</label>
+                    <label class="likes">Likes: {{ discussion.likes}}</label> 
+                </div>
+            </div>
+
+        </li>
     </ul>
 </div>
-  
-<table id="myTable">
-    <thead>
-        <tr>
-            <th>Title</th>
-            <th>Username</th>
-            <th>Replies</th>
-            <th>Likes</th>
-            <th>Date Posted</th>
-        </tr>
-</thead>
-    <tbody>
-         <tr *ngFor = "let discussion of discussions">
-             
-                <a routerLink="/discussion/{{discussion.discussionId}}"><td>{{discussion.subject}}</td></a>
-                <td>{{discussion.userid}}</td>
-                <td>{{discussion.comments.length}}</td>
-                <td>{{ discussion.likes}}</td>
-                <td>{{ discussion.creationTime }}</td>
-            
-        </tr>
-        
-    </tbody>
-</table>
+
+<div *ngIf="filterlist.length == 0" class="discussionList">
+    <ul *ngFor="let discussion of discussions">
+        <li>
+            <div class="wrapper">
+                <div class="right">
+                    <a routerLink="/discussion/{{discussion.discussionId}}">
+                        {{discussion.subject}}
+                    </a>
+                    <br>
+                    <button *ngFor="let dt of discussion.discussionTopics">
+                        {{dt}}
+                    </button>
+                </div>
+                <div class="left">
+                    <label class="username">{{discussion.userid}}</label> <br>
+                    <label class="comments">Replys: {{discussion.comments.length}}</label>
+                    <label class="likes">Likes: {{ discussion.likes}}</label> 
+                </div>
+            </div>
+
+        </li>
+    </ul>
+</div>
+
 
 <button *ngIf="1<pageNum" (click)="onPrev()">Previous</button>
 <button *ngIf="numOfDiscussion > (pageNum*10)" (click)="onNext()">Next</button>
-
-
-

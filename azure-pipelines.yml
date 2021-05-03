@@ -22,24 +22,8 @@ steps:
   inputs:
     command: 'install'
 
-- script: npx ng build
+- script: npx ng build --prod
   displayName: ng build
-
-- task: ArchiveFiles@2
-  displayName: 'Archive files'
-  inputs:
-    rootFolderOrFile: '$(System.DefaultWorkingDirectory)/dist/CinephiliacsRepo'
-    includeRootFolder: false
-    archiveType: zip
-    archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-    replaceExistingArchive: true
-        
-
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
 
 # below is azure deploy
 
@@ -49,5 +33,4 @@ steps:
     azureSubscription: 'Project-3-Training(e37a1117-750a-4552-bb20-e84ed6f3c85d)'
     appType: 'webApp'
     WebAppName: 'cinephiliacsapp'
-    package: $(Pipeline.Workspace)/drop
-    # packageForLinux: 'dist/CinephiliacsRepo'
+    packageForLinux: '$(System.DefaultWorkingDirectory)/dist/*'
