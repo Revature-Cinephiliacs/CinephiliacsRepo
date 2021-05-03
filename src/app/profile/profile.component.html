@@ -67,9 +67,9 @@
       <input *ngIf="false" type="text" [(ngModel)]="editedUser.email" [ngModelOptions]="{standalone: true}"
         required><br>
       <label for="uname">Username</label>
-      <p>{{editedUser.username}}</p>
-      <input *ngIf="isNewUser && userIsEditable" type="text" [(ngModel)]="editedUser.username"
-        [ngModelOptions]="{standalone: true}" class="noneditable" required><br>
+      <p *ngIf="!userIsEditable">{{editedUser.username}}</p>
+      <input *ngIf="userIsEditable" type="text" [(ngModel)]="editedUser.username"
+        [ngModelOptions]="{standalone: true}" required><br>
       <label for="uname">First Name</label>
       <p *ngIf="!userIsEditable">{{editedUser.firstname}}</p>
       <input *ngIf="userIsEditable" type="text" [(ngModel)]="editedUser.firstname" [ngModelOptions]="{standalone: true}"
