@@ -16,7 +16,6 @@ import * as moment from 'moment';
 })
 export class ReviewComponent implements OnInit {
   @Input() movieid: string;
-
   reviews: Review[] = [];
   allReviews: Review[] = [];
   filteredReviews: Review[] = [];
