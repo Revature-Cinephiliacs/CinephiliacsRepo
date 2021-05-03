@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Review, Discussion, Comment } from '../models';
+import { Review, Discussion, Comment } from '../models/models';
 import { ActivatedRoute } from '@angular/router';
 import { LoginService } from '../login.service';
 import { HttpService } from '../http.service';

@@ -2,7 +2,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { HttpService } from './http.service';
 import { AppComponent } from './app.component';
-import { User, Review, Discussion, Comment, NewUser, Movie } from './models';
+import { User, Review, Discussion, Comment, NewUser, Movie } from './models/models';
 import { LoggerService } from './logger.service';
 import { UrlService } from './url.service';
 
@@ -29,8 +29,8 @@ export class UserService {
   }
 
   //Funtion that call User MSA to get userinfo by sending userID
-  getUser(userid: string): Promise<any> {
-    return this.http.get(this.usersUrl + `user/${userid}`).toPromise();
+  getUser(): Promise<any> {
+    return this.http.get(this.usersUrl + `user/userinfo`).toPromise();
   }
 
   //Functio that call User MSA to get all users

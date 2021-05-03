@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Discussion } from './models';
+import { Discussion } from './models/models';
 import { UrlService } from './url.service';
 
 @Injectable({

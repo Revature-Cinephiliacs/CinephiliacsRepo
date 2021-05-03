@@ -6,7 +6,7 @@ import { BehaviorSubject, combineLatest, from, Observable, of, Subject, throwErr
 import { catchError, concatMap, shareReplay, tap } from 'rxjs/operators';
 import { LoggerService } from './logger.service';
 import { LoginService } from './login.service';
-import { NewUser } from './models';
+import { NewUser } from './models/models';
 import { UrlService } from './url.service';
 import { UserService } from './user.service';
 // import { UserService } from './user.service';
@@ -134,7 +134,8 @@ export class AuthService {
   // call the users api to get the current user
   // call this when
   private tryRetrieveUser(userid: string) {
-    this.userService.getUser(userid).then(reply => {
+    this.userService.getUser().then(reply => {
+      this.logger.log("retrieving user", reply);
       this.authModel$.next(reply);
       if (reply.firstname == null && window.location.pathname != "/profile") {
         this.logger.log("new user in auth", reply);
@@ -147,11 +148,16 @@ export class AuthService {
     }).catch(err => {
       this.logger.error("in retrieving user", err);
       this.isAdmin$.next(false);
-      if (err.status == 404) {
+      if (err.status == 400) {
         this.router.navigate(["profile"]);
         this.isANewUser$.next(true);
       }
     });
+    this.userService.getAlUser().toPromise().then(reply => {
+      this.logger.log("all users", reply);
+    }).catch(err => {
+      this.logger.error("all users", err);
+    })
   }
 
   // send a request to check if user is an admin

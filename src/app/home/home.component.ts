@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { LoggerService } from '../logger.service';
-import { NewUser, User } from '../models'
+import { NewUser, User } from '../models/models';
 
 @Component({
   selector: 'app-home',

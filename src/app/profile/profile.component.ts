@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { User, Review, Discussion, Comment, NewUser } from '../models';
+import { User, Review, Discussion, Comment, NewUser } from '../models/models';
 import { LoginService } from '../login.service';
 import { HttpService } from '../http.service';
 import { LoggerService } from '../logger.service';
@@ -82,24 +82,38 @@ export class ProfileComponent implements OnInit {
         this.createForm();
         this.createFormControls();
         this.isNewUser = isnew;
+        this.editedUser.permissions = 1;
+        this.currentUser.permissions = 1;
       }
       this.logger.log("new user? ", this.isNewUser);
-    })
+    });
+
     this.auth.userProfile$.subscribe(reply => {
-      this.currentUser = new NewUser();
-      this.currentUser.email = reply.email;
-      this.auth.authModel$.subscribe(reply => {
-        this.logger.log("profile user", reply);
-        if (this.isANewUser(reply)) {
-          this.isNewUser = true;
-          this.userIsEditable = true;
-        } else {
-          this.getAllUserData()
+      this.logger.log("userProfile$ user", reply);
+      if (reply != null || reply != undefined) {
+        this.currentUser = new NewUser();
+        this.currentUser.email = reply.email;
+        this.currentUser.userid = reply.sub;
+        this.editedUser = new NewUser();
+        this.editedUser.email = reply.email;
+        this.editedUser.userid = reply.sub;
+        this.auth.authModel$.subscribe(reply => {
+          if (reply == null)
+            return;
+          this.logger.log("authModel$ user", reply);
           this.currentUser = reply;
           this.editedUser = reply;
-        }
-        this.logger.log("is new user?", this.isNewUser)
-      });
+          if (this.isANewUser(reply)) {
+            this.isNewUser = true;
+            this.userIsEditable = true;
+          } else {
+            this.getAllUserData()
+            this.currentUser = reply;
+            this.editedUser = reply;
+          }
+          this.logger.log("is new user?", this.isNewUser);
+        });
+      }
     });
     //todo: change to current user calls
   }
@@ -117,21 +131,21 @@ export class ProfileComponent implements OnInit {
       this.moviesAreLoaded = true;
     });
 
-    this.userService.getAUserDiscussions(this.currentUser.username).then(data => {
+    this.userService.getAUserDiscussions(this.currentUser.userid).then(data => {
       if (data != null) {
         this.userDiscussions = data;
       }
       this.discussionsAreLoaded = true;
     });
 
-    this.userService.getAUserComments(this.currentUser.username).then(data => {
+    this.userService.getAUserComments(this.currentUser.userid).then(data => {
       if (data != null) {
         this.userComments = data;
       }
       this.commentsAreLoaded = true;
     });
 
-    this.userService.getAUserReviews(this.currentUser.username).then(data => {
+    this.userService.getAUserReviews(this.currentUser.userid).then(data => {
       if (data != null) {
         this.userReviews = data;
       }
@@ -178,9 +192,11 @@ export class ProfileComponent implements OnInit {
       // splitDate = splitDate.reverse();
       // this.editedUser.dateofbirth = splitDate.join("-");
       // this.editedUser.dateofbirth = this.editedUser.dateofbirth.replace("-", "/");
+      this.logger.log("creating user", this.editedUser);
       if (newuser) {
         this.userService.createUser(this.editedUser).then(reply => {
-          this.userService.getUser(this.currentUser.userid).then(reply => {
+          this.logger.log("new user reply", reply);
+          this.userService.getUser().then(reply => {
             this.logger.log("new user", reply);
             this.currentUser = reply;
             this.isNewUser = false;
@@ -195,7 +211,7 @@ export class ProfileComponent implements OnInit {
       } else {
         this.userService.postUpdateUser(this.currentUser.userid, this.editedUser).toPromise().then(response => {
           // Once the update request has processed, use an API call to get the updated user information
-          this.userService.getUser(this.currentUser.userid).then(reply => {
+          this.userService.getUser().then(reply => {
             this.logger.log("updated user", reply);
             this.currentUser = reply;
           }).catch(err => {

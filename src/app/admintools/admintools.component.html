@@ -1,26 +1,31 @@
-<p>admintools works!</p>
+<h1>Admin</h1>
+<h2>Reports</h2>
+
+<ul class="ticket-list" *ngIf="tickets">
+  <li *ngFor="let ticket of tickets">
+    <span>Report ID:</span>&nbsp;
+    <div class="ticket-id">{{ticket.ReportId}}</div> <br>
+    <span>Date:</span>&nbsp;
+    <div class="ticket-date">{{ticket.ReportTime}}</div>
+    <div class="ticket-description">{{ticket.ReportDescription}}</div>
+    <div class="item-and-button">
+      <button class="item-toggle-button" (click)="toggleItem(ticket)">View Item</button>
+      <div class="ticket-item" [ngClass]="{'expanded':isCollapsed(ticket)}">{{ticket.Item | json}}</div>
+    </div>
+    <button class="archive">Archive</button><br>
+    <button class="delete">Delete Item</button>
+    {{ticket.ReportType}}
+    {{ticket.ReportEnitityId}}
 
 
-<ul *ngIf="tickets">
-    <li *ngFor="let ticket of tickets"> 
-        {{ticket.number}}
-        {{ticket.ReportType}}
-        {{ticket.ReportDescription}}
-        {{ticket.ReportEnitityId}}
-        {{ticket.ReportTime}}
-        {{ticket.Item}}
-    </li>
+  </li>
 </ul>
 
-<form [formGroup]="form" (ngSubmit)="submitUserChanges()" >
-    <label for="fname">UserName</label><br>
-    <input type="text" formControlName="UserName"><br>
-    <label for="options">options</label><br>
-    <input type="radio" formControlName="Rights" value="admin">Admin Rights<br>
-    <input type="radio" formControlName="Rights" value="moderator">Moderator Rights<br>
-    <input type="submit" value="Submit">
-</form> 
-
-
-
-
+<form [formGroup]="form" (ngSubmit)="submitUserChanges()">
+  <label for="fname">UserName</label><br>
+  <input type="text" formControlName="UserName"><br>
+  <label for="options">options</label><br>
+  <input type="radio" formControlName="Rights" value="admin">Admin Rights<br>
+  <input type="radio" formControlName="Rights" value="moderator">Moderator Rights<br>
+  <input type="submit" value="Submit">
+</form>
