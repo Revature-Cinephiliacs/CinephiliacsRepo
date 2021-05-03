@@ -148,7 +148,7 @@ export class AuthService {
     }).catch(err => {
       this.logger.error("in retrieving user", err);
       this.isAdmin$.next(false);
-      if (err.status == 404) {
+      if (err.status == 400) {
         this.router.navigate(["profile"]);
         this.isANewUser$.next(true);
       }
