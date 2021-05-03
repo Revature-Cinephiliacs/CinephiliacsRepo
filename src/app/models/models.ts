@@ -17,30 +17,23 @@ export interface Review {
   usernameid: string
 }
 
-export interface Discussion {
-  discussionid: number,
-  movieid: string,
-  username: string,
-  subject: string,
-  topic: string
-}
-
-export interface Comment {
-  commentid: number,
-  discussionid: number,
-  username: string,
-  text: string,
-  isspoiler: boolean
+export class Comment {
+  commentid: number;
+  discussionid: number;
+  username: string;
+  text: string;
+  isspoiler: boolean;
+  parentCommentid: number;
 }
 
 
-export interface ReportedItem {
-  ReportId?: number, // optional
-  ReportEntityType: ReportType,
-  ReportDescription: string,
-  ReportEnitityId: string,
-  ReportTime: Moment,
-  Item: any
+export class ReportedItem {
+  ReportId?: number; // optional
+  ReportEntityType: ReportType;
+  ReportDescription: string;
+  ReportEnitityId: string;
+  ReportTime: Moment;
+  Item: any;
 }
 
 export enum ReportType {
@@ -49,14 +42,14 @@ export enum ReportType {
   Discussion = "Discussion"
 }
 
-export interface NewUser {
-  userid: string,
-  username: string,
-  firstname: string,
-  lastname: string,
-  email: string,
-  dateofbirth: string,
-  permissions: number
+export class NewUser {
+  userid: string;
+  username: string;
+  firstname: string;
+  lastname: string;
+  email: string;
+  dateofbirth: string;
+  permissions: number;
 }
 
 export class Movie {
@@ -87,6 +80,13 @@ export class PostReview {
   usernameid: string;
   score: number;
   review: string;
+}
+
+export class TagVote {
+  movieId: string;
+  userId: string;
+  tagName: string;
+  isUpvote: boolean;
 }
 
 export class Discussion {

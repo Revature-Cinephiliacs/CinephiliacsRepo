@@ -16,10 +16,11 @@ import { UserService } from './user.service';
 })
 export class AuthService {
   // todo: change these to user model
-  public authModel$ = new Subject<NewUser>();
+  public authModel$ = new BehaviorSubject<NewUser>(null);
   public authModel = {};
-  public isAdmin$ = new Subject<boolean>();
+  public isAdmin$ = new BehaviorSubject<boolean>(false);
   public isAdmin = false;
+  public isANewUser$ = new BehaviorSubject<boolean>(false);
   public loading$ = new BehaviorSubject<boolean>(true);
 
   // Create subject and public observable of user profile data
@@ -133,19 +134,30 @@ export class AuthService {
   // call the users api to get the current user
   // call this when
   private tryRetrieveUser(userid: string) {
-    this.userService.getUser(userid).then(reply => {
+    this.userService.getUser().then(reply => {
+      this.logger.log("retrieving user", reply);
       this.authModel$.next(reply);
-      if (reply.firstName == null && window.location.pathname != "/register") {
-        this.logger.log("new user", "");
-        this.router.navigate(["register"]);
+      if (reply.firstname == null && window.location.pathname != "/profile") {
+        this.logger.log("new user in auth", reply);
+        this.router.navigate(["profile"]);
+        this.isANewUser$.next(true);
       }
       else {
         this.isUserAdmin(userid);
       }
     }).catch(err => {
-      this.logger.error("in checkAuth$", err);
+      this.logger.error("in retrieving user", err);
       this.isAdmin$.next(false);
+      if (err.status == 404) {
+        this.router.navigate(["profile"]);
+        this.isANewUser$.next(true);
+      }
     });
+    this.userService.getAlUser().toPromise().then(reply => {
+      this.logger.log("all users", reply);
+    }).catch(err => {
+      this.logger.error("all users", err);
+    })
   }
 
   // send a request to check if user is an admin
@@ -155,10 +167,12 @@ export class AuthService {
       this.logger.log("isadmin", reply);
       this.isAdmin$.next(true);
       this.isAdmin = reply;
+      this.router.navigate(["profile"]);
     }).catch(err => {
       this.logger.error("isadmin", err);
       this.isAdmin$.next(false);
       this.isAdmin = false;
+      this.router.navigate(["profile"]);
     });
   }
 

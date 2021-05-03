@@ -3,7 +3,11 @@ import { Moment } from "moment";
 import { LoggerService } from '../logger.service';
 import { ReviewService } from '../review.service';
 import { HttpService } from '../http.service';
+<<<<<<< HEAD
 import { AuthService} from '../auth.service';
+=======
+import { AuthService } from '../auth.service';
+>>>>>>> 7209736e425520c107c3993849f4d7a59f9ba455
 import { Movie, NewUser, PostDiscussion, PostReview, ReportedItem, ReportType, Review } from '../models/models';
 import { ActivatedRoute } from '@angular/router';
 import { AdminService } from '../admin.service';
@@ -16,7 +20,11 @@ import * as moment from 'moment';
 })
 export class ReviewComponent implements OnInit {
   @Input() movieid: string;
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 7209736e425520c107c3993849f4d7a59f9ba455
   reviews: Review[] = [];
   allReviews: Review[] = [];
   filteredReviews: Review[] = [];
@@ -42,7 +50,11 @@ export class ReviewComponent implements OnInit {
   authModel: NewUser;
 
   selectedFilter: string;
+<<<<<<< HEAD
   filters: string[] =[
+=======
+  filters: string[] = [
+>>>>>>> 7209736e425520c107c3993849f4d7a59f9ba455
     "Show All",
     "1 Star",
     "2 Stars",
@@ -76,8 +88,12 @@ export class ReviewComponent implements OnInit {
   }
 
   //Function that will get a page of movie reviews
+<<<<<<< HEAD
   loadReviews(page: number)
   {
+=======
+  loadReviews(page: number) {
+>>>>>>> 7209736e425520c107c3993849f4d7a59f9ba455
     this.reviewService.getMovieReviewsPage(this.movieid, page, this.reviewSortOrder)
       .subscribe((data: Review[]) => {
         if (data.length == 0) {
@@ -198,10 +214,16 @@ export class ReviewComponent implements OnInit {
   }
 
   //filter ratings
+<<<<<<< HEAD
   filterByRating(ratingOption:string)
   {
     console.log(ratingOption);
     switch(ratingOption) {
+=======
+  filterByRating(ratingOption: string) {
+    console.log(ratingOption);
+    switch (ratingOption) {
+>>>>>>> 7209736e425520c107c3993849f4d7a59f9ba455
       case "1 Star": {
         console.log("Filter 1 star reviews");
         this.getMovieScoreReviews(1);
@@ -237,6 +259,7 @@ export class ReviewComponent implements OnInit {
   }
 
   //Go through reviews to filter based on a given rating
+<<<<<<< HEAD
   getMovieScoreReviews(rating: number)
   {
     this.reviews = [];
@@ -249,6 +272,17 @@ export class ReviewComponent implements OnInit {
         {
           this.reviews = data;
           
+=======
+  getMovieScoreReviews(rating: number) {
+    this.reviews = [];
+    this.reviewService.getMovieScoreReview(this.movieid, rating)
+      .subscribe((data: Review[]) => {
+        console.log("Get score reviews")
+        console.log(data)
+        if (data != null) {
+          this.reviews = data;
+
+>>>>>>> 7209736e425520c107c3993849f4d7a59f9ba455
         }
       }), error => {
         console.log("error")
@@ -257,8 +291,12 @@ export class ReviewComponent implements OnInit {
   }
 
   //Flag a review
+<<<<<<< HEAD
   flagReview(review: Review)
   {
+=======
+  flagReview(review: Review) {
+>>>>>>> 7209736e425520c107c3993849f4d7a59f9ba455
     let reportItem: ReportedItem = {
       ReportEntityType: ReportType.Review,
       ReportDescription: "Flagged Review",

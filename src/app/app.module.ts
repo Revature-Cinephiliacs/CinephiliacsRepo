@@ -15,8 +15,11 @@ import { DiscussionComponent } from './discussion/discussion.component';
 import { LoginComponent } from './login/login.component';
 import { ProfileComponent } from './profile/profile.component';
 import { AdmintoolsComponent } from './admintools/admintools.component';
+import { ReviewComponent } from './review/review.component';
 import { MovieDiscussionsComponent } from './movie-discussions/movie-discussions.component';
 import { DiscussionListComponent } from './discussion-list/discussion-list.component';
+import { GetStartedBoxComponent } from './get-started-box/get-started-box.component';
+import { ErrorComponent } from './error/error.component';
 
 @NgModule({
   declarations: [
@@ -30,8 +33,11 @@ import { DiscussionListComponent } from './discussion-list/discussion-list.compo
     LoginComponent,
     ProfileComponent,
     AdmintoolsComponent,
+    ReviewComponent,
     MovieDiscussionsComponent,
-    DiscussionListComponent
+    DiscussionListComponent,
+    GetStartedBoxComponent,
+    ErrorComponent
   ],
   imports: [
     BrowserModule,
