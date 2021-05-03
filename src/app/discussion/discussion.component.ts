@@ -52,7 +52,7 @@ export class DiscussionComponent implements OnInit {
 
   //for sorting buttons 
   likesBtn: boolean = false;
-  createdBth: boolean = false;
+  createdBtn: boolean = false;
   movieTitle: string;
 
   constructor(
@@ -149,10 +149,10 @@ export class DiscussionComponent implements OnInit {
   // Sorting functions 
   // sort comments based on creation time in Ascending order
   sortByCreationA() {
-    if(this.createdBth){
-      this.createdBth = false;
+    if(this.createdBtn){
+      this.createdBtn = false;
     }else{
-      this.createdBth = true;
+      this.createdBtn = true;
     }
     this.sortingOrder = "timeA";
     this.pageNum = 1;
@@ -160,10 +160,10 @@ export class DiscussionComponent implements OnInit {
   }
   //sort comments based on creation time in Descending order
   sortByCreationB() {
-    if(this.createdBth){
-      this.createdBth = false;
+    if(this.createdBtn){
+      this.createdBtn = false;
     }else{
-      this.createdBth = true;
+      this.createdBtn = true;
     }
     this.sortingOrder = "timeD";
     this.pageNum = 1;

@@ -1,15 +1,22 @@
 import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
+import { AuthService } from './auth.service';
+import { LoggerService } from './logger.service';
+import { CustomError, ErrorService } from './error.service';
 
 describe('AppComponent', () => {
-  let component: AppComponent = new AppComponent();
+  let auth: AuthService;
+  let errors: ErrorService;
+  let logger: LoggerService;
+  let component: AppComponent = new AppComponent( auth,  errors, logger);
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
         RouterTestingModule
       ],
       declarations: [
+        AuthService,
         AppComponent
       ],
     }).compileComponents();
