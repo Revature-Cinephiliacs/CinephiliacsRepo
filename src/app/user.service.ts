@@ -35,7 +35,7 @@ export class UserService {
 
   //Functio that call User MSA to get all users
   getAlUser() {
-    return this.http.get<User[]>(this.usersUrl + "user/users")
+    return this.http.get<NewUser[]>(this.usersUrl + "user/users")
   }
 
   //Function that call User MSA to check if user is admin or not
