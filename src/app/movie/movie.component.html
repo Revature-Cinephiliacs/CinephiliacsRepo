@@ -1,6 +1,6 @@
 <div *ngIf="selectedMovie" class="movieinfo">
     <h1>{{ selectedMovie.title }}</h1>
-    <div *ngIf="userId">
+    <div *ngIf="userModel">
       <div *ngIf="movieFollowed then thenFBlock else elseFBlock"></div>
       <ng-template #thenFBlock>
         <button class="deactived">Following Movie</button>
