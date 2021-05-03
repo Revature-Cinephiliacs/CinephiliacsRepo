@@ -1,0 +1,23 @@
+div.message {
+  color: white;
+  background-color: pink;
+  border-radius: 8pt;
+  border: 3px solid red;
+  padding: 5pt;
+  font-size: 15pt;
+  margin-top: 5pt;
+  display: grid;
+  grid: auto / 20% 80%;
+  text-align: left;
+  transition: 0.6s ease-in-out;
+
+  span {
+    display: inline-block;
+  }
+}
+
+.error-icon {
+  height: 20pt;
+  width: 20pt;
+  margin: auto;
+}

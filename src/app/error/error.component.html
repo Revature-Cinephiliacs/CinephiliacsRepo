@@ -1,0 +1,6 @@
+<div class="message" *ngFor="let error of this.errService.errorList">
+  <img src="../../assets/error_icon.svg" class="error-icon">
+  <span>
+    {{error.errorMessage}}
+  </span>
+</div>
