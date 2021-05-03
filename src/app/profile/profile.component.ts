@@ -98,7 +98,11 @@ export class ProfileComponent implements OnInit {
         this.editedUser.email = reply.email;
         this.editedUser.userid = reply.sub;
         this.auth.authModel$.subscribe(reply => {
+          if (reply == null)
+            return;
           this.logger.log("authModel$ user", reply);
+          this.currentUser = reply;
+          this.editedUser = reply;
           if (this.isANewUser(reply)) {
             this.isNewUser = true;
             this.userIsEditable = true;
@@ -127,21 +131,21 @@ export class ProfileComponent implements OnInit {
       this.moviesAreLoaded = true;
     });
 
-    this.userService.getAUserDiscussions(this.currentUser.username).then(data => {
+    this.userService.getAUserDiscussions(this.currentUser.userid).then(data => {
       if (data != null) {
         this.userDiscussions = data;
       }
       this.discussionsAreLoaded = true;
     });
 
-    this.userService.getAUserComments(this.currentUser.username).then(data => {
+    this.userService.getAUserComments(this.currentUser.userid).then(data => {
       if (data != null) {
         this.userComments = data;
       }
       this.commentsAreLoaded = true;
     });
 
-    this.userService.getAUserReviews(this.currentUser.username).then(data => {
+    this.userService.getAUserReviews(this.currentUser.userid).then(data => {
       if (data != null) {
         this.userReviews = data;
       }

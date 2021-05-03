@@ -30,7 +30,7 @@ export class UserService {
 
   //Funtion that call User MSA to get userinfo by sending userID
   getUser(): Promise<any> {
-    return this.http.get(this.usersUrl + `userinfo`).toPromise();
+    return this.http.get(this.usersUrl + `user/userinfo`).toPromise();
   }
 
   //Functio that call User MSA to get all users
