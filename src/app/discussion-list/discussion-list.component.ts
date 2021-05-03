@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-
 import {ForumService } from '../forum.service';
 import { ActivatedRoute } from '@angular/router';
 import { MoviepageService } from '../moviepage.service'
-import { Discussion, Movie } from '../models/models'
+import { Discussion, Movie, Topic } from '../models/models'
 
 @Component({
   selector: 'app-discussion-list',
@@ -15,7 +14,8 @@ export class DiscussionListComponent implements OnInit {
   discussions: Discussion[] = [];
   numOfDiscussion: number = 0;
   pageNum: number = 1;
-  topics: string[];
+  topics: Topic[];
+  discussionTopics: string[];
   sortingOrder: string = "recent"   //Default sorting order will be based recent activities
 
   constructor(private _forum: ForumService, 
@@ -61,6 +61,16 @@ export class DiscussionListComponent implements OnInit {
       this._forum.getDiscussionPage(this.movieID, this.pageNum, this.sortingOrder).subscribe(data => {
         console.log(data);
         this.discussions = data;
+        this.discussions.forEach(dis => {
+            dis.discussionTopics.forEach(tid => {
+              this.topics.forEach(t => {
+                if(tid.discussionId == t.topicId){
+
+                }
+              });
+            });
+        });
+        
         console.log(this.discussions);   
       });
     }, 1000);

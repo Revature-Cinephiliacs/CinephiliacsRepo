@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { UrlService } from './url.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { User, Review, Discussion, Comment } from './models/models';
+import { User, Review, Discussion, Comment, Topic } from './models/models';
 
 @Injectable({
   providedIn: 'root'
@@ -31,7 +31,7 @@ export class ForumService {
   }
 
   getTopics() {
-    return this.http.get<string[]>(this.forumsUrl + "forum/topics");
+    return this.http.get<Topic[]>(this.forumsUrl + "forum/topics");
   }
 
     //Function that will make a call to the Forum API endpoint to add a given topic to a given discussion
