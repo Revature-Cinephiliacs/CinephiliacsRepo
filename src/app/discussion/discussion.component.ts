@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LoggerService } from '../logger.service';
 import { ForumService } from '../forum.service';
-import { Discussion, Comment, User} from '../models';
+import { Discussion, Comment, User} from '../models/models';
 import { AuthService } from '../auth.service';
 import { UserService } from "../user.service";
 
@@ -43,7 +43,7 @@ export class DiscussionComponent implements OnInit {
 
 
   newComment: any = {
-    discussionid: 0,
+    discussionid: "",
     userid: "",
     text: "",
     isspoiler: false,
@@ -78,7 +78,7 @@ export class DiscussionComponent implements OnInit {
       this.subject = this.discussion.subject;
     });
 
-    this._forum.getDiscussionComments(this.discussionID).subscribe(data =>{ 
+    this._forum.getDiscussionComments(this.discussionID).subscribe(data => {
       this.comments = data;
       this.getParentSize();
     });
@@ -139,13 +139,12 @@ export class DiscussionComponent implements OnInit {
     console.log(this.newComment);
   }
 
-    //Will hide the reply form and display the new comment form
-    cancelReply()
-    {
-      this.displayReplyForm = false;
-      this.displayMessageForm = true;
-      console.log("cancel")
-    }
+  //Will hide the reply form and display the new comment form
+  cancelReply() {
+    this.displayReplyForm = false;
+    this.displayMessageForm = true;
+    console.log("cancel")
+  }
 
   // Sorting functions 
   // sort comments based on creation time in Ascending order
@@ -199,18 +198,18 @@ export class DiscussionComponent implements OnInit {
     this.getComments();
   }
 
-    //get next comments page
-    onNext(){
-      this.pageComments = [];
-      this.pageNum++;
-      this.getComments();
-    }
-    //get previous comments page
-    onPrev(){
-      this.pageComments = [];
-      this.pageNum--;
-      this.getComments();
-    }
+  //get next comments page
+  onNext() {
+    this.pageComments = [];
+    this.pageNum++;
+    this.getComments();
+  }
+  //get previous comments page
+  onPrev() {
+    this.pageComments = [];
+    this.pageNum--;
+    this.getComments();
+  }
 
   //Function that will calculate the number of comments
   //based on the number of parent comments
@@ -270,36 +269,32 @@ export class DiscussionComponent implements OnInit {
   //Function will check if the selected topic is already a topic of the
   //current discussion, if so display a warning, if not call service to add topic
   //to discussion and display updated topics
-  addNewTopic()
-  {
+  addNewTopic() {
     var newTopic = this.selectedDiscussionOption;
     console.log(this.currentTopics.includes(newTopic));
-    if(this.currentTopics.includes(newTopic))
-    {
+    if (this.currentTopics.includes(newTopic)) {
       this.displayWarning = true;
     }
-    else{
+    else {
       this.displayWarning = false;
       let id = "";
       this.topics.forEach(t => {
-        if(newTopic == t.topicName)
-        {
-          id = t.topicId; 
+        if (newTopic == t.topicName) {
+          id = t.topicId;
         }
       });
 
       console.log("Add topic to dis");
       console.log("new topic id: " + id);
       console.log(this.discussionID);
-      this._forum.addTopicToDiscussion(this.discussionID, id).subscribe(data => 
-        {
-          console.log(data);
-          if(data == true){
-            this.currentTopics.push(newTopic);
-          }
+      this._forum.addTopicToDiscussion(this.discussionID, id).subscribe(data => {
+        console.log(data);
+        if (data == true) {
+          this.currentTopics.push(newTopic);
+        }
       })
     }
-    
+
   }
 
   followDiscussion(){
@@ -312,7 +307,7 @@ export class DiscussionComponent implements OnInit {
   getUserFollowedDis(){
     this._forum.getUserFollowedDiscussion(this.userid).subscribe(data => {
       data.forEach(dis => {
-        if(dis.discussionid == this.discussionID){
+        if(dis.discussionId == this.discussionID){
           this.displayFollow = false;
         }
       });

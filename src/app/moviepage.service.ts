@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { UrlService } from './url.service';
-import { Movie, PostReview } from './models'
-import { Review } from './models'
+import { Movie, PostReview, TagVote } from './models/models';
+import { Review } from './models/models';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +12,7 @@ export class MoviepageService {
   movieBaseURL: string = "";
   constructor(private http: HttpClient, private urlService: UrlService) { 
     this.movieBaseURL = urlService.MovieAPIUrl + "movie";
+    // this.movieBaseURL = "https://localhost:5003/movie";// for testing
   }
 
   //Function that will call the Movie Microservice API movie/movieid end point
@@ -60,7 +61,7 @@ export class MoviepageService {
   }
 
   //Search for a list of movies from given filter (create filter)
-  searchMovies(filter: any)
+  searchMovies(filter: {[index:string] : [string, string]})
   {
     return this.http.post( this.movieBaseURL + "/search", filter);
   }
@@ -72,7 +73,7 @@ export class MoviepageService {
   }
 
   //add a vote for a movie tag (create tagging model)
-  voteForTag(taggingDTO : any)
+  voteForTag(taggingDTO : TagVote)
   {
     return this.http.post ( this.movieBaseURL + "/tags", taggingDTO);
   }

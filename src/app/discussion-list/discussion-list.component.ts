@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import {ForumService } from '../forum.service';
 import { ActivatedRoute } from '@angular/router';
 import { MoviepageService } from '../moviepage.service'
-import { Discussion, Movie } from '../models'
+import { Discussion, Movie } from '../models/models'
 
 @Component({
   selector: 'app-discussion-list',

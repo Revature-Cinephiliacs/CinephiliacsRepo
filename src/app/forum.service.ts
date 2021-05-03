@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { UrlService } from './url.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { User, Review, Discussion, Comment } from './models';
+import { User, Review, Discussion, Comment } from './models/models';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,7 @@ export class ForumService {
    }
 
   getDiscussion(movieId: String) {
-    return this.http.get<Discussion[]>(this.forumsUrl + "forum/discussionsmovie/" + movieId);
+    return this.http.get<Discussion[]>(this.forumsUrl + "forum/discussion/" + movieId);
   }
 
   //Function that will make a call to the Forum API discussions/movieid endpoint

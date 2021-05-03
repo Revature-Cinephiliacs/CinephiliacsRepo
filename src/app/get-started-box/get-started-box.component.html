@@ -1,0 +1,30 @@
+<div class="holder">
+  <!-- <div *ngIf="this.isLoggedIn() then loginBlock else searchBlock"></div> -->
+  <div *ngIf="!isLoggedIn">
+    <h2>What are you waiting for?</h2>
+    <button (click)="authLogin()">Login or Sign up Now!</button>
+  </div>
+  <div *ngIf="isLoggedIn">
+    <h3>Welcome {{this.currentUser.username}}</h3>
+    <!-- todo: fix search box -->
+    <form [formGroup]="forumSearch" (ngSubmit)="onSubmit()">
+      <!-- svg source https://freesvg.org/vector-clip-art-of-minimal-design-search-icon -->
+      <svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg"
+        xmlns="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+        xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="25" height="20"
+        viewBox="0 0 55.770032 124.72441" id="svg4983" version="1.1" inkscape:version="0.91 r13725"
+        sodipodi:docname="Minimal Magnifying Glass.svg">
+        <g inkscape:label="Layer 1" inkscape:groupmode="layer" id="layer1" transform="translate(64.082039,-216.03793)">
+          <g id="g4288" transform="matrix(12.843054,0,0,12.843054,-4352.973,-5791.3727)">
+            <circle r="3.625" cy="472.13062" cx="335.03351" id="path4284" />
+            <path sodipodi:nodetypes="cc" inkscape:connector-curvature="0" id="path4286"
+              d="m 337.9085,474.44313 2.90967,2.26732" />
+          </g>
+        </g>
+      </svg>
+      <input type="text" name="search" [(ngModel)]="movieSearch" placeholder="Search Movies"
+        formControlName="getStartedBoxSearch" />
+    </form>
+  </div>
+</div>

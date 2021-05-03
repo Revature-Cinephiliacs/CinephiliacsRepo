@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Comment, ReportedItem, ReportType } from './models';
+import { Comment, ReportedItem, ReportType } from './models/models';
 import { UrlService } from './url.service';
 
 @Injectable({
@@ -21,8 +21,8 @@ export class AdminService {
    * Get all reports from admin tools
    * @returns 
    */
-  getReports(): Promise<ReportedItem> {
-    return this.http.get<ReportedItem>(this.adminUrl + "Tickets").toPromise();
+  getReports(): Promise<ReportedItem[]> {
+    return this.http.get<ReportedItem[]>(this.adminUrl + "Tickets").toPromise();
   }
 
   /**

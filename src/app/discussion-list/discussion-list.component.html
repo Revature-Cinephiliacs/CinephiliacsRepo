@@ -45,13 +45,23 @@
 <div *ngIf="filterlist.length != 0" class="discussionList">
     <ul *ngFor="let discussion of filterlist">
         <li>
-            <a routerLink="/discussion/{{discussion.discussionId}}">
-                {{discussion.subject}}
-            </a>
-            {{discussion.userid}}
-            {{discussion.comments.length}}
-            {{ discussion.likes}}
-            <!-- {{ discussion.creationTime }} -->
+            <div class="wrapper">
+                <div class="right">
+                    <a routerLink="/discussion/{{discussion.discussionId}}">
+                        {{discussion.subject}}
+                    </a>
+                    <br>
+                    <button *ngFor="let dt of discussion.discussionTopics">
+                        {{dt}}
+                    </button>
+                </div>
+                <div class="left">
+                    <label class="username">{{discussion.userid}}</label> <br>
+                    <label class="comments">Replys: {{discussion.comments.length}}</label>
+                    <label class="likes">Likes: {{ discussion.likes}}</label> 
+                </div>
+            </div>
+
         </li>
     </ul>
 </div>
