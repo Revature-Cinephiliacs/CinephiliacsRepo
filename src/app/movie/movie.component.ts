@@ -41,6 +41,7 @@ export class MovieComponent implements OnInit {
 
   userId: string;
   username: string;
+  userModel: any;
 
   submitDiscussion: PostDiscussion = {
     movieid: this.router.snapshot.params.id,
@@ -50,7 +51,6 @@ export class MovieComponent implements OnInit {
   }
 
   topics: any;
-  //authModel: NewUser;
 
   constructor(
     private logger: LoggerService,
@@ -60,13 +60,10 @@ export class MovieComponent implements OnInit {
     private reviewService: ReviewService) { }
 
   ngOnInit(): void {
-    console.log("USERTEST")
-    this.authService.authModel$.subscribe(reply => {
-      this.logger.log("authmodel", reply);
-      this.authModel = reply
-      this.logger.log("movie authmodel", this.authModel)
+    this.authService.userProfile$.subscribe(reply => {
+      this.logger.log("review user profile", reply);
+      this.userModel = reply;
     });
-    console.log(this.authModel)
 
     this.logger.log("", this.router.snapshot.params);
     //this.inputFields();
@@ -99,8 +96,6 @@ export class MovieComponent implements OnInit {
     else {
       this.logger.log("", "user isn't set");
     }
-
-    this.test();
   }
 
   //Function that will get a list of discussions for a given movie (waiting for forum service)
@@ -116,8 +111,8 @@ export class MovieComponent implements OnInit {
 
   //Function for a user to follow a given movie
   followMovie() {
-    if (this.userId) {
-      this.movieService.addMovieToFollowing(this.movieID, this.userId).subscribe(data => {
+    if (this.userModel) {
+      this.movieService.addMovieToFollowing(this.movieID, this.userModel.sub).subscribe(data => {
         this.movieFollowed = true;
       });
     }
@@ -153,13 +148,5 @@ export class MovieComponent implements OnInit {
   //     this.logger.log("", "no User");
   //   }
   // }
-
-  test()
-  {
-    console.log("USERID")
-    console.log(this.authModel.userid)
-    console.log("USERNAME")
-    console.log(this.authModel.username)
-  }
 
 }
