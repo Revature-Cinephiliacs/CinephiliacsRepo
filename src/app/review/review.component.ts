@@ -3,8 +3,8 @@ import { Moment } from "moment";
 import { LoggerService } from '../logger.service';
 import { ReviewService } from '../review.service';
 import { HttpService } from '../http.service';
-import { AuthService} from '../auth.service';
-import { Movie, NewUser, PostDiscussion, PostReview, ReportedItem, ReportType, Review } from '../models';
+import { AuthService } from '../auth.service';
+import { Movie, NewUser, PostDiscussion, PostReview, ReportedItem, ReportType, Review } from '../models/models';
 import { ActivatedRoute } from '@angular/router';
 import { AdminService } from '../admin.service';
 import * as moment from 'moment';
@@ -16,7 +16,7 @@ import * as moment from 'moment';
 })
 export class ReviewComponent implements OnInit {
   @Input() movieid: string;
-  
+
   reviews: Review[] = [];
   allReviews: Review[] = [];
   filteredReviews: Review[] = [];
@@ -42,7 +42,7 @@ export class ReviewComponent implements OnInit {
   authModel: NewUser;
 
   selectedFilter: string;
-  filters: string[] =[
+  filters: string[] = [
     "Show All",
     "1 Star",
     "2 Stars",
@@ -76,8 +76,7 @@ export class ReviewComponent implements OnInit {
   }
 
   //Function that will get a page of movie reviews
-  loadReviews(page: number)
-  {
+  loadReviews(page: number) {
     this.reviewService.getMovieReviewsPage(this.movieid, page, this.reviewSortOrder)
       .subscribe((data: Review[]) => {
         if (data.length == 0) {
@@ -198,10 +197,9 @@ export class ReviewComponent implements OnInit {
   }
 
   //filter ratings
-  filterByRating(ratingOption:string)
-  {
+  filterByRating(ratingOption: string) {
     console.log(ratingOption);
-    switch(ratingOption) {
+    switch (ratingOption) {
       case "1 Star": {
         console.log("Filter 1 star reviews");
         this.getMovieScoreReviews(1);
@@ -237,18 +235,15 @@ export class ReviewComponent implements OnInit {
   }
 
   //Go through reviews to filter based on a given rating
-  getMovieScoreReviews(rating: number)
-  {
+  getMovieScoreReviews(rating: number) {
     this.reviews = [];
     this.reviewService.getMovieScoreReview(this.movieid, rating)
-      .subscribe((data: Review[]) =>
-      {
+      .subscribe((data: Review[]) => {
         console.log("Get score reviews")
         console.log(data)
-        if(data != null)
-        {
+        if (data != null) {
           this.reviews = data;
-          
+
         }
       }), error => {
         console.log("error")
@@ -257,8 +252,7 @@ export class ReviewComponent implements OnInit {
   }
 
   //Flag a review
-  flagReview(review: Review)
-  {
+  flagReview(review: Review) {
     let reportItem: ReportedItem = {
       ReportEntityType: ReportType.Review,
       ReportDescription: "Flagged Review",

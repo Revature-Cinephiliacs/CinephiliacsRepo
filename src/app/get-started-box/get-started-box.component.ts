@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormControlName, FormGroup } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { LoggerService } from '../logger.service';
-import { NewUser } from '../models';
+import { NewUser } from '../models/models';
 
 @Component({
   selector: 'app-get-started-box',
