@@ -49,7 +49,7 @@ export class NewUser {
   lastname: string;
   email: string;
   dateofbirth: string;
-  permissions: number;
+  permissions: number; // 1 for normal user, 3 for admin
 }
 
 export class Movie {
