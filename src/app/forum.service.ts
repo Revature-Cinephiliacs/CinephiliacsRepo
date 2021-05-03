@@ -8,10 +8,10 @@ import { User, Review, Discussion, Comment } from './models/models';
 })
 export class ForumService {
   
-  forumsUrl: string = "";
+  forumsUrl: string = "https://localhost:5001/";
   constructor(private http: HttpClient,
     private urlService: UrlService) {
-    this.forumsUrl = urlService.ForumAPIUrl;
+    //this.forumsUrl = urlService.ForumAPIUrl;
    }
 
   getDiscussion(movieId: String) {
@@ -65,6 +65,14 @@ export class ForumService {
     return this.http.get<Comment[]>( this.forumsUrl + "forum/comments/" + discussionID);
   }
   
+  //Function that calls Forum API to Post following a discussion of a user  
+  followDiscussion(discussionid: string, userid: string){
+    return this.http.post(this.forumsUrl + "forum/discussions/follow/" + discussionid + "/" + userid, null);
+  }
+
+  getUserFollowedDiscussion(userid: string){
+    return this.http.get<Discussion[]>( this.forumsUrl + "forum/discussions/follow/" + userid);
+  }
 
   postComment(newComment: any) {
     return this.http.post(this.forumsUrl + "forum/comment", newComment);
