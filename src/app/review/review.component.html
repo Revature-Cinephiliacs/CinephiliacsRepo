@@ -1,0 +1,56 @@
+<div class= "left">
+    <h3>Reviews</h3>
+
+    <div class = "reviewheader">
+        <div class = "sortSection">
+            <span>Sort By: </span>
+            <span class="sort" (click)="timeSortNext()" [class.selected]="timeActive">{{timeSortString}}</span>
+            <span class="sort lastchild" (click)="ratingSortNext()" [class.selected]="ratingActive">{{ratingSortString}}</span>
+        </div>
+        <div class = "filterSection">
+            <span>Filter: </span>
+            <select class = "filter" ng-Model= "selectedFilter">
+                <option *ngFor = "let f of filters" (click) = "filterByRating(f)">{{f}}</option>
+            </select>
+        </div>
+    </div>
+
+    <div *ngIf="(reviews.length > 0) then thenRBlock else elseRBlock"></div>
+    <ng-template #thenRBlock>
+        <ul>
+            <li *ngFor="let review of reviews">
+                <u routerLink ="/user/{{review.usernameid}}" class="username">{{ review.usernameid}}</u>
+                <p class="rating">{{ review.score}}</p>
+                <p >{{ review.review}}</p>
+                <button id="flag">Flag</button>
+
+            </li>
+        </ul>
+        <button *ngIf="!lastPage" (click)="loadNextPage()">More Reviews</button>
+    </ng-template>
+    <ng-template #elseRBlock>
+        <span>{{reviewMessage}}</span>
+    </ng-template>
+
+    <div *ngIf="userId" id="review">
+        <h4>New Review</h4>
+        <form>
+            <label>Rating:</label><br>
+            <select name="rating" id="rating" [(ngModel)]="sumbitReview.score" [ngModelOptions]="{standalone: true}">
+                <option selected hidden disabled></option>
+                <option value="1">1</option>
+                <option value="1.5">1.5</option>
+                <option value="2">2</option>
+                <option value="2.5">2.5</option>
+                <option value="3">3</option>
+                <option value="3.5">3.5</option>
+                <option value="4">4</option>
+                <option value="4.5">4.5</option>
+                <option value="5">5</option>
+            </select><br>
+            <label>Review Text:</label><br>
+            <input type="text" [(ngModel)]="sumbitReview.review" [ngModelOptions]="{standalone: true}"><br>
+            <button type="reset"  (click)="postReview()">Submit Review</button>
+        </form>
+    </div>
+</div>

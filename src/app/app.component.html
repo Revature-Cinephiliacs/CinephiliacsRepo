@@ -27,7 +27,7 @@
           </form>
         </li>
         <li>
-          <a href="#" routerLink="/" class="profile">
+          <a *ngIf="this.auth.loggedIn" href="#" routerLink="profile" class="profile">
             <!-- Free svg from https://freesvg.org/user-icon-silhouette -->
             <svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"
               xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg"
@@ -48,12 +48,12 @@
           <span *ngIf="this.auth.loggedIn && this.authModel && this.authModel.firstname">{{this.authModel.firstname}}
             {{this.authModel.lastname}}</span>
         </li>
-        <li>
+        <!-- <li>
           <button *ngIf="!this.auth.loggedIn" (click)="testLogin()">Login</button>
         </li>
         <li>
           <button *ngIf="this.auth.loggedIn" (click)="testLogout()">Logout</button>
-        </li>
+        </li> -->
       </ul>
     </nav>
   </div>
@@ -63,4 +63,5 @@
 </div>
 <div class="container">
   <router-outlet></router-outlet>
+  <app-error></app-error>
 </div>
