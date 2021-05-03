@@ -6,6 +6,9 @@ import { LoggerService } from '../logger.service';
 import { AuthService } from '../auth.service';
 import { UserService } from '../user.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ForumService } from '../forum.service';
+import { ReviewService } from '../review.service';
+import { DiscussionService } from '../discussion.service';
 
 @Component({
   selector: 'app-profile',
@@ -39,6 +42,8 @@ export class ProfileComponent implements OnInit {
     private _http: HttpService,
     private userService: UserService,
     private auth: AuthService,
+    private discussionService: DiscussionService,
+    private reviewService: ReviewService,
   ) { }
 
   newfirstNameControl: FormControl;
@@ -135,6 +140,7 @@ export class ProfileComponent implements OnInit {
 
     this.userService.getAUserDiscussions(this.currentUser.userid).then(data => {
       if (data != null) {
+        this.logger.log("discussions user", data);
         this.userDiscussions = data;
       }
       this.discussionsAreLoaded = true;
@@ -142,6 +148,7 @@ export class ProfileComponent implements OnInit {
 
     this.userService.getAUserComments(this.currentUser.userid).then(data => {
       if (data != null) {
+        this.logger.log("comments user", data);
         this.userComments = data;
       }
       this.commentsAreLoaded = true;
@@ -149,6 +156,7 @@ export class ProfileComponent implements OnInit {
 
     this.userService.getAUserReviews(this.currentUser.userid).then(data => {
       if (data != null) {
+        this.logger.log("reviews user", data);
         this.userReviews = data;
       }
       this.reviewsAreLoaded = true;
@@ -157,36 +165,80 @@ export class ProfileComponent implements OnInit {
     // service: c = comments (user, discussion), d = disuccsion (user, movie), r = review (user, movie)
     this.userService.getUserNotifications(this.currentUser.userid).then(notifs => {
       this.logger.log("notifications", notifs);
+      let temp1 = {};
+      let temp2 = {};
+      let temp3 = {};
       if (notifs != null) {
         this.userNotifications = notifs;
+        let commentNotifications = this.userNotifications.filter(n => n.fromService == 'c').map(n => n.otherId);
+        this.discussionService.getCommentsByIds(commentNotifications).then(c => {
+          this.logger.log("comments", c);
+          this.userNotifications.forEach(n => {
+            temp1 = c.filter(c => c.commentid == n.otherId)[0];
+            if (temp1 != null)
+              n.item = temp1
+          });
+          this.logger.log("new notifications", this.userNotifications);
+        });
+        let reviewNotifications = this.userNotifications.filter(n => n.fromService == 'r').map(n => n.otherId);
+        this.reviewService.getReviewbyIds(reviewNotifications).then(r => {
+          this.logger.log("reviews", r);
+          this.userNotifications.forEach(n => {
+            temp2 = r.filter(r => r.reviewid == n.otherId)[0];
+            if (temp2 != null)
+              n.item = temp2;
+          });
+          this.logger.log("new notifications", this.userNotifications);
+        });
+        let discussionNotifications = this.userNotifications.filter(n => n.fromService == 'd').map(n => n.otherId);
+        this.discussionService.getDiscussionsByIds(discussionNotifications).then(d => {
+          this.logger.log("discussions", d);
+          this.userNotifications.forEach(n => {
+            temp3 = d.filter(d => d.discussionId == n.otherId)[0];
+            if (temp3 != null)
+              n.item = temp3;
+          });
+          this.logger.log("new notifications", this.userNotifications);
+        });
       }
       this.notificationsAreLoaded = true;
     });
   }
 
   moviesLoaded() {
-    this.logger.log("", this.moviesAreLoaded);
     this.moviesAreLoaded = true;
     return this.moviesAreLoaded;
   }
   reviewsLoaded() {
-    this.logger.log("", this.reviewsAreLoaded);
     this.reviewsAreLoaded = true;
     return this.reviewsAreLoaded;
   }
   dicussionsLoaded() {
-    this.logger.log("", this.discussionsAreLoaded);
     this.discussionsAreLoaded = true;
     return this.discussionsAreLoaded
   }
 
   commentsLoaded() {
-    this.logger.log("", this.commentsAreLoaded);
     this.commentsAreLoaded = true;
     return this.commentsAreLoaded;
   }
 
+  /**
+   * Delete the notification
+   * @param not 
+   */
+  deleteNotification(not: UserNotification) {
+    this.userService.deleteNotification(not.notificationId).then(r => {
+      this.logger.log("deleted?", r);
+      if (r == true)
+        this.userNotifications = this.userNotifications.filter(n => n.notificationId != not.notificationId);
+    })
+  }
 
+  /**
+   * Update the user data
+   * @param newuser 
+   */
   updateUser(newuser: boolean = false): void {
     if (this.userIsEditable || newuser) {
       this.userIsUpdating = true;
@@ -246,8 +298,6 @@ export class ProfileComponent implements OnInit {
   }
 
   isCreatorNull(not: UserNotification) {
-    this.logger.log("notification", not);
-    this.logger.log("is null?", not.creatorId == null);
     return not.creatorId == null;
   }
 
