@@ -16,17 +16,20 @@ export class ProfileComponent implements OnInit {
   currentUser: NewUser = new NewUser();
   editedUser: NewUser = new NewUser();
 
+  // Checks for updating user info
   userIsEditable: boolean = false;
   userIsUpdating: boolean = false;
 
   isNewUser: boolean = false;
 
+  // Check whether or not things are loading
   moviesAreLoaded: boolean = false;
   reviewsAreLoaded: boolean = false;
   notificationsAreLoaded: boolean = false;
   discussionsAreLoaded: boolean = false;
   commentsAreLoaded: boolean = false;
 
+  // Get user created elements
   userMovieNames: string[] = [];
   userMovies: any[] = [];
   userReviews: Review[] = [];
@@ -41,6 +44,7 @@ export class ProfileComponent implements OnInit {
     private auth: AuthService,
   ) { }
 
+  // Set up edited user info form
   newfirstNameControl: FormControl;
   newlastNameControl: FormControl;
   newusernameControl: FormControl;
@@ -64,6 +68,7 @@ export class ProfileComponent implements OnInit {
     });
   }
 
+  // If a user is new, prompt them to enter their info
   isANewUser(user: NewUser) {
     if ((user == undefined || user == null) ||
       ((user.firstname == null ||
@@ -79,6 +84,7 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // Check if a user is a new user
     this.auth.isANewUser$.subscribe(isnew => {
       if (isnew) {
         this.createForm();
@@ -90,6 +96,7 @@ export class ProfileComponent implements OnInit {
       this.logger.log("new user? ", this.isNewUser);
     });
 
+    // Get user info
     this.auth.userProfile$.subscribe(reply => {
       this.logger.log("userProfile$ user", reply);
       if (reply != null || reply != undefined) {
@@ -119,9 +126,12 @@ export class ProfileComponent implements OnInit {
     });
     //todo: change to current user calls
   }
+
+  // Get info from the User API
   getAllUserData() {
     this.userService.getAUserFollowedMovies(this.currentUser.userid).then(data => {
       this.userMovieNames = data;
+      // Check if a user follows any movies
       if (this.userMovieNames) {
         this.userMovieNames.forEach(movieName => {
           // Get the Movie information for each favorited movie, for the poster image.
@@ -133,6 +143,7 @@ export class ProfileComponent implements OnInit {
       this.moviesAreLoaded = true;
     });
 
+    // Check if a user has added any discussions
     this.userService.getAUserDiscussions(this.currentUser.userid).then(data => {
       if (data != null) {
         this.userDiscussions = data;
@@ -140,6 +151,7 @@ export class ProfileComponent implements OnInit {
       this.discussionsAreLoaded = true;
     });
 
+    // Check if a user has added any comments
     this.userService.getAUserComments(this.currentUser.userid).then(data => {
       if (data != null) {
         this.userComments = data;
@@ -147,6 +159,7 @@ export class ProfileComponent implements OnInit {
       this.commentsAreLoaded = true;
     });
 
+    // Check if a user has added any reviews
     this.userService.getAUserReviews(this.currentUser.userid).then(data => {
       if (data != null) {
         this.userReviews = data;
@@ -164,29 +177,35 @@ export class ProfileComponent implements OnInit {
     });
   }
 
+  // Check whether or not movies are loaded
   moviesLoaded() {
     this.logger.log("", this.moviesAreLoaded);
     this.moviesAreLoaded = true;
     return this.moviesAreLoaded;
   }
+
+  // Check whether or not reviews are loaded
   reviewsLoaded() {
     this.logger.log("", this.reviewsAreLoaded);
     this.reviewsAreLoaded = true;
     return this.reviewsAreLoaded;
   }
+
+  // Check whether or not discussions are loaded
   dicussionsLoaded() {
     this.logger.log("", this.discussionsAreLoaded);
     this.discussionsAreLoaded = true;
     return this.discussionsAreLoaded
   }
 
+  // Check whether or not comments are loaded
   commentsLoaded() {
     this.logger.log("", this.commentsAreLoaded);
     this.commentsAreLoaded = true;
     return this.commentsAreLoaded;
   }
 
-
+  // Store new user information
   updateUser(newuser: boolean = false): void {
     if (this.userIsEditable || newuser) {
       this.userIsUpdating = true;
@@ -237,6 +256,7 @@ export class ProfileComponent implements OnInit {
     }
   }
 
+  // Do not store new user info
   cancelUpdate(): void {
     this.editedUser.firstname = this.currentUser.firstname;
     this.editedUser.lastname = this.currentUser.lastname;
@@ -245,18 +265,21 @@ export class ProfileComponent implements OnInit {
     this.userIsEditable = false;
   }
 
+  // Check if the creator of a notification has been deleted
   isCreatorNull(not: UserNotification) {
     this.logger.log("notification", not);
     this.logger.log("is null?", not.creatorId == null);
     return not.creatorId == null;
   }
 
+  // Allow user to edit info
   editUser(): void {
     if (!this.userIsUpdating) {
       this.userIsEditable = true;
     }
   }
 
+  // Allow user to log out
   authLogout() {
     this.auth.logout();
   }

@@ -12,7 +12,6 @@ import { MovieComponent } from './movie/movie.component';
 import { AllUsersComponent } from './all-users/all-users.component';
 import { UserComponent } from './user/user.component';
 import { DiscussionComponent } from './discussion/discussion.component';
-import { LoginComponent } from './login/login.component';
 import { ProfileComponent } from './profile/profile.component';
 import { AdmintoolsComponent } from './admintools/admintools.component';
 import { ReviewComponent } from './review/review.component';
@@ -30,7 +29,6 @@ import { ErrorComponent } from './error/error.component';
     AllUsersComponent,
     UserComponent,
     DiscussionComponent,
-    LoginComponent,
     ProfileComponent,
     AdmintoolsComponent,
     ReviewComponent,
