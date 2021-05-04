@@ -31,10 +31,10 @@ ul {
     margin-bottom: -15px;
 
    li {
+       padding-bottom: 5px;
         label{
             float: right;
             padding-right: 5px;
-            
             span{
                 font-size: small;
             }
@@ -45,15 +45,6 @@ ul {
         }
 
     }
-    
-   .wrapper{
-    display: flex;
-    }
-    .left{
-        flex: 1;
-        
-    }
-    
     
 
 }
@@ -107,9 +98,7 @@ ul {
         display: block;
         margin-bottom: 5px;
     }
-    button:first-of-type {
-        margin-left: 20px;
-    }
+    
     br {
         display: inherit;
     }
