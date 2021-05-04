@@ -13,13 +13,13 @@
 
       <ul>
           <li>
-              <img src="{{selectedMovie.posterURL}}" alt="Movie Poster">
+              <img src="{{selectedMovie.posterURL}}" alt="{{selectedMovie.title}}">
               <div class="information">
                   <p class="name"><strong>Title:</strong> {{ selectedMovie.title  }}</p>
                   <p *ngIf="reviews.length > 0" class="reviewscore"><strong>User Review Score: </strong>{{ reviewScore.toFixed(1) }}</p>
                   <p class = "year"><strong>Year: </strong> {{ selectedMovie.releaseDate | date: 'yyyy' }} </p>
                   <p class="date"><strong>Release Date:</strong> {{ selectedMovie.releaseDate }}</p>
-                  <p class="runtime"><strong>Runtime:</strong> {{ selectedMovie.runtimeMinutes  }}</p>
+                  <p class="runtime"><strong>Runtime:</strong> {{ selectedMovie.runtimeMinutes  }} minutes</p>
                   <p class="genre"><strong>Genre:</strong> {{ selectedMovie.movieGenres }}</p>
                   <p class="directors"><strong>Director(s):</strong> {{ selectedMovie.movieDirectors }}</p>
                   <p class="actors"><strong>Actors:</strong> {{ selectedMovie.movieActors }}</p>
@@ -44,7 +44,7 @@
     <div class = "cardScroll">
       <div class="movieCard" *ngFor = "let rm of relatedMovies">
         <a routerLink = "/movie/{{ rm.imdbId }}" (click) = "redirect(rm.imdbId)">
-          <img src="{{rm.posterURL}}" alt="Movie Poster" class="cardPoster">
+          <img src="{{rm.posterURL}}" alt="{{rm.title}}" class="cardPoster">
         </a>
         
       </div>

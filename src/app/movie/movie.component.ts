@@ -102,7 +102,11 @@ export class MovieComponent implements OnInit {
   getRelatedMovies() {
     this.movieService.getRelatedMovies(this.movieID).subscribe(data => {
       this.logger.log("Get Related Movies", data);
-      this.relatedMovies = data;
+      data.forEach(m => {
+        if(m != null){
+          this.relatedMovies.push(m);
+        }
+      });
     });
   }
 
