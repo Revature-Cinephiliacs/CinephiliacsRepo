@@ -31,6 +31,7 @@ export class ProfileComponent implements OnInit {
   // Check whether or not things are loading
   moviesAreLoaded: boolean = false;
   reviewsAreLoaded: boolean = false;
+  followedDiscussionsAreLoaded: boolean = false;
   notificationsAreLoaded: boolean = false;
   discussionsAreLoaded: boolean = false;
   commentsAreLoaded: boolean = false;
@@ -41,6 +42,7 @@ export class ProfileComponent implements OnInit {
   userMovies: any[] = [];
   userReviews: Review[] = [];
   userDiscussions: Discussion[] = [];
+  userFollowedDiscussions: Discussion[] = [];
   userComments: Comment[] = [];
   userNotifications: UserNotification[] = [];
   userRecommendedMovies: Movie[];
@@ -179,6 +181,15 @@ export class ProfileComponent implements OnInit {
         this.userReviews = data;
       }
       this.reviewsAreLoaded = true;
+    });
+
+    // Get all discussions followed by user
+    this.userService.getAUserFollowedDiscussions(this.currentUser.userid).then(data => {
+      if (data != null) {
+        this.logger.log("followed discussions user", data);
+        this.userFollowedDiscussions = data;
+      }
+      this.followedDiscussionsAreLoaded = true;
     });
 
     // service: c = comments (user, discussion), d = disuccsion (user, movie), r = review (user, movie)
