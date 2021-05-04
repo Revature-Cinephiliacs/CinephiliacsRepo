@@ -9,7 +9,7 @@
         </div>
         <div class = "filterSection">
             <span>Filter: </span>
-            <select class = "filter" ng-Model= "selectedFilter">
+            <select class = "filter" [(ngModel)]= "selectedFilter">
                 <option *ngFor = "let f of filters" (click) = "filterByRating(f)">{{f}}</option>
             </select>
         </div>
