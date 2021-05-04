@@ -1,52 +1,57 @@
-<div *ngIf="selectedMovie" class="movieinfo">
-    <h1>{{ selectedMovie.title }}</h1>
-    <div *ngIf="userId">
-      <div *ngIf="movieFollowed then thenFBlock else elseFBlock"></div>
-      <ng-template #thenFBlock>
-        <button class="deactived">Following Movie</button>
-      </ng-template>
-      <ng-template #elseFBlock>
-        <button (click)="followMovie()">Follow Movie</button>
-      </ng-template>
-    </div>
+<div class="moviePage">
+    <div *ngIf="selectedMovie" class="movieinfo">
+      <h1>{{ selectedMovie.title }}</h1>
+      <div *ngIf="userModel">
+        <div *ngIf="movieFollowed then thenFBlock else elseFBlock"></div>
+        <ng-template #thenFBlock>
+          <button class="deactived">Following Movie</button>
+        </ng-template>
+        <ng-template #elseFBlock>
+          <button (click)="followMovie()">Follow Movie</button>
+        </ng-template>
+      </div>
 
-    <ul>
-        <li>
-            <img src="{{selectedMovie.posterURL}}" alt="Movie Poster">
-            <div class="information">
-                <p class="name"><strong>Title:</strong> {{ selectedMovie.title  }}</p>
-                <p *ngIf="reviews.length > 0" class="reviewscore"><strong>User Review Score: </strong>{{ reviewScore.toFixed(1) }}</p>
-                <p class = "year"><strong>Year: </strong> {{ selectedMovie.releaseDate | date: 'yyyy' }} </p>
-                <p class="date"><strong>Release Date:</strong> {{ selectedMovie.releaseDate }}</p>
-                <p class="runtime"><strong>Runtime:</strong> {{ selectedMovie.runtimeMinutes  }}</p>
-                <p class="genre"><strong>Genre:</strong> {{ selectedMovie.movieGenres }}</p>
-                <p class="directors"><strong>Director(s):</strong> {{ selectedMovie.movieDirectors }}</p>
-                <p class="actors"><strong>Actors:</strong> {{ selectedMovie.movieActors }}</p>
-                <p class="plot"><strong>Plot Summary:</strong> {{ selectedMovie.plot }}</p>
-            </div>
-        </li>
-    </ul>
-</div>
-<div class= "left">
-  <app-review [movieid] = movieID></app-review>
-</div>
-
-<div class="right">
-  <app-movie-discussions></app-movie-discussions>
-
-  <div *ngIf="userId" id="discussion">
-    <h4>New Discussion</h4>
-    <form>
-      <label>Topic: </label><br>
-      <select name="rating" id="rating" [(ngModel)]="submitDiscussion.topic" [ngModelOptions]="{standalone: true}">
-        <option selected hidden disabled></option>
-        <option *ngFor="let topic of topics" [value]="topic">
-          {{topic}}
-        </option>
-      </select><br>
-      <label>Discussion Subject:</label><br>
-      <input type="text" [(ngModel)]="submitDiscussion.subject" [ngModelOptions]="{standalone: true}"><br>
-      <button type="reset" (click)="postDiscussion()">Submit Discussion</button>
-    </form>
+      <ul>
+          <li>
+              <img src="{{selectedMovie.posterURL}}" alt="{{selectedMovie.title}}">
+              <div class="information">
+                  <p class="name"><strong>Title:</strong> {{ selectedMovie.title  }}</p>
+                  <p *ngIf="reviews.length > 0" class="reviewscore"><strong>User Review Score: </strong>{{ reviewScore.toFixed(1) }}</p>
+                  <p class = "year"><strong>Year: </strong> {{ selectedMovie.releaseDate | date: 'yyyy' }} </p>
+                  <p class="date"><strong>Release Date:</strong> {{ selectedMovie.releaseDate }}</p>
+                  <p class="runtime"><strong>Runtime:</strong> {{ selectedMovie.runtimeMinutes  }} minutes</p>
+                  <p class="genre"><strong>Genre:</strong> {{ selectedMovie.movieGenres }}</p>
+                  <p class="directors"><strong>Director(s):</strong> {{ selectedMovie.movieDirectors }}</p>
+                  <p class="actors"><strong>Actors:</strong> {{ selectedMovie.movieActors }}</p>
+                  <p class="plot"><strong>Plot Summary:</strong> {{ selectedMovie.plot }}</p>
+              </div>
+          </li>
+      </ul>
   </div>
+
+  <div class="reviewsAndDiscussions">
+    <div class= "left">
+      <app-review [movieid] = movieID></app-review>
+    </div>
+  
+    <div class="right">
+      <app-movie-discussions></app-movie-discussions>
+    </div>
+  </div>
+
+  <div class="recommended">
+    <h3>Related Movies</h3>
+    <div class = "cardScroll">
+      <div class="movieCard" *ngFor = "let rm of relatedMovies">
+        <a routerLink = "/movie/{{ rm.imdbId }}" (click) = "redirect(rm.imdbId)">
+          <img src="{{rm.posterURL}}" alt="{{rm.title}}" class="cardPoster">
+        </a>
+        
+      </div>
+    </div>
+    
+
+  </div>
+
 </div>
+

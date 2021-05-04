@@ -1,56 +1,89 @@
-
-
 //w3school
 
  #myInput{
       width: 200px;
       margin-left: 10%;
   }
-  
-  
 
-.creatDiscussio{
+
+.createDiscussion{
     float: right;
     
 }
 
 .discussionList{
-    border-left: 2px solid #d8d5d1;
-    border-right: 2px solid #d8d5d1;
-    border-bottom: 2px solid #d8d5d1;
-    border-radius: 5px;
+    // border-left: 2px solid #d8d5d1;
+    // border-right: 2px solid #d8d5d1;
+    // border-bottom: 2px solid #d8d5d1;
+    // border-radius: 5px;
     
     margin-top: 10px;
 }
 
-ul{
+ul {
     list-style-type: none;
-    border-top: 2px solid #d8d5d1;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    padding-bottom: 5px;
+    border: 2px solid #d8d5d1;
+    border-radius: 5px;
+    padding-bottom: 10px;
     padding-top: 10px;
-    height: 40px;
-
-}
-li label{
-    float: right;
-    padding-right: 5px;
-}
-
-.psotDiscussion{
+    height: 65px;
+    background-color: #fffdfa;
+    margin-bottom: -12px;
     
+    height: 80px;
+
+   li {
+       
+       padding-bottom: 5px;
+       
+        label{
+            float: right;
+            padding-right: 5px;
+            span{
+                font-size: small;
+            }
+        }
+        .createdTime{
+            font-size: small;
+        }
+
+    }
+
+}
+
+.postDiscussion{
     border: 1px solid black;
-    background-color: #d0d1d1;
-    padding: 10px;
+    background-color: lightgrey;
+    padding: 0 25px;
     margin-left: 20%;
     margin-right: 20%;
     margin-top: 10px;
     border-radius: 5px;
-    
-}
-.psotDiscussion input{
-    width: 300px;
+
+    form {
+        margin-bottom: 25px;
+        margin-top: -10px;
+
+        input {
+            width: 300px;
+            height: 25px;
+        }
+
+        select {
+            height: 25px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            margin-top: 20px;
+            width: 150px;
+            height: 35px;
+            color: white;
+            border: none;
+            background-color: #357fc5;
+            border-radius: 5px;
+        }
+    }
 }
 
 .wrapper{
@@ -61,4 +94,111 @@ li label{
 }
 .right{
     margin-right: 20px;
+    a:first-of-type {
+        display: block;
+        margin-bottom: 5px;
+    }
+    
+    br {
+        display: inherit;
+    }
+}
+
+
+label {
+    margin-right: 10px;
+}
+
+.head {
+    height: 150px;
+
+    .headleft {
+        width: 55%;
+        float: left;
+
+        h2 {
+            margin-bottom: 28px;
+        }
+
+        button {
+            margin: 0;
+            height: 25px;
+            border: 1px solid grey;
+            background-color: lightgrey;
+
+            &.first {
+                border-radius: 5px 0 0 5px;
+            }
+
+            &.last {
+                border-radius: 0 5px 5px 0;
+                margin-right: 25px;
+            }
+
+            &.selected {
+                background-color:  rgb(180, 179, 179);
+                border: 1px solid grey;
+            }
+        }
+
+        select {
+            height: 25px;
+        }
+    }
+
+    .headright {
+        float: right;
+        width: 45%;
+        text-align: right;
+        margin-top: 25px;
+
+        input {
+            margin-bottom: 25px;
+            width: 250px;
+            height: 30px;
+            padding: 0 5px;
+            border: 1px solid grey;
+            border-radius: 5px;
+        }
+
+        button {
+            width: 200px;
+            height: 40px;
+            border-radius: 5px;
+            background-color: #357fc5;
+            border: none;
+            color: white;
+        }
+    }
+}
+
+.discussionList{
+    margin-bottom: 20px;
+}
+
+.nextPrev{
+    margin-bottom: 10px;
+}
+.prev{
+    
+    float: left;
+    margin-left: 30%;
+        width: 100px;
+        height: 25px;
+        color: white;
+        border: none;
+        background-color: #357fc5;
+        border-radius: 2px;
+        
+}
+.next{
+    
+    float: right;
+    margin-right: 30%;
+        width: 100px;
+        height: 25px;
+        color: white;
+        border: none;
+        background-color: #357fc5;
+        border-radius: 2px;
 }

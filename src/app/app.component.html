@@ -44,17 +44,11 @@
             </svg>
           </a>
         </li>
-        <img *ngIf="auth.isAdmin" routerLink="admin" src="../assets/admin_icon.svg" class="admin-icon" alt="">
+          <img *ngIf="auth.isAdmin" routerLink="admin" src="../assets/admin_icon.svg" class="admin-icon" alt="">
         <li>
           <span
             *ngIf="this.auth.loggedIn && this.authModel && this.authModel.firstname">{{this.authModel.username}}</span>
         </li>
-        <!-- <li>
-          <button *ngIf="!this.auth.loggedIn" (click)="testLogin()">Login</button>
-        </li>
-        <li>
-          <button *ngIf="this.auth.loggedIn" (click)="testLogout()">Logout</button>
-        </li> -->
       </ul>
     </nav>
   </div>

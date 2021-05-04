@@ -37,9 +37,22 @@ export class UserService {
     return this.http.get(this.usersUrl + `user/userinfo`).toPromise();
   }
 
+  getUserByUsername(username: string): Promise<NewUser> {
+    return this.http.get<NewUser>(this.usersUrl + "user/user/username/" + username).toPromise();
+  }
+
   //Functio that call User MSA to get all users
   getAlUser() {
-    return this.http.get<NewUser[]>(this.usersUrl + "user/users")
+    return this.http.get<NewUser[]>(this.usersUrl + "user/users");
+  }
+
+  /**
+   * deletes a notification
+   * @param notId 
+   * @returns 
+   */
+  deleteNotification(notId: string) {
+    return this.http.delete<boolean>(this.usersUrl + "user/notification/" + notId).toPromise();
   }
 
   //Function that call User MSA to check if user is admin or not
@@ -96,6 +109,10 @@ export class UserService {
    */
   getAUserFollowedMovies(userid: string): Promise<string[]> {
     return this.http.get<string[]>(this.movieUrl + "Movie/follow/" + userid).toPromise();
+  }
+
+  getAUserFollowedDiscussions(userid: string) {
+    return this.http.get<Discussion[]>(this.forumsUrl + "forum/discussions/follow/{userid}" + userid).toPromise();
   }
 
   //Function to get user's age

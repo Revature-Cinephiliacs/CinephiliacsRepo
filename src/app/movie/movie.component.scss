@@ -1,3 +1,8 @@
+.moviePage
+{
+  display: flex;
+  flex-direction: column;
+}
 u:hover {
   cursor: pointer;
 }
@@ -63,7 +68,7 @@ u:hover {
 .left {
   float: left;
   width: 55%;
-  margin-bottom: 7%;
+  margin-bottom: 2%;
 
   h3 {
     font-size: 1.5em;
@@ -272,6 +277,10 @@ u:hover {
   }
 }
 
+.recommended {
+  margin-bottom: 5%;
+}
+
 @media screen and (max-width: 800px) {
 
   //todo: fix when in small screen (use grid?)
@@ -292,4 +301,17 @@ app-movie-discussions {
   display: block;
   width: 95%;
   margin-bottom: 5vh;
+}
+
+.cardScroll {
+  overflow-x: scroll;
+  overflow-y: hidden;
+  white-space: nowrap;
+  display: flex;
+  flex-direction: row;
+  max-height: 300px;
+  .cardPoster{
+    max-height: 100%;
+    width: auto;
+  }
 }

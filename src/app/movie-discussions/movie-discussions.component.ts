@@ -19,6 +19,7 @@ export class MovieDiscussionsComponent implements OnInit {
     private router: ActivatedRoute) { }
 
   ngOnInit(): void {
+    // Get discussions from the movie ID in the url
     this.movieId = this.router.snapshot.params.id;
     this.logger.log("movieId", this.movieId);
     this.discussionService.getMovieDiscussions(this.movieId).then(reply => {
@@ -34,6 +35,7 @@ export class MovieDiscussionsComponent implements OnInit {
     });
   }
 
+  // Generate test discussions
   testGenerateDiscussions() {
     this.discussions = [
       this.testGetDiscussion("some discussion"),
@@ -44,6 +46,7 @@ export class MovieDiscussionsComponent implements OnInit {
     ];
   }
 
+  // Test getting discussions
   testGetDiscussion(subject: string): Discussion {
     let d = new Discussion();
     d.subject = subject;

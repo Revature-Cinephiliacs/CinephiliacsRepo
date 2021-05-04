@@ -4,15 +4,15 @@
 <ul class="ticket-list" *ngIf="tickets">
   <li *ngFor="let ticket of tickets">
     <span>Report ID:</span>&nbsp;
-    <div class="ticket-id">{{ticket.ReportId}}</div> <br>
+    <div class="ticket-id">{{ticket.ticketId}}</div> <br>
     <span>Date:</span>&nbsp;
-    <div class="ticket-date">{{ticket.ReportTime}}</div>
+    <div class="ticket-date">{{ticket.timeSubmitted}}</div>
     <div class="ticket-description">{{ticket.ReportDescription}}</div>
     <div class="item-and-button">
       <button class="item-toggle-button" (click)="toggleItem(ticket)">View Item</button>
       <div class="ticket-item" [ngClass]="{'expanded':isCollapsed(ticket)}">{{ticket.Item | json}}</div>
     </div>
-    <button class="archive">Archive</button><br>
+    <button class="archive"(click)="archiveTicket(ticket)">Archive</button><br>
     <button class="delete">Delete Item</button>
     {{ticket.ReportType}}
     {{ticket.ReportEnitityId}}
@@ -20,11 +20,14 @@
 
   </li>
 </ul>
-
-<form [formGroup]="form" (ngSubmit)="submitUserChanges()">
-  <label for="fname">UserName</label><br>
-  <input type="text" formControlName="UserName"><br>
-  <label for="options">options</label><br>
-  <button></button>
-  <button></button>>
+<!--[formGroup]="changeUser" (ngSubmit)="submitUserChanges()" -->
+<form >
+  <label for="users">Users</label><br>
+  <select name="usertochange" id="usertochange" [(ngModel)]="usertochange" [ngModelOptions]="{standalone: true}">
+    <option *ngFor="let user of users" [value]="user.userid">
+            {{user.username}}
+    </option>
+</select>
+  <button (click)="addAdmin()">Add Admin</button>
+  <button (click)="removeAdmin()">Remove Admin</button>>
 </form>

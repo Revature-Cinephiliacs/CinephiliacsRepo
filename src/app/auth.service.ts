@@ -36,7 +36,7 @@ export class AuthService {
     createAuth0Client({
       domain: 'cinephiliacs.us.auth0.com', // the account
       client_id: 'uDzm9BWSa0J3ePufHnwOjxzKWO2hpW5P', // an application
-      redirect_uri: "http://localhost:4200", // angular deployment url
+      redirect_uri: "https://cinephiliacsapp.azurewebsites.net/", // angular deployment url
       audience: 'https://cinephiliacs-api/' // an API
     })
   ) as Observable<Auth0Client>).pipe(
@@ -142,7 +142,8 @@ export class AuthService {
       this.authModel$.next(reply);
       if (reply.firstname == null && window.location.pathname != "/profile") {
         this.logger.log("new user in auth", reply);
-        this.router.navigate(["profile"]);
+        if (window.location.pathname == "" || window.location.pathname == "/")
+          this.router.navigate(["profile"]);
         this.isANewUser$.next(true);
       }
       else {
@@ -152,7 +153,8 @@ export class AuthService {
       this.logger.error("in retrieving user", err);
       this.isAdmin$.next(false);
       if (err.status == 400) {
-        this.router.navigate(["profile"]);
+        if (window.location.pathname == "" || window.location.pathname == "/")
+          this.router.navigate(["profile"]);
         this.isANewUser$.next(true);
       }
     });
@@ -165,12 +167,14 @@ export class AuthService {
       this.logger.log("isadmin", reply);
       this.isAdmin$.next(true);
       this.isAdmin = reply;
-      this.router.navigate(["profile"]);
+      if (window.location.pathname == "" || window.location.pathname == "/")
+        this.router.navigate(["profile"]);
     }).catch(err => {
       this.logger.error("isadmin", err);
       this.isAdmin$.next(false);
       this.isAdmin = false;
-      this.router.navigate(["profile"]);
+      if (window.location.pathname == "" || window.location.pathname == "/")
+        this.router.navigate(["profile"]);
     });
   }
 
@@ -230,4 +234,6 @@ export class AuthService {
       });
     });
   }
+
+
 }

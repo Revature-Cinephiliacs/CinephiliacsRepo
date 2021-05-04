@@ -10,19 +10,21 @@ export class AdminService {
   adminUrl: string = "";
   forumsUrl: string = "";
   reviewsUrl: string = "";
+  userUrl: string ="";
 
   constructor(private http: HttpClient, private urlService: UrlService) {
     this.adminUrl = urlService.AdminToolsAPIUrl;
     this.forumsUrl = urlService.ForumAPIUrl;
     this.reviewsUrl = urlService.ReviewsAPIUrl;
+    this.userUrl = urlService.UserAPIUrl;
   }
 
   /**
    * Get all reports from admin tools
    * @returns 
    */
-  getReports(): Promise<ReportedItem[]> {
-    return this.http.get<ReportedItem[]>(this.adminUrl + "Tickets").toPromise();
+  getReports(){
+    return this.http.get<ReportedItem[]>(this.adminUrl + "Tickets");
   }
 
   /**
@@ -73,5 +75,22 @@ export class AdminService {
       "reviews": reportedItemsList.filter(item => { item.ReportEntityType == ReportType.Review }),
     }
   }
+
+
+
+  addAdmin(userId){
+    this.http.post(this.userUrl + 'user/role/admin/' + userId, null).subscribe(reply => reply);
+    console.log(userId + "Added to admin");
+  }
+
+  removeAdmin(userId){
+    this.http.delete(this.userUrl + 'user/role/admin/' + userId, null).subscribe(reply=> reply);
+  }
+
+  archiveTicket(ticket){
+    this.http.post(this.adminUrl + 'reports/archive',ticket.ticketId).subscribe(reply=> reply);
+  }
+
+
 
 }
