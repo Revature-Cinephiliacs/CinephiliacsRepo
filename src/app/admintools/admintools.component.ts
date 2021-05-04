@@ -55,6 +55,11 @@ export class AdmintoolsComponent implements OnInit {
 
   }
 
+  archiveTicket(ticketID){
+    console.log(ticketID);
+    this.admin.archiveTicket(ticketID);
+  }
+
   fillTestTickets() {
     this.tickets = [
       this.createTicket("some descriptionsome description some description some description some description some description some description some description ", ReportType.Comment),

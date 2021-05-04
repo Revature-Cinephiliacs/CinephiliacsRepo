@@ -22,15 +22,15 @@ describe('DiscussionListComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('DiscussionList-SortByCreationTimeA Should alter CreatedBtn', () =>{
-    component.createdBth = true;
-    component.sortByCreationA();
-    expect(component.createdBth).toBe(false);
+  it('DiscussionList-creationSortNext Should alter CreatedBtn', () =>{
+    component.createdSort = false;
+    component.creationSortNext();
+    expect(component.createdSort).toBe(true);
   })
-  it('DiscussionList-sortByLikeA Should alter likesBtn', () =>{
-    component.likesBtn = true;
-    component.sortByLikeA();
-    expect(component.likesBtn).toBe(false);
+  it('DiscussionList-likeSortNext Should alter likesBtn', () =>{
+    component.likesSort = false;
+    component.likeSortNext();
+    expect(component.likesSort).toBe(true);
   })
 
   it('DiscussionList-onNext Should increment pageNum', ( ) =>{
@@ -38,9 +38,9 @@ describe('DiscussionListComponent', () => {
     component.onNext();
     expect(component.pageNum).toBe(2);
   })
-  it('DiscussionList-onPerv Should decrement pageNum', ( ) =>{
+  it('DiscussionList-onPrev Should decrement pageNum', ( ) =>{
     component.pageNum = 2;
-    component.onNext();
+    component.onPrev();
     expect(component.pageNum).toBe(1);
   })
 
