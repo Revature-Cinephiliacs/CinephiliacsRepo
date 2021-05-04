@@ -1,19 +1,46 @@
 <div class="search">
     <form id="searchInput" [formGroup]="searchForm" (ngSubmit)="onSubmit()">
         <!-- svg source https://freesvg.org/vector-clip-art-of-minimal-design-search-icon -->
-        <svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="28.10632" height="25" viewBox="0 0 55.770032 124.72441" id="svg4983" version="1.1" inkscape:version="0.91 r13725" sodipodi:docname="Minimal Magnifying Glass.svg">
+        <!-- <svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="28.10632" height="25" viewBox="0 0 55.770032 124.72441" id="svg4983" version="1.1" inkscape:version="0.91 r13725" sodipodi:docname="Minimal Magnifying Glass.svg">
             <g inkscape:label="Layer 1" inkscape:groupmode="layer" id="layer1" transform="translate(64.082039,-216.03793)">
             <g id="g4288" transform="matrix(12.843054,0,0,12.843054,-4352.973,-5791.3727)" style="fill:none;stroke:grey;stroke-width:1.5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1">
                 <circle r="3.625" cy="472.13062" cx="335.03351" id="path4284" style="color:grey;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation-filters:linearRGB;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#393939;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"/>
                 <path sodipodi:nodetypes="cc" inkscape:connector-curvature="0" id="path4286" d="m 337.9085,474.44313 2.90967,2.26732" style="color:grey;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation-filters:linearRGB;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#393939;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"/>
             </g>
             </g>
-        </svg>
-        <input type="text" id="pgSearch" name="pgSearch" formControlName="search">
+        </svg> -->
+        <select formControlName="selectedFilter" id = "filter">
+            <option [ngValue] = null>Search By...</option>
+            <option *ngFor = "let o of searchFilterOptions" [ngValue] = "o">
+                {{o}}
+            </option>
+        </select>
+        <input type="text" id="pgSearch" name="pgSearch" formControlName="search" placeholder='Search By...'>
     </form>
-    <div class="filters">
+</div>
+<div class="DetailSearching">
+    <button *ngIf = "regularSearching" (click)= "detailedState()" class="buttonDetail">Click for Detailed Search</button>
+    <div class="detailedSearch" *ngIf = "detailedSearching">
+        <form id = "detailSearch" [formGroup] = "detailForm" (ngSubmit) = "detailedSearch()">
+            <label>Tag</label>
+            <input type="text" id="tagFilter" name="tagFilter" formControlName="tagFilter" >
+            <label>Actor</label>
+            <input type="text" id="actorFilter" name="actorFilter" formControlName="actorFilter" >
+            <label>Director</label>
+            <input type="text" id="directorFilter" name="directorFilter" formControlName="directorFilter" >
+            <label>Genre</label>
+            <input type="text" id="genreFilter" name="genreFilter" formControlName="genreFilter" >
+            <label>Language</label>
+            <input type="text" id="languageFilter" name="languageFilter" formControlName="languageFilter" >
+            <label>Rating</label>
+            <input type="text" id="ratingFilter" name="ratingFilter" formControlName="ratingFilter" >
+            <button type="submit" class = "buttonDetail">Search</button>
+        </form>
+        <button (click) = "regularState()" class ="buttonDetail">Cancel</button>
     </div>
 </div>
+
+
  
 <h1>Results for "{{searchTerm}}"</h1>
 <ul *ngIf="searches">
@@ -36,11 +63,21 @@
         <p class="id">{{ search.imdbID }}</p>
     </li>
 </ul>
+<ul *ngIf = "resultMovies">
+    <li *ngFor="let search of resultMovies">
+        <div class="image">
+            <img src="{{search.posterURL}}" routerLink="/movie/{{search.imdbId}}" alt="Movie Poster">
+        </div>
+        <p class="name">{{ search.title }}</p>
+        <p class="year">{{ search.releaseDate }}</p>
+    </li>
+</ul>
 
-<div class="pages">
+<div class="pages" *ngIf = "titleSearching">
     <a href="/list/{{searchTerm}}/{{prevPg}}" class="prev" *ngIf="prevPg>0">Previous Page</a>
     <a href="/list/{{searchTerm}}/{{nextPg}}" class="next" *ngIf="nextPg<76">Next Page</a>
 </div>
+
 
 
 
