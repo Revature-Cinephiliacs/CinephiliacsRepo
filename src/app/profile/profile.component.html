@@ -55,6 +55,33 @@
   <ng-template #elseMBlock>
     <h4>Loading Movies . . .</h4>
   </ng-template>
+
+  <h3>Recommended Movies</h3>
+  <div *ngIf="recommendationsAreLoaded; then thenRMBlock else elseRMBlock"></div>
+  <ng-template #thenRMBlock>
+    <div *ngIf="userRecommendedMovies.length">
+      <ul class="movies">
+        <li *ngFor="let recmovie of userRecommendedMovies">
+          <div class="image">
+            <img src="{{recmovie.posterURL}}" routerLink="/movie/{{recmovie.imdbId}}" alt="Movie Poster">
+          </div>
+          <p class="name">{{ recmovie.title }}</p>
+          <p class="year">{{ recmovie.releaseDate | date: "yyyy" }}</p>
+        </li>
+      </ul>
+    </div>
+    <div *ngIf = "moreRecMovies">
+      <button id="recButton" routerLink="/recommended">Show More Recommended Movies</button>
+    </div>
+
+    <div *ngIf="!userRecommendedMovies.length">
+      <h4 class="missing">No Recommended Movies</h4>
+    </div>
+
+  </ng-template>
+  <ng-template #elseRMBlock>
+    <h4>Loading  Recommended Movies . . .</h4>
+  </ng-template>
 </div>
 
 <div class="right">
@@ -151,10 +178,6 @@
   <ng-template #elseCBlock>
     <h4>Loading Comments . . .</h4>
   </ng-template>
-
-  <h3>Recommended Movies</h3>
-  <a routerLink="/recommended">Show More Recommended Movies</a>
-  <!-- <app-recommendations></app-recommendations> -->
 
   <h3>Notifications</h3>
   <div *ngIf="notificationsAreLoaded; then thenNBlock else elseNBlock"></div>

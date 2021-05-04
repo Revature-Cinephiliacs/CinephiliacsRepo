@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { User, Review, Discussion, Comment, NewUser, UserNotification } from '../models/models';
+import { User, Review, Discussion, Comment, NewUser, UserNotification, Movie } from '../models/models';
 import { LoginService } from '../login.service';
 import { HttpService } from '../http.service';
 import { LoggerService } from '../logger.service';
@@ -9,6 +9,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ForumService } from '../forum.service';
 import { ReviewService } from '../review.service';
 import { DiscussionService } from '../discussion.service';
+import { MoviepageService } from '../moviepage.service';
 
 @Component({
   selector: 'app-profile',
@@ -25,6 +26,8 @@ export class ProfileComponent implements OnInit {
 
   isNewUser: boolean = false;
 
+  moreRecMovies: boolean = false;
+
   // Check whether or not things are loading
   moviesAreLoaded: boolean = false;
   reviewsAreLoaded: boolean = false;
@@ -32,6 +35,7 @@ export class ProfileComponent implements OnInit {
   notificationsAreLoaded: boolean = false;
   discussionsAreLoaded: boolean = false;
   commentsAreLoaded: boolean = false;
+  recommendationsAreLoaded: boolean = false;
 
   // Get user created elements
   userMovieNames: string[] = [];
@@ -41,6 +45,7 @@ export class ProfileComponent implements OnInit {
   userFollowedDiscussions: Discussion[] = [];
   userComments: Comment[] = [];
   userNotifications: UserNotification[] = [];
+  userRecommendedMovies: Movie[];
 
   constructor(
     private logger: LoggerService,
@@ -49,6 +54,7 @@ export class ProfileComponent implements OnInit {
     private auth: AuthService,
     private discussionService: DiscussionService,
     private reviewService: ReviewService,
+    private movieService: MoviepageService
   ) { }
 
   // Set up edited user info form
@@ -230,6 +236,19 @@ export class ProfileComponent implements OnInit {
       }
       this.notificationsAreLoaded = true;
     });
+
+    //get recommended movies 
+    this.movieService.getUserRecommendedMovies().subscribe(data => {
+      this.logger.log("Recommended Movies", data);
+      this.userRecommendedMovies = data.slice(0,4);
+      if(data.length > 5)
+      {
+        this.moreRecMovies = true;
+      }
+      
+      console.log(this.userRecommendedMovies)
+      this.recommendationsAreLoaded = true;
+    })
   }
 
   // Check whether or not movies are loaded
@@ -254,6 +273,12 @@ export class ProfileComponent implements OnInit {
   commentsLoaded() {
     this.commentsAreLoaded = true;
     return this.commentsAreLoaded;
+  }
+
+  // Check whether or not recommended movies are loaded
+  recsLoaded(){
+    this.recommendationsAreLoaded = true;
+    return this.recommendationsAreLoaded;
   }
 
   /**
@@ -348,4 +373,5 @@ export class ProfileComponent implements OnInit {
   authLogout() {
     this.auth.logout();
   }
+
 }
