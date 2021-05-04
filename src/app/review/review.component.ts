@@ -25,6 +25,7 @@ export class ReviewComponent implements OnInit {
   submitReviewStatus = false;
   submitReviewMessage = "Review not submitted";
 
+  // set up info for sorting and pagination
   timeSortState: number = 0;
   timeSortString: string = "Newest";
   ratingSortState: number = 0;
@@ -33,6 +34,8 @@ export class ReviewComponent implements OnInit {
   timeActive: boolean = true;
   reviewsBusy: boolean = false;
   lastPage: boolean = false;
+
+  // set up info to get the average review score
   reviewScoreSum: number = 0;
   reviewScore: number = 0;
 
@@ -66,6 +69,7 @@ export class ReviewComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    // check if user is logged in 
     this.authService.authModel$.subscribe(reply => {
       this.logger.log("authmodel", reply);
       this.authModel = reply;

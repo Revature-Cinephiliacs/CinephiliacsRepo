@@ -5,7 +5,6 @@ import { ActivatedRoute } from '@angular/router';
 import { HttpService } from '../http.service';
 import { LoggerService } from '../logger.service';
 import { AuthService } from '../auth.service';
-import { LoginService } from '../login.service';
 import { Movie, NewUser, PostDiscussion, PostReview, Review } from '../models/models';
 import { MoviepageService } from '../moviepage.service';
 import { ReviewService } from '../review.service';
@@ -106,11 +105,7 @@ export class MovieComponent implements OnInit {
   //Function that will get a list of discussions for a given movie (waiting for forum service)
   async showDiscussion() {
     setTimeout(() => {
-      // this.movieService.getMovieDiscussion(this.movieID).subscribe(data => {
-      //   console.log(data)
-      //   this.logger.log("", data);
-      //   this.discussions = data;
-      // });
+      
     }, 2000);
   }
 
@@ -136,24 +131,7 @@ export class MovieComponent implements OnInit {
     }
     this.logger.log("", this.submitDiscussion);
   }
-
-  // inputFields() {
-  //   if (localStorage.getItem("loggedin")) {
-  //     this.logger.log("", "userset");
-  //     // this.user = localStorage.getItem("loggedin")
-  //     this.userId = "";
-  //     // this.logger.log("", JSON.parse(this.user).username + "USER");
-  //     // this.logger.log("", this.user);
-  //     this.submitDiscussion.userid = this.userId;
-  //     this.sumbitReview.usernameid = this.username;
-  //     this.logger.log("", this.sumbitReview);
-
-  //   } else {
-
-  //     this.logger.log("", "no User");
-  //   }
-  // }
-
+  
   test()
   {
     console.log("USERID")

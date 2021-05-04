@@ -14,20 +14,53 @@ variables:
 
 steps:
 - task: NodeTool@0
-  inputs:
-    versionSpec: '10.x'
   displayName: 'Install Node.js'
-
-- task: Npm@1
   inputs:
-    command: 'install'
+    versionSpec: '14.x'
+  
+
+# - task: Npm@1
+#   displayName: 
+#   inputs:
+#     command: 'install'
+#     #may need 'workingDir: $(solution)'
+
+# - task: Npm@1
+#   inputs:
+#     command: 'custom'
+#     #may need 'workingDir: $(solution)'
+#     customCommand: 'npx ng build --prod'
+#     #verbose: true
+
+- script: npm ci
+  displayName: npm install
+  # workingDirectory: $(appDirectory)
 
 - script: npx ng build --prod
   displayName: ng build
+  # workingDirectory: $(appDirectory)
 
 # below is azure deploy
+# - task: AzureRmWebAppDeployment@4
+#   inputs:
+#     ConnectionType: 'AzureRM'
+#     azureSubscription: 'Project-3-Training(e37a1117-750a-4552-bb20-e84ed6f3c85d)'
+#     appType: 'webApp'
+#     WebAppName: 'cinephiliacsapp'
+#     packageForLinux: '$(Build.ArtifactStagingDirectory)/**/*.zip'
+#     enableCustomDeployment: true
+#     DeploymentType: runFromZip
+
+# - task: AzureRmWebAppDeployment@4
+#   inputs:
+#     ConnectionType: 'AzureRM'
+#     azureSubscription: 'Project-3-Training(1)(e37a1117-750a-4552-bb20-e84ed6f3c85d)'
+#     appType: 'webApp'
+#     WebAppName: 'cinephiliacsapp'
+#     packageForLinux: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
 
 - task: AzureRmWebAppDeployment@4
+  displayName: app service deploy
   inputs:
     ConnectionType: 'AzureRM'
     azureSubscription: 'Project-3-Training(e37a1117-750a-4552-bb20-e84ed6f3c85d)'

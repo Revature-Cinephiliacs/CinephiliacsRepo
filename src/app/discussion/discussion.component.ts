@@ -15,6 +15,7 @@ import { UserService } from "../user.service";
 })
 export class DiscussionComponent implements OnInit {
 
+  // Discussion info
   discussionID: string = "";
   discussion: Discussion;
 
@@ -62,11 +63,13 @@ export class DiscussionComponent implements OnInit {
     private _forum: ForumService, private router: ActivatedRoute) { }
 
   ngOnInit(): void {
+    // Check if user is logged in
     this.auth.authModel$.subscribe(reply =>{
       this.userid = reply.userid;
       this.username = reply.username
     })
     
+    // Load discussion info
     this.discussionID = this.router.snapshot.params.id;
     this.newComment.discussionid = this.router.snapshot.params.id;
     //this.displayInput();
@@ -80,10 +83,13 @@ export class DiscussionComponent implements OnInit {
       this.subject = this.discussion.subject;
     });
 
+    // load discussion comments
     this._forum.getDiscussionComments(this.discussionID).subscribe(data => {
       this.comments = data;
       this.getParentSize();
     });
+    
+    // Check if user follows the discussion
     this.getUserFollowedDis()
     this._forum.getTopics().subscribe(data => {
       console.log(data);
@@ -246,6 +252,7 @@ export class DiscussionComponent implements OnInit {
   //   }
   // }
 
+  // Get discussion id for this page
   getDicussionID() {
     this.logger.log("", "Dicussion ID " + this.discussionID);
     return this.discussionID;
@@ -257,10 +264,12 @@ export class DiscussionComponent implements OnInit {
     this.logger.log("", this.displaySpoilers);
   }
 
+  // checks whether or not a user has chosen to show spoilers
   spoilersShown() {
     return this.displaySpoilers;
   }
 
+  // checks if a string is blank
   isEmpty(testSTR: string) {
     return (testSTR == "");
   }
@@ -310,6 +319,7 @@ export class DiscussionComponent implements OnInit {
 
   }
 
+  // Allows user to follow discussion
   followDiscussion(){
     this._forum.followDiscussion(this.discussionID, this.userid).subscribe(data =>{
       console.log(data);
@@ -317,6 +327,7 @@ export class DiscussionComponent implements OnInit {
     })
   }
 
+  // Checks whether or not the user is following this discussion
   getUserFollowedDis(){
     this._forum.getUserFollowedDiscussion(this.userid).subscribe(data => {
       data.forEach(dis => {

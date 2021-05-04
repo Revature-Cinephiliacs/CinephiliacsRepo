@@ -35,8 +35,8 @@ export class DiscussionListComponent implements OnInit {
   userid: string;
 
   displayPostDiscussion: boolean = false;
-
-    submitDiscussion: newDiscussion = {
+  
+  submitDiscussion: newDiscussion = {
       movieId: this.router.snapshot.params.id,
       topic:"",
       userId: "",
