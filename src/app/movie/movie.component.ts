@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Route, ActivatedRoute } from '@angular/router';
+import { Route, ActivatedRoute, Router } from '@angular/router';
 import { HttpService } from '../http.service';
 import { LoggerService } from '../logger.service';
 import { AuthService } from '../auth.service';
@@ -56,6 +56,7 @@ export class MovieComponent implements OnInit {
     private router: ActivatedRoute, private _http: HttpService,
     private authService: AuthService,
     private movieService: MoviepageService,
+    private routerer: Router,
     private reviewService: ReviewService) { }
 
   ngOnInit(): void {
@@ -73,7 +74,7 @@ export class MovieComponent implements OnInit {
 
     //will get the details of the movie from the IMDB API
     this.movieID = this.router.snapshot.params.id;
-    
+
     this.movieService.getMovieDetails(this.movieID).subscribe(data => {
       this.selectedMovie = data;
       this.logger.log("", "this is getting movie details");
@@ -105,7 +106,7 @@ export class MovieComponent implements OnInit {
   //Function that will get a list of discussions for a given movie (waiting for forum service)
   async showDiscussion() {
     setTimeout(() => {
-      
+
     }, 2000);
   }
 
@@ -133,20 +134,17 @@ export class MovieComponent implements OnInit {
   }
 
   //Get a list of related movies for the current movie displayed
-  getRelatedMovies()
-  {
-    this.movieService.getRelatedMovies(this.movieID).subscribe(data =>
-      {
-        this.logger.log("Get Related Movies", data);
-        this.relatedMovies = data;
-      });
+  getRelatedMovies() {
+    this.movieService.getRelatedMovies(this.movieID).subscribe(data => {
+      this.logger.log("Get Related Movies", data);
+      this.relatedMovies = data;
+    });
   }
 
-  redirect(movieID: string)
-  {
+  redirect(movieID: string) {
     this.movieID = movieID;
-    window.location.href = "/movie/" + this.movieID;
+    this.routerer.navigate(["/movie/" + this.movieID]);
   }
-  
+
 
 }
