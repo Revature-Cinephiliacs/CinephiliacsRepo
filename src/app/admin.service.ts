@@ -84,6 +84,10 @@ export class AdminService {
     this.http.post(this.authUrl + 'Authenitcation/role/Admin', userId);
   }
 
+  archiveTicket(ticketID){
+    this.http.post(this.adminUrl + 'reports/archive',ticketID);
+  }
+
 
 
 }
