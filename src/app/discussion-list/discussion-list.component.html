@@ -28,7 +28,7 @@
         <select name="rating" id="rating" [(ngModel)]="submitDiscussion.topic" [ngModelOptions]="{standalone: true}">
             <option selected hidden disabled></option>
             <option *ngFor="let topic of topics"
-                    [value]="topic.topicName">
+                    [value]="topic.topicId">
                     {{topic.topicName}}
             </option>
         </select><br>
