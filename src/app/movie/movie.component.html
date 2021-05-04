@@ -13,7 +13,7 @@
 
       <ul>
           <li>
-              <img src="{{selectedMovie.posterURL}}" alt="Movie Poster">
+              <img src="{{selectedMovie.posterURL}}" alt="{{selectedMovie.title}}">
               <div class="information">
                   <p class="name"><strong>Title:</strong> {{ selectedMovie.title  }}</p>
                   <p *ngIf="reviews.length > 0" class="reviewscore"><strong>User Review Score: </strong>{{ reviewScore.toFixed(1) }}</p>
@@ -44,7 +44,7 @@
     <div class = "cardScroll">
       <div class="movieCard" *ngFor = "let rm of relatedMovies">
         <a routerLink = "/movie/{{ rm.imdbId }}" (click) = "redirect(rm.imdbId)">
-          <img src="{{rm.posterURL}}" alt="Movie Poster" class="cardPoster">
+          <img src="{{rm.posterURL}}" alt="{{rm.title}}" class="cardPoster">
         </a>
         
       </div>
