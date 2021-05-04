@@ -1,6 +1,6 @@
 .left {
     float: left;
-    width: 55%;
+    width: 100%;
     margin-bottom: 7%;
 
     h3 {
@@ -15,6 +15,7 @@
     div.reviewheader {
         display: flex;
         flex-direction: row;
+        margin-bottom: 15px;
     }
     span.sort {
         background-color: lightgrey;
@@ -36,6 +37,8 @@
 
     div.filterSection {
         margin-left:3rem;
+        display: flex;
+        align-items: center;
     }
 
     select.filter{
@@ -68,6 +71,7 @@
         background-color: lightgray;
         padding: 5%;
         width: 90%;
+        margin-top: 15px;
 
         form {
             label {
@@ -141,4 +145,12 @@
             border-radius: 10px;
         }
     }
+
+    textarea {
+        border-radius: 5px;
+        border: none;
+        margin-bottom: 20px;
+    }
+       
+       
 }

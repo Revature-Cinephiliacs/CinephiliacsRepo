@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { User, Review, Discussion, Comment, NewUser, UserNotification } from '../models/models';
+import { User, Review, Discussion, Comment, NewUser, UserNotification, Movie } from '../models/models';
 import { LoginService } from '../login.service';
 import { HttpService } from '../http.service';
 import { LoggerService } from '../logger.service';
@@ -9,6 +9,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ForumService } from '../forum.service';
 import { ReviewService } from '../review.service';
 import { DiscussionService } from '../discussion.service';
+import { MoviepageService } from '../moviepage.service';
 
 @Component({
   selector: 'app-profile',
@@ -25,20 +26,26 @@ export class ProfileComponent implements OnInit {
 
   isNewUser: boolean = false;
 
+  moreRecMovies: boolean = false;
+
   // Check whether or not things are loading
   moviesAreLoaded: boolean = false;
   reviewsAreLoaded: boolean = false;
+  followedDiscussionsAreLoaded: boolean = false;
   notificationsAreLoaded: boolean = false;
   discussionsAreLoaded: boolean = false;
   commentsAreLoaded: boolean = false;
+  recommendationsAreLoaded: boolean = false;
 
   // Get user created elements
   userMovieNames: string[] = [];
   userMovies: any[] = [];
   userReviews: Review[] = [];
   userDiscussions: Discussion[] = [];
+  userFollowedDiscussions: Discussion[] = [];
   userComments: Comment[] = [];
   userNotifications: UserNotification[] = [];
+  userRecommendedMovies: Movie[];
 
   constructor(
     private logger: LoggerService,
@@ -47,6 +54,7 @@ export class ProfileComponent implements OnInit {
     private auth: AuthService,
     private discussionService: DiscussionService,
     private reviewService: ReviewService,
+    private movieService: MoviepageService
   ) { }
 
   // Set up edited user info form
@@ -175,6 +183,15 @@ export class ProfileComponent implements OnInit {
       this.reviewsAreLoaded = true;
     });
 
+    // Get all discussions followed by user
+    this.userService.getAUserFollowedDiscussions(this.currentUser.userid).then(data => {
+      if (data != null) {
+        this.logger.log("followed discussions user", data);
+        this.userFollowedDiscussions = data;
+      }
+      this.followedDiscussionsAreLoaded = true;
+    });
+
     // service: c = comments (user, discussion), d = disuccsion (user, movie), r = review (user, movie)
     this.userService.getUserNotifications(this.currentUser.userid).then(notifs => {
       this.logger.log("notifications", notifs);
@@ -219,6 +236,19 @@ export class ProfileComponent implements OnInit {
       }
       this.notificationsAreLoaded = true;
     });
+
+    //get recommended movies 
+    this.movieService.getUserRecommendedMovies().subscribe(data => {
+      this.logger.log("Recommended Movies", data);
+      this.userRecommendedMovies = data.slice(0,4);
+      if(data.length > 5)
+      {
+        this.moreRecMovies = true;
+      }
+      
+      console.log(this.userRecommendedMovies)
+      this.recommendationsAreLoaded = true;
+    })
   }
 
   // Check whether or not movies are loaded
@@ -244,7 +274,13 @@ export class ProfileComponent implements OnInit {
     this.commentsAreLoaded = true;
     return this.commentsAreLoaded;
   }
-  
+
+  // Check whether or not recommended movies are loaded
+  recsLoaded(){
+    this.recommendationsAreLoaded = true;
+    return this.recommendationsAreLoaded;
+  }
+
   /**
    * Delete the notification
    * @param not 
@@ -252,9 +288,10 @@ export class ProfileComponent implements OnInit {
   deleteNotification(not: UserNotification) {
     this.userService.deleteNotification(not.notificationId).then(r => {
       this.logger.log("deleted?", r);
-      if (r == true)
-        this.userNotifications = this.userNotifications.filter(n => n.notificationId != not.notificationId);
-    })
+      this.userNotifications = this.userNotifications.filter(n => n.notificationId != not.notificationId);
+    }).catch(err => {
+      this.logger.log("error in deleting comment", err);
+    });
   }
 
   /**
@@ -336,4 +373,5 @@ export class ProfileComponent implements OnInit {
   authLogout() {
     this.auth.logout();
   }
+
 }

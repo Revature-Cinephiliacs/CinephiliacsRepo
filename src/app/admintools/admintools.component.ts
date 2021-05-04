@@ -22,31 +22,37 @@ export class AdmintoolsComponent implements OnInit {
   selecteduser: NewUser;
 
 
-  usertochange:any;
-  changeUser:any;
+  usertochange: any;
+  changeUser: any;
 
 
-  constructor(private fb: FormBuilder, private admin: AdminService, private logger: LoggerService,
+  constructor(private fb: FormBuilder,
+    private auth: AuthService,
+    private admin: AdminService, private logger: LoggerService,
     private userService: UserService) { }
 
   ngOnInit(): void {
-    this.admin.getReports().toPromise().then(result => {
-      this.tickets = result;
-      this.collapsedItem = Array(this.tickets.length).fill(false);
-    }).catch(err => {
-      this.logger.error("in retrieving tickets", err);
-      this.fillTestTickets();
-      this.collapsedItem = Array(this.tickets.length).fill(false);
+    this.auth.isAdmin$.subscribe(iad => {
+      if (iad) {
+        this.admin.getReports().then(result => {
+          this.tickets = result;
+          this.collapsedItem = Array(this.tickets.length).fill(false);
+        }).catch(err => {
+          this.logger.error("in retrieving tickets", err);
+          this.fillTestTickets();
+          this.collapsedItem = Array(this.tickets.length).fill(false);
+        });
+
+        this.userService.getAlUser().toPromise().then(result => {
+          this.users = result;
+          this.logger.log("Users", this.users);
+        }).catch(error => {
+          this.logger.error("error in retreaving customers", error);
+          this.fillUsers();
+        });
+      }
     });
 
-    this.userService.getAlUser().toPromise().then(result =>{
-      this.users = result;
-      this.logger.log("Users" + this.users,"good");
-    }).catch(error =>{
-      this.logger.error("error in retreaving customers",error);
-      this.fillUsers();
-    })
-    
   }
 
   archiveTicket(ticketID){
@@ -62,7 +68,7 @@ export class AdmintoolsComponent implements OnInit {
     ];
   }
 
-  fillUsers(){
+  fillUsers() {
     this.users = [
       this.createUser("01"),
       this.createUser("02"),
@@ -71,8 +77,7 @@ export class AdmintoolsComponent implements OnInit {
     console.log(this.users);
   }
 
-  createUser(userID: string): NewUser
-  {
+  createUser(userID: string): NewUser {
     let user = new NewUser();
     user.username = "TestUser" + userID;
     user.userid = userID;
@@ -119,10 +124,10 @@ export class AdmintoolsComponent implements OnInit {
   }
 
 
-  addAdmin(){
+  addAdmin() {
     this.admin.addAdmin(this.usertochange);
   }
-  removeAdmin(){
+  removeAdmin() {
     this.admin.removeAdmin(this.usertochange);
   }
 }
