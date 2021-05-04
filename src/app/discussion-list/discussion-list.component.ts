@@ -47,7 +47,6 @@ export class DiscussionListComponent implements OnInit {
     this.auth.authModel$.subscribe(reply =>{
       this.userid = reply.userid;
       this.submitDiscussion.userId = reply.userid;
-      console.log(reply)
     })
     this.movieID =  this.router.snapshot.params.id;
     this._movie.getMovieDetails(this.movieID).subscribe(data => { this.movieTitle = data.title })
@@ -57,7 +56,6 @@ export class DiscussionListComponent implements OnInit {
       this.discussions = []})
 
       this._forum.getTopics().subscribe(data => {
-        console.log(data);
         this.topics = data;
       });
       this.getDiscussions()
@@ -70,9 +68,7 @@ export class DiscussionListComponent implements OnInit {
     this.discussions = [];
     setTimeout(() => {
       this._forum.getDiscussionPage(this.movieID, this.pageNum, this.sortingOrder).subscribe(data => {
-        console.log(data);
         this.discussions = data;
-        console.log(data);
       });
     }, 1000);
   }
@@ -97,7 +93,6 @@ export class DiscussionListComponent implements OnInit {
   let input, filter;
   input = document.getElementById("myInput");
   filter = input.value.toUpperCase();
-  console.log(filter)
   this.discussions = this.discussions.filter(obj => {
     return !!JSON.stringify(Object.values(obj)).match(new RegExp(filter, 'i'));
   });
@@ -183,27 +178,22 @@ export class DiscussionListComponent implements OnInit {
   postDiscussion(){
     if(this.submitDiscussion.topic == "" || this.submitDiscussion.subject == "")
     {
-      console.log("didn't submit discussion");
     }else if(this.submitDiscussion.subject.length >= 250){
       alert("Discussion should be less than 250 Characters")
     }else{
       this.submitDiscussion.creationTime = moment();
       this.submitDiscussion.movieId = this.router.snapshot.params.id;
-      console.log(this.submitDiscussion);
       this._forum.submitDiscussion(this.submitDiscussion).subscribe(data => {
-        console.log(data); 
         this.displayPostDiscussion = false;
       });
-      //this.showDiscussion();
+     
     }
   }
 
   //Function to change discussion as selected filter
   onChangeFilter(){
-    console.log(this.selectedFilter);
     setTimeout(() => {
       this._forum.filterDiscussionByTopic(this.selectedFilter).subscribe(data => {
-        console.log(data);
         this.discussions = data;
       })
     })
