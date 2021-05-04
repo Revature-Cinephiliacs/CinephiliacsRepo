@@ -88,11 +88,15 @@ label {
 }
 
 .head {
-    height: 125px;
+    height: 150px;
 
     .headleft {
         width: 50%;
         float: left;
+
+        h2 {
+            margin-bottom: 28px;
+        }
 
         button {
             margin: 0;
@@ -127,7 +131,7 @@ label {
         margin-top: 25px;
 
         input {
-            margin-bottom: 15px;
+            margin-bottom: 25px;
             width: 250px;
             height: 30px;
             padding: 0 5px;
@@ -144,4 +148,8 @@ label {
             color: white;
         }
     }
+}
+
+.discussionList {
+    margin-bottom: 50px;
 }
