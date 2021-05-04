@@ -244,7 +244,7 @@ export class ProfileComponent implements OnInit {
     this.commentsAreLoaded = true;
     return this.commentsAreLoaded;
   }
-  
+
   /**
    * Delete the notification
    * @param not 
@@ -252,9 +252,10 @@ export class ProfileComponent implements OnInit {
   deleteNotification(not: UserNotification) {
     this.userService.deleteNotification(not.notificationId).then(r => {
       this.logger.log("deleted?", r);
-      if (r == true)
-        this.userNotifications = this.userNotifications.filter(n => n.notificationId != not.notificationId);
-    })
+      this.userNotifications = this.userNotifications.filter(n => n.notificationId != not.notificationId);
+    }).catch(err => {
+      this.logger.log("error in deleting comment", err);
+    });
   }
 
   /**
