@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LoggerService } from '../logger.service';
 import { ForumService } from '../forum.service';
-import { Discussion, Comment, User} from '../models/models';
+import { Discussion, Comment, User } from '../models/models';
 import { AuthService } from '../auth.service';
 import { UserService } from "../user.service";
 
@@ -32,7 +32,7 @@ export class DiscussionComponent implements OnInit {
   username: string; //username 
   userid: string;
 
-  displayFollow:boolean = true;
+  displayFollow: boolean = true;
 
   displaySpoilers: boolean = false;
   pageComments: Comment[] = [];
@@ -64,11 +64,11 @@ export class DiscussionComponent implements OnInit {
 
   ngOnInit(): void {
     // Check if user is logged in
-    this.auth.authModel$.subscribe(reply =>{
+    this.auth.authModel$.subscribe(reply => {
       this.userid = reply.userid;
       this.username = reply.username
     })
-    
+
     // Load discussion info
     this.discussionID = this.router.snapshot.params.id;
     this.newComment.discussionid = this.router.snapshot.params.id;
@@ -76,10 +76,10 @@ export class DiscussionComponent implements OnInit {
     console.log(this.username)
     this.getComments();
     this._forum.getCurrentDiscussion(this.discussionID).subscribe(data => {
-      this.logger.log("", data);
+      this.logger.log("current discussion", data);
       console.log(data)
       this.discussion = data;
-      
+
       this.subject = this.discussion.subject;
     });
 
@@ -88,7 +88,7 @@ export class DiscussionComponent implements OnInit {
       this.comments = data;
       this.getParentSize();
     });
-    
+
     // Check if user follows the discussion
     this.getUserFollowedDis()
     this._forum.getTopics().subscribe(data => {
@@ -126,7 +126,7 @@ export class DiscussionComponent implements OnInit {
   }
 
   //Function that will show the reply form and hide the new comment form
-  showReplyForm(commentparentid:string){
+  showReplyForm(commentparentid: string) {
     this.displayReplyForm = true;
     this.displayMessageForm = false;
     this.parentId = commentparentid;
@@ -141,7 +141,7 @@ export class DiscussionComponent implements OnInit {
     if (this.isEmpty(this.newComment.text)) {
       console.log("Please enter a comment");
     } else {
-      this.newComment.userid = this.userid; 
+      this.newComment.userid = this.userid;
       this.newComment.parentcommentid = this.parentId;
       this._forum.postComment(this.newComment).subscribe(data => console.log(data));
       this.getComments();
@@ -150,7 +150,7 @@ export class DiscussionComponent implements OnInit {
   }
 
   //Function that will add a like to a comment
-  addLike(commentid: string){
+  addLike(commentid: string) {
     var userid = this.userid;
     this._forum.addLike(commentid, userid).subscribe(data => {
       console.log(data);
@@ -168,9 +168,9 @@ export class DiscussionComponent implements OnInit {
   // Sorting functions 
   // sort comments based on creation time in Ascending order
   sortByCreationA() {
-    if(this.createdBtn){
+    if (this.createdBtn) {
       this.createdBtn = false;
-    }else{
+    } else {
       this.createdBtn = true;
     }
     this.sortingOrder = "timeA";
@@ -179,9 +179,9 @@ export class DiscussionComponent implements OnInit {
   }
   //sort comments based on creation time in Descending order
   sortByCreationB() {
-    if(this.createdBtn){
+    if (this.createdBtn) {
       this.createdBtn = false;
-    }else{
+    } else {
       this.createdBtn = true;
     }
     this.sortingOrder = "timeD";
@@ -190,9 +190,9 @@ export class DiscussionComponent implements OnInit {
   }
   //sort comments based on number of like in Ascending order
   sortByLikeAsc() {
-    if(this.likesBtn){
+    if (this.likesBtn) {
       this.likesBtn = false;
-    }else{
+    } else {
       this.likesBtn = true;
     }
     this.sortingOrder = "likesA";
@@ -201,9 +201,9 @@ export class DiscussionComponent implements OnInit {
   }
   //sort comments based on number of like in Descending order
   sortByLikeDesc() {
-    if(this.likesBtn){
+    if (this.likesBtn) {
       this.likesBtn = false;
-    }else{
+    } else {
       this.likesBtn = true;
     }
     this.sortingOrder = "likesD";
@@ -320,18 +320,18 @@ export class DiscussionComponent implements OnInit {
   }
 
   // Allows user to follow discussion
-  followDiscussion(){
-    this._forum.followDiscussion(this.discussionID, this.userid).subscribe(data =>{
+  followDiscussion() {
+    this._forum.followDiscussion(this.discussionID, this.userid).subscribe(data => {
       console.log(data);
       this.displayFollow = false;
     })
   }
 
   // Checks whether or not the user is following this discussion
-  getUserFollowedDis(){
+  getUserFollowedDis() {
     this._forum.getUserFollowedDiscussion(this.userid).subscribe(data => {
       data.forEach(dis => {
-        if(dis.discussionId == this.discussionID){
+        if (dis.discussionId == this.discussionID) {
           this.displayFollow = false;
         }
       });
