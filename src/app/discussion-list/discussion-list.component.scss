@@ -9,29 +9,29 @@
 
 .createDiscussion{
     float: right;
-    
 }
 
-.discussionList{
-    border-left: 2px solid #d8d5d1;
-    border-right: 2px solid #d8d5d1;
-    border-bottom: 2px solid #d8d5d1;
-    border-radius: 5px;
-    
-    margin-top: 10px;
-}
-
-ul{
+ul {
     list-style-type: none;
-    border-top: 2px solid #d8d5d1;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    padding-bottom: 5px;
-    padding-top: 10px;
-    height: 40px;
-    margin-bottom: 10px;
+    margin: 0;
+    padding-left: 0;
 
+    li {
+        border: 2px solid #d8d5d1;
+        background-color: #fffdfa;
+        padding: 30px;
+    }
+    li ::ng-deep{
+        
+        border-top-left-radius: 5px;
+        li{
+            margin-left: 5%;
+            border: none;
+        }
+    }
+    
 }
+
 li label{
     float: right;
     padding-right: 5px;
@@ -80,6 +80,16 @@ li label{
 }
 .right{
     margin-right: 20px;
+    a:first-of-type {
+        display: block;
+        margin-bottom: 5px;
+    }
+    button:first-of-type {
+        margin-left: 20px;
+    }
+    br {
+        display: inherit;
+    }
 }
 
 
@@ -138,7 +148,7 @@ label {
         button {
             width: 200px;
             height: 40px;
-            border-radius: 10px;
+            border-radius: 5px;
             background-color: #357fc5;
             border: none;
             color: white;
