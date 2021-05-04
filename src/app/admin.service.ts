@@ -79,15 +79,16 @@ export class AdminService {
 
 
   addAdmin(userId){
-    this.http.post(this.userUrl + 'user/role/admin/' + userId, null);
+    this.http.post(this.userUrl + 'user/role/admin/' + userId, null).subscribe(reply => reply);
+    console.log(userId + "Added to admin");
   }
 
   removeAdmin(userId){
-    this.http.delete(this.userUrl + 'user/role/admin/' + userId, null);
+    this.http.delete(this.userUrl + 'user/role/admin/' + userId, null).subscribe(reply=> reply);
   }
 
-  archiveTicket(ticketID){
-    this.http.post(this.adminUrl + 'reports/archive',ticketID);
+  archiveTicket(ticket){
+    this.http.post(this.adminUrl + 'reports/archive',ticket.ticketId).subscribe(reply=> reply);
   }
 
 

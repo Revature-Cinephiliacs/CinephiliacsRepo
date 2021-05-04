@@ -6,6 +6,7 @@ import { ForumService } from '../forum.service';
 import { Discussion, Comment, User } from '../models/models';
 import { AuthService } from '../auth.service';
 import { UserService } from "../user.service";
+import { AdminService } from '../admin.service';
 
 
 @Component({
@@ -60,7 +61,9 @@ export class DiscussionComponent implements OnInit {
     private _user: UserService,
     private auth: AuthService,
     private logger: LoggerService,
-    private _forum: ForumService, private router: ActivatedRoute) { }
+    private _forum: ForumService, 
+    private _admin: AdminService,
+    private router: ActivatedRoute) { }
 
   ngOnInit(): void {
     // Check if user is logged in
@@ -68,6 +71,11 @@ export class DiscussionComponent implements OnInit {
       this.userid = reply.userid;
       this.username = reply.username
     })
+    this.auth.isAdmin$.subscribe(iad => {
+      if (iad) {
+        console.log("isadmin");
+      }}
+    );
 
     // Load discussion info
     this.discussionID = this.router.snapshot.params.id;
@@ -336,5 +344,9 @@ export class DiscussionComponent implements OnInit {
         }
       });
     })
+  }
+
+  reportComment(commentToReport){
+
   }
 }

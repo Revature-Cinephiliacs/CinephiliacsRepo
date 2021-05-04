@@ -34,9 +34,10 @@ export class AdmintoolsComponent implements OnInit {
   ngOnInit(): void {
     this.auth.isAdmin$.subscribe(iad => {
       if (iad) {
-        this.admin.getReports().then(result => {
+        this.admin.getReports().toPromise().then(result => {
           this.tickets = result;
           this.collapsedItem = Array(this.tickets.length).fill(false);
+          console.log(this.tickets);
         }).catch(err => {
           this.logger.error("in retrieving tickets", err);
           this.fillTestTickets();
@@ -55,10 +56,6 @@ export class AdmintoolsComponent implements OnInit {
 
   }
 
-  archiveTicket(ticketID){
-    console.log(ticketID);
-    this.admin.archiveTicket(ticketID);
-  }
 
   fillTestTickets() {
     this.tickets = [
@@ -85,7 +82,7 @@ export class AdmintoolsComponent implements OnInit {
   }
   createTicket(desc: string, type: ReportType): ReportedItem {
     let ticket = new ReportedItem();
-    ticket.ReportId = Math.random();
+    ticket.ReportId = "a";
     ticket.ReportDescription = desc;
     ticket.ReportEntityType = type;
     ticket.ReportTime = moment(new Date());
@@ -121,6 +118,10 @@ export class AdmintoolsComponent implements OnInit {
   toggleItem(ticket: ReportedItem) {
     let index = this.tickets.indexOf(ticket);
     this.collapsedItem[index] = !this.collapsedItem[index];
+  }
+
+  archiveTicket(ticketNumber){
+    this.admin.archiveTicket(ticketNumber);
   }
 
 
