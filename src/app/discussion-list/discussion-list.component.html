@@ -1,28 +1,27 @@
-<h3>{{movieTitle}} Discussions</h3>
-<div>
-    Sort:
-    <button *ngIf="!createdBth" (click)="sortByCreationB()">Created &#9660; </button>
-    <button *ngIf="createdBth" (click)="sortByCreationA()">Created &#9650;</button>
-    <button *ngIf="!commentsBtn" (click)="sortDiscussionsByCommentsDesc()">Comments &#9660;</button>
-    <button *ngIf="commentsBtn" (click)="sortDiscussionsByCommentsAsc()">Comments &#9650;</button>
-    <button *ngIf="!likesBtn" (click)="sortByLikeD()">Likes &#9660;</button>
-    <button *ngIf="likesBtn" (click)="sortByLikeA()">Likes &#9650;</button>
-    <button (click)="sortByRecent()">Activity &#9660;</button>
-  
-         Filter: 
+<div class="head">
+    <div class="headleft">
+        <h2>{{movieTitle}} Discussions</h2>
+        <label>Sort:</label>
+        <button class="first" (click)="sortByRecent()" [class.selected]="activitySort">Recent Activity</button>
+        <button (click)="creationSortNext()" [class.selected]="createdSort">Created {{createdSortDirection}} </button>
+        <button (click)="commentsSortNext()" [class.selected]="commentsSort">Comments {{commentsSortDirection}}</button>
+        <button class="last" (click)="likeSortNext()" [class.selected]="likesSort">Likes {{likesSortDirection}}</button>
+
+        <label>Filter:</label> 
         <select id="topics" name="topic" [(ngModel)]="selectedFilter" (change)="onChangeFilter()">
-            <option value=""></option>
+            <option value="" default hidden></option>
             <option *ngFor="let t of topics" [ngValue]="t.topicId">{{t.topicName}}</option>
         </select>
+    </div>
 
-    
-        <label id="myInput">Discussion: </label>
-        <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
-            aria-describedby="search-addon"  (keyup)="searchDiscussion()" placeholder="Search for Discussion...">
-    <button (click)="displayPostDiscussion = true" class="creatDiscussio" >Create New Discussion</button>
+    <div class="headright">
+        <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon"  (keyup)="searchDiscussion()" placeholder="Search Discussions"><br>
+        <button (click)="displayPostDiscussion = true" class="createDiscussion" >Create New Discussion</button>
+    </div>
+</div>
 
 
-<div *ngIf="displayPostDiscussion" class="psotDiscussion">
+<div *ngIf="displayPostDiscussion" class="postDiscussion">
     <h4>Create New Discussion</h4>
     <form>
         <label>Topic: </label><br>
@@ -56,7 +55,7 @@
                 </div>
                 <div class="left">
                     <label class="username">{{discussion.userid}}</label> <br>
-                    <label class="comments">Replys: {{discussion.comments.length}}</label>
+                    <label class="comments">Replies: {{discussion.comments.length}}</label>
                     <label class="likes">Likes: {{ discussion.likes}}</label> 
                 </div>
             </div>
