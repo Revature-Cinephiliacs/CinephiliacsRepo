@@ -63,7 +63,7 @@
     <h3>Your Info</h3>
     <div class="container" (ngSubmit)="updateUser()">
       <label for="uname">Email</label>
-      <p *ngIf="!userIsEditable">{{editedUser.email}}</p>
+      <p>{{editedUser.email}}</p>
       <input *ngIf="false" type="text" [(ngModel)]="editedUser.email" [ngModelOptions]="{standalone: true}"
         required><br>
       <label for="uname">Username</label>
