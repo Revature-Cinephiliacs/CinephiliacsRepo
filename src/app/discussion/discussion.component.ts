@@ -70,11 +70,11 @@ export class DiscussionComponent implements OnInit {
 
   ngOnInit(): void {
     // Check if user is logged in
-    this.auth.authModel$.subscribe(reply =>{
+    this.auth.authModel$.subscribe(reply => {
       this.userid = reply.userid;
       this.username = reply.username
     })
-    
+
     // Load discussion info
     this.discussionID = this.router.snapshot.params.id;
     this.newComment.discussionid = this.router.snapshot.params.id;
@@ -93,7 +93,7 @@ export class DiscussionComponent implements OnInit {
       this.comments = data;
       this.getParentSize();
     });
-    
+
     // Check if user follows the discussion
     this.getUserFollowedDis()
     this._forum.getTopics().subscribe(data => {
@@ -331,15 +331,15 @@ export class DiscussionComponent implements OnInit {
   }
 
   // Allows user to follow discussion
-  followDiscussion(){
-    this._forum.followDiscussion(this.discussionID, this.userid).subscribe(data =>{
+  followDiscussion() {
+    this._forum.followDiscussion(this.discussionID, this.userid).subscribe(data => {
       console.log(data);
       this.displayFollow = false;
     })
   }
 
   // Checks whether or not the user is following this discussion
-  getUserFollowedDis(){
+  getUserFollowedDis() {
     this._forum.getUserFollowedDiscussion(this.userid).subscribe(data => {
       data.forEach(dis => {
         if (dis.discussionId == this.discussionID) {

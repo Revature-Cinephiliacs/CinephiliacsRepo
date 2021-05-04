@@ -130,6 +130,7 @@
         display: none;
       }
     }
+
   }
 
   h3 {
@@ -288,3 +289,21 @@ button.delete-not {
   margin-right: 20px;
   cursor: pointer;
 }
+
+.logout-button {
+  cursor: pointer;
+}
+
+#recButton{
+  width: 150px;
+  height: 40px;
+  margin: 25px 0 50px 0;
+  border-radius: 10px;
+  background-color: #357fc5;
+  border: none;
+  color: white;
+  .hover{
+    cursor: pointer;
+  }
+}
+

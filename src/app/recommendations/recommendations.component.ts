@@ -24,7 +24,7 @@ export class RecommendationsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.authService.userProfile$.subscribe(reply => {
+    this.authService.authModel$.subscribe(reply => {
       this.logger.log("recs user profile", reply);
       this.userModel = reply;
     });
@@ -34,8 +34,6 @@ export class RecommendationsComponent implements OnInit {
 
   getUserRecommendedMovies()
   {
-    console.log("GET RECS")
-    let userid = this.userModel.sub;
     this.movieService.getUserRecommendedMovies().subscribe(data => {
       this.logger.log("Recommended Movies", data);
       this.recommendedMovies = data;

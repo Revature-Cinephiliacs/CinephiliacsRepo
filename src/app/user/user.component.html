@@ -3,16 +3,18 @@
 
   <div class="leftmovie">
     <h3>Favorite Movies</h3>
-    <span *ngIf="moviesAreLoaded; then thenMBlock else elseMBlock"></span>
+    <div *ngIf="moviesAreLoaded; then thenMBlock else elseMBlock"></div>
     <ng-template #thenMBlock>
       <div *ngIf="userMovies.length">
         <ul class="movies">
           <li *ngFor="let movie of userMovies">
             <div class="image">
-                <img src="{{movie.Poster}}" routerLink="/movie/{{movie.imdbID}}" alt="Movie Poster">
+              <img src="{{movie.Poster}}" routerLink="/movie/{{movie.imdbID}}" alt="Movie Poster">
             </div>
             <p class="name">{{ movie.Title }}</p>
-            <p class="year">{{ movie.Year }}<span *ngIf="movie.Year.substring(movie.Year.length - 1)=='–'">present</span></p>
+            <p class="year">{{ movie.Year }}<span
+                *ngIf="movie.Year.substring(movie.Year.length - 1)=='–'">present</span>
+            </p>
             <p class="id">{{ movie.imdbID }}</p>
           </li>
         </ul>
@@ -33,9 +35,9 @@
       <div *ngIf="userReviews.length">
         <ul class="reviews">
           <li *ngFor="let review of userReviews">
-            <p class="rating">{{ review.rating}}</p>
-            <a routerLink ="/user/{{review.username}}" class="username">{{ review.username}}</a>
-            <p >{{ review.text}}</p>
+            <p class="rating">Score: {{ review.score}}</p>
+            <a routerLink="/user/{{review.usernameid}}" class="username">{{ review.usernameid}}</a>
+            <p>{{ review.review}}</p>
           </li>
         </ul>
       </div>
@@ -53,9 +55,10 @@
       <div *ngIf="userDiscussions.length">
         <ul class="discussions">
           <li *ngFor="let discussion of userDiscussions">
-            <a routerLink="/user/{{discussion.username}}" class="username">{{ discussion.username }}</a>
-            <p *ngIf="discussion.topic != 'None'" class="topic">Topic: {{ discussion.topic}}</p>
-            <div routerLink="/discussion/{{discussion.discussionid}}" class="discussionsubject">{{ discussion.subject}}</div>
+            <a routerLink="/user/{{discussion.userid}}" class="username">{{ discussion.userid }}</a>
+            <!-- <p *ngIf="discussion.topic != 'None'" class="topic">Topic: {{ discussion.topic}}</p> -->
+            <div routerLink="/discussion/{{discussion.discussionid}}" class="discussionsubject">{{ discussion.subject}}
+            </div>
           </li>
         </ul>
       </div>
@@ -73,11 +76,11 @@
       <div *ngIf="userComments.length">
         <ul class="comments">
           <li *ngFor="let comment of userComments">
-            <div  class="spoilerCover" *ngIf="comment.isspoiler && !spoilersShown()">
+            <div class="spoilerCover" *ngIf="comment.isspoiler && !spoilersShown()">
               <button (click)="showSpoilers()">Show Spoilers</button>
             </div>
             <div class="commentContent" *ngIf="!comment.isspoiler || spoilersShown()">
-              <a routerLink="/user/{{comment.username}}" class="username">{{ comment.username }}</a>
+              <a routerLink="/user/{{comment.userid}}" class="username">{{ comment.userid }}</a>
               <div routerLink="/discussion/{{comment.discussionid}}" class="commenttext">{{comment.text}}</div>
             </div>
           </li>

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Route, ActivatedRoute } from '@angular/router';
+import { Route, ActivatedRoute, Router } from '@angular/router';
 import { HttpService } from '../http.service';
 import { LoggerService } from '../logger.service';
 import { AuthService } from '../auth.service';
@@ -13,7 +13,6 @@ import { ReviewService } from '../review.service';
   styleUrls: ['./movie.component.scss']
 })
 export class MovieComponent implements OnInit {
-  @Input() authModel: any;
 
   reviewScoreSum: number = 0;
   reviewScore: number = 0;
@@ -23,18 +22,6 @@ export class MovieComponent implements OnInit {
   reviews: Review[] = [];
   input: any;
   movieFollowed: boolean = false;
-
-  reviewPage: number = 1;
-  reviewSortOrder: string = "timedsc";
-
-  timeSortState: number = 0;
-  timeSortString: string = "Newest";
-  ratingSortState: number = 0;
-  ratingSortString: string = "Rating \u21D5";
-  ratingActive: boolean = false;
-  timeActive: boolean = true;
-  reviewsBusy: boolean = false;
-  lastPage: boolean = false;
 
   userId: string;
   username: string;
@@ -56,16 +43,15 @@ export class MovieComponent implements OnInit {
     private router: ActivatedRoute, private _http: HttpService,
     private authService: AuthService,
     private movieService: MoviepageService,
+    private routerer: Router,
     private reviewService: ReviewService) { }
 
   ngOnInit(): void {
-    this.authService.userProfile$.subscribe(reply => {
-      this.logger.log("review user profile", reply);
+    this.authService.authModel$.subscribe(reply =>{
       this.userModel = reply;
-    });
+    })
 
     this.logger.log("", this.router.snapshot.params);
-    //this.inputFields();
     this.movieService.getMovieTags().subscribe(data => {
       this.logger.log("", data);
       this.topics = data;
@@ -73,17 +59,31 @@ export class MovieComponent implements OnInit {
 
     //will get the details of the movie from the IMDB API
     this.movieID = this.router.snapshot.params.id;
-    
+
     this.movieService.getMovieDetails(this.movieID).subscribe(data => {
       this.selectedMovie = data;
       this.logger.log("", "this is getting movie details");
       this.logger.log("", this.selectedMovie);
-    })
+    });
+    
+    this.getUserFollowingMovies();
+    //Get related movies
+    this.getRelatedMovies();
 
-    //Will get the discussions for the movie
-    this.showDiscussion();
+  }
 
-    if (this.userId) {
+  //Function for a user to follow a given movie
+  followMovie() {
+    if (this.userModel) {
+      this.movieService.addMovieToFollowing(this.movieID).subscribe(data => {
+        this.movieFollowed = true;
+      });
+    }
+  }
+
+  //Get user following movies
+  getUserFollowingMovies(){
+    if (this.userModel) {
       this.movieService.getUserFollowingMovies(this.userId).subscribe((usersMovieNames: string[]) => {
         if (typeof usersMovieNames.find(m => m == this.movieID) === 'undefined') {
           this.movieFollowed = false;
@@ -96,57 +96,22 @@ export class MovieComponent implements OnInit {
     else {
       this.logger.log("", "user isn't set");
     }
-
-    //Get related movies
-    this.getRelatedMovies();
-
-  }
-
-  //Function that will get a list of discussions for a given movie (waiting for forum service)
-  async showDiscussion() {
-    setTimeout(() => {
-      
-    }, 2000);
-  }
-
-  //Function for a user to follow a given movie
-  followMovie() {
-    if (this.userModel) {
-      this.movieService.addMovieToFollowing(this.movieID).subscribe(data => {
-        this.movieFollowed = true;
-      });
-    }
-  }
-
-  //Function for a user to post a discussion
-  postDiscussion() {
-    if (this.submitDiscussion.topic == "" || this.submitDiscussion.subject == "") {
-      this.logger.log("", "didn't submit discussion");
-    } else if (this.submitDiscussion.subject.length >= 250) {
-      alert("Discussion should be less than 250 Characters")
-    } else {
-
-      // this.movieService.postDiscussion(this.submitDiscussion).subscribe(data => this.logger.log("", data));
-      this.showDiscussion();
-    }
-    this.logger.log("", this.submitDiscussion);
   }
 
   //Get a list of related movies for the current movie displayed
-  getRelatedMovies()
-  {
-    this.movieService.getRelatedMovies(this.movieID).subscribe(data =>
-      {
-        this.logger.log("Get Related Movies", data);
-        this.relatedMovies = data;
-      });
+  getRelatedMovies() {
+    this.movieService.getRelatedMovies(this.movieID).subscribe(data => {
+      this.logger.log("Get Related Movies", data);
+      this.relatedMovies = data;
+    });
   }
 
-  redirect(movieID: string)
-  {
+  //Redirects to movie component with a different movie id
+  redirect(movieID: string) {
     this.movieID = movieID;
-    window.location.href = "/movie/" + this.movieID;
+    //this.routerer.navigate(["/movie/" + this.movieID]);
+    window.location.href ="/movie/" + this.movieID;
   }
-  
+
 
 }

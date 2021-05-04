@@ -1,7 +1,7 @@
 import { analyzeAndValidateNgModules, ThrowStmt } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 import { HttpService } from '../http.service';
 import { LoggerService } from '../logger.service';
 import { Movie } from '../models/models';
@@ -38,6 +38,7 @@ export class ListComponent implements OnInit {
   constructor(
     private logger: LoggerService,
     private router: ActivatedRoute, private _http: HttpService,
+    private routerer: Router,
     private movieService: MoviepageService) { }
 
   ngOnInit(): void {
@@ -141,21 +142,20 @@ export class ListComponent implements OnInit {
     this.logger.log("selected filter", this.searchForm.get('selectedFilter').value);
     let filterType = this.searchForm.get('selectedFilter').value;
     this.searchTerm = this.searchForm.get('search').value;
-    let termholder=this.stringSplit(this.searchTerm);
+    let termholder = this.stringSplit(this.searchTerm);
     var filterbody = {}
-    if(filterType == null)
-    {
+    if (filterType == null) {
       filterType = this.defaultFilter;
     }
 
     //switch case for filters
-    switch(filterType) {
+    switch (filterType) {
       //If filter is set to title
       case this.searchFilterOptions[0]:
         this.titleSearching = true;
         if (this.searchForm.get('search')!.value != "") {
           let searchParam = JSON.stringify(this.searchForm.get('search')!.value).substring(1, JSON.stringify(this.searchForm.get('search')!.value).length - 1);
-          window.location.href = "/list/" + searchParam + "/1";
+          this.routerer.navigate(["/list/" + searchParam + "/1"]);
         }
         break;
       //If filter is set to tags
@@ -224,12 +224,11 @@ export class ListComponent implements OnInit {
           any: termholder
         }
         break;
-    }    
+    }
   }
 
   //used to split search string by multiple delimiters and then remove quotes
-  stringSplit(searchItem: any)
-  {
+  stringSplit(searchItem: any) {
     let searchInput = searchItem;
     this.searchTerms = searchInput.match(/(?:[^\s"]+|"[^"]*")+/g);
     let termholder = [];
@@ -246,11 +245,11 @@ export class ListComponent implements OnInit {
     this.getFilters();
     this.logger.log("final results", this.movieidlist);
     this.searches = null;
-    this.searches2 =[];
+    this.searches2 = [];
   }
 
   //call movie api for search filter
-  getSearchResults(formbody: any){
+  getSearchResults(formbody: any) {
     this.movieService.searchMovies(formbody).subscribe((data: string[]) => {
       this.logger.log("Search Results", data);
       data.forEach(d => {
@@ -263,19 +262,18 @@ export class ListComponent implements OnInit {
   }
 
   //toggle detailed search view
-  detailedState(){
+  detailedState() {
     this.detailedSearching = true;
     this.regularSearching = false;
   }
   //toggle detailed search view
-  regularState(){
+  regularState() {
     this.detailedSearching = false;
     this.regularSearching = true;
   }
 
   //detailed search
-  detailedSearch()
-  {
+  detailedSearch() {
     var detailedSearchBody = {};
 
     let tags = this.detailForm.get('tagFilter').value;
@@ -285,33 +283,27 @@ export class ListComponent implements OnInit {
     let languages = this.detailForm.get('languageFilter').value;
     let rating = this.detailForm.get('ratingFilter').value;
 
-    if(tags != "")
-    {
+    if (tags != "") {
       let termholder = this.stringSplit(tags);
       detailedSearchBody['tag'] = termholder;
     }
-    if(actors != "")
-    {
+    if (actors != "") {
       let termholder = this.stringSplit(actors);
       detailedSearchBody['actor'] = termholder;
     }
-    if(directors != "")
-    {
+    if (directors != "") {
       let termholder = this.stringSplit(directors);
       detailedSearchBody['director'] = termholder;
     }
-    if(genres != "")
-    {
+    if (genres != "") {
       let termholder = this.stringSplit(genres);
       detailedSearchBody['genre'] = termholder;
     }
-    if(languages != "")
-    {
+    if (languages != "") {
       let termholder = this.stringSplit(languages);
       detailedSearchBody['language'] = termholder;
     }
-    if(rating != "")
-    {
+    if (rating != "") {
       let termholder = this.stringSplit(rating);
       detailedSearchBody['rating'] = termholder;
     }

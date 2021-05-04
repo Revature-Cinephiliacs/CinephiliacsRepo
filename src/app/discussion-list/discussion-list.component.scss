@@ -20,7 +20,7 @@
     margin-top: 10px;
 }
 
-ul{
+ul {
     list-style-type: none;
     border: 2px solid #d8d5d1;
     border-radius: 5px;
@@ -95,6 +95,25 @@ ul{
     }
 }
 
+.wrapper{
+    display: flex;
+}
+.left{
+    flex: 1;
+}
+.right{
+    margin-right: 20px;
+    a:first-of-type {
+        display: block;
+        margin-bottom: 5px;
+    }
+    button:first-of-type {
+        margin-left: 20px;
+    }
+    br {
+        display: inherit;
+    }
+}
 
 
 label {
@@ -102,11 +121,15 @@ label {
 }
 
 .head {
-    height: 125px;
+    height: 150px;
 
     .headleft {
         width: 55%;
         float: left;
+
+        h2 {
+            margin-bottom: 28px;
+        }
 
         button {
             margin: 0;
@@ -141,7 +164,7 @@ label {
         margin-top: 25px;
 
         input {
-            margin-bottom: 15px;
+            margin-bottom: 25px;
             width: 250px;
             height: 30px;
             padding: 0 5px;
@@ -152,7 +175,7 @@ label {
         button {
             width: 200px;
             height: 40px;
-            border-radius: 10px;
+            border-radius: 5px;
             background-color: #357fc5;
             border: none;
             color: white;
