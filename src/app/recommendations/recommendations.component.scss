@@ -1,16 +1,58 @@
-.recMovie{
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-between;
-
-    list-style: none;
-
-    div.image {
-        img{
-            cursor: pointer;
+.moviecard {
+    float: left;
+    width: 80%;
+    margin-bottom: 0;
+  
+    ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+  
+      li {
+        padding: 1em;
+        width: 20%;
+        min-width: 100px;
+        height: auto;
+        margin-bottom: 0.4em;
+        display: flex;
+        flex-direction: column;
+  
+        div.image {
+          display: flex;
+          align-items: center;
+          margin-bottom: 0.2em;
+  
+          img {
             width: 100%;
+            cursor: pointer;
+          }
         }
-    }
+  
+        p {
+          margin: 0;
+          font-weight: bold;
+          font-size: 1.0rem;
+        }
+  
+        p.name {
+          font-weight: bold;
+          font-size: 1.0rem;
+          text-transform: uppercase;
+        }
+  
+        p.year {
+          font-size: .9rem;
+          flex-grow: 1;
+        }
 
-}
+      }
+  
+    }
+  
+    h3 {
+      font-size: 1.4em;
+    }
+  
+  }
