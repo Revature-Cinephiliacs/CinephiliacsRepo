@@ -68,7 +68,7 @@ export class ReviewComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.authService.authModel$.subscribe(reply =>{
+    this.authService.authModel$.subscribe(reply => {
       this.authModel = reply;
     })
 
@@ -253,8 +253,7 @@ export class ReviewComponent implements OnInit {
   }
 
   //Flag a review
-  flagReview(review: Review)
-  {
+  flagReview(review: Review) {
     let reportItem = new ReportedItem();
     reportItem.ReportEntityType = ReportType.Review;
     reportItem.ReportDescription = "Review is under review for questionable content";
@@ -262,7 +261,9 @@ export class ReviewComponent implements OnInit {
 
     this.adminToolService.ReportItem(reportItem).then(data => {
       console.log(data)
-    })
+    }).catch(err => {
+      this.logger.error("error reporting", err);
+    });
   }
 
   //Function to post a movie review

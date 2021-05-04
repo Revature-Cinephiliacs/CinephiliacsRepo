@@ -28,7 +28,7 @@ export class Comment {
 
 
 export class ReportedItem {
-  ReportId?: number; // optional
+  ReportId?: string; // optional
   ReportEntityType: ReportType;
   ReportDescription: string;
   ReportEnitityId: string;
