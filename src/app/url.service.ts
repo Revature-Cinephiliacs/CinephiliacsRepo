@@ -11,7 +11,6 @@ export class UrlService {
   MovieAPIUrl: string = "http://20.94.153.81/";
   AdminToolsAPIUrl: string = "http://20.189.29.112/";
   AuthenticationAPIUrl: string = "http://20.45.0.16/";
-  // FrontendUrl: string = "http://20.94.137.143/";
   FrontendUrl: string = "https://cinephiliacsapp.azurewebsites.net/";
   RecommendationsAPIUrl: string = "http://20.189.28.203/";
   GroupsAPIUrl: string = "http://20.45.0.67/";
