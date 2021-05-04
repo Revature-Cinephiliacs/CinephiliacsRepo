@@ -64,11 +64,13 @@ export class DiscussionComponent implements OnInit {
   ngOnInit(): void {
     this.auth.authModel$.subscribe(reply =>{
       this.userid = reply.userid;
+      this.username = reply.username
     })
     
     this.discussionID = this.router.snapshot.params.id;
     this.newComment.discussionid = this.router.snapshot.params.id;
-    this.displayInput();
+    //this.displayInput();
+    console.log(this.username)
     this.getComments();
     this._forum.getCurrentDiscussion(this.discussionID).subscribe(data => {
       this.logger.log("", data);
@@ -111,6 +113,8 @@ export class DiscussionComponent implements OnInit {
       this.newComment.userid = this.userid;
       this._forum.postComment(this.newComment).subscribe(data => this.logger.log("", data));
       this.getComments();
+      const form = document.getElementById("postComment") as HTMLFormElement;
+      form.reset();
     }
     this.logger.log("", this.newComment);
   }
@@ -137,6 +141,15 @@ export class DiscussionComponent implements OnInit {
       this.getComments();
     }
     console.log(this.newComment);
+  }
+
+  //Function that will add a like to a comment
+  addLike(commentid: string){
+    var userid = this.userid;
+    this._forum.addLike(commentid, userid).subscribe(data => {
+      console.log(data);
+      this.getComments();
+    });
   }
 
   //Will hide the reply form and display the new comment form
@@ -223,22 +236,22 @@ export class DiscussionComponent implements OnInit {
     console.log(this.numOfComments);
   }
 
-  displayInput() {
-    if (localStorage.getItem("loggedin")) {
-      this.username = localStorage.getItem("loggedin");
-      this.newComment.username = JSON.parse(this.username).username;
-      this.logger.log("", "User Logged In");
-    } else {
-      this.logger.log("", "Hide inputs");
-    }
-  }
+  // displayInput() {
+  //   if (localStorage.getItem("loggedin")) {
+  //     this.username = localStorage.getItem("loggedin");
+  //     this.newComment.username = JSON.parse(this.username).username;
+  //     this.logger.log("", "User Logged In");
+  //   } else {
+  //     this.logger.log("", "Hide inputs");
+  //   }
+  // }
 
   getDicussionID() {
     this.logger.log("", "Dicussion ID " + this.discussionID);
     return this.discussionID;
   }
 
-
+  //Function to display spoilers
   showSpoilers() {
     this.displaySpoilers = true;
     this.logger.log("", this.displaySpoilers);

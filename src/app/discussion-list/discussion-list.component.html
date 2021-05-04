@@ -1,6 +1,4 @@
 <h3>{{movieTitle}} Discussions</h3>
-
-
 <div>
     Sort:
     <button *ngIf="!createdBth" (click)="sortByCreationB()">Created &#9660; </button>
@@ -22,9 +20,7 @@
         <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
             aria-describedby="search-addon"  (keyup)="searchDiscussion()" placeholder="Search for Discussion...">
     <button (click)="displayPostDiscussion = true" class="creatDiscussio" >Create New Discussion</button>
-    
-    
-</div>
+
 
 <div *ngIf="displayPostDiscussion" class="psotDiscussion">
     <h4>Create New Discussion</h4>
@@ -33,7 +29,7 @@
         <select name="rating" id="rating" [(ngModel)]="submitDiscussion.topic" [ngModelOptions]="{standalone: true}">
             <option selected hidden disabled></option>
             <option *ngFor="let topic of topics"
-                    [value]="topic">
+                    [value]="topic.topicName">
                     {{topic.topicName}}
             </option>
         </select><br>
@@ -52,7 +48,10 @@
                     </a>
                     <br>
                     <button *ngFor="let dt of discussion.discussionTopics">
-                        {{dt}}
+                        <label *ngFor="let t of topics" >
+                            <span *ngIf="t.topicId == dt">{{t.topicName}} </span>
+                        </label>
+                        
                     </button>
                 </div>
                 <div class="left">
@@ -76,7 +75,9 @@
                     </a>
                     <br>
                     <button *ngFor="let dt of discussion.discussionTopics">
-                        {{dt}}
+                        <span *ngFor="let t of topics" >
+                            <span *ngIf="t.topicId == dt">{{t.topicName}} </span>
+                        </span>
                     </button>
                 </div>
                 <div class="left">
@@ -89,7 +90,6 @@
         </li>
     </ul>
 </div>
-
 
 <button *ngIf="1<pageNum" (click)="onPrev()">Previous</button>
 <button *ngIf="numOfDiscussion > (pageNum*10)" (click)="onNext()">Next</button>

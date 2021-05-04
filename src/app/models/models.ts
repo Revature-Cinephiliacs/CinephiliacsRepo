@@ -98,7 +98,14 @@ export class Discussion {
   totalikes: number;
   comments: Comment[];
   discussionFollows: DiscussionFollow[];
-  discussionTopics: DiscussionTopic[];
+  discussionTopics: string[];
+}
+export class newDiscussion {
+  movieId: string;
+  userId: string;
+  creationTime: Moment;
+  subject: string;
+  topic: string;
 }
 
 export class DiscussionTopic {
