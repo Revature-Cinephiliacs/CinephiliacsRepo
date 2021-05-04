@@ -23,6 +23,7 @@
             <div class="info">
                 <h1>{{ rm.title }}</h1>
                 <p>{{ rm.releaseDate | date: 'yyyy'}}</p>
+                <button routerLink="/movie/{{rm.imdbId}}">View Movie</button>
             </div>
         </div>
         

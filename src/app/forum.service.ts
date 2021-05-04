@@ -21,6 +21,7 @@ export class ForumService {
   //Function that will make a call to the Forum API discussions/movieid endpoint
   //to retrieve a list of discussions associated with given movie id
   getDiscussionPage(movieId: String, page: number, sortingOrder: string){
+    console.log(sortingOrder)
     return this.http.get<Discussion[]>( this.forumsUrl + "forum/discussions/"+movieId+"/"+page+"/"+sortingOrder);
   }
 
