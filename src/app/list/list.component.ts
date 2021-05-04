@@ -275,6 +275,11 @@ export class ListComponent implements OnInit {
 
   //detailed search
   detailedSearch() {
+
+    this.resultMovies = [];
+    this.searches = null;
+    this.searches2 = [];
+
     var detailedSearchBody = {};
 
     let tags = this.detailForm.get('tagFilter').value;
@@ -309,6 +314,8 @@ export class ListComponent implements OnInit {
       detailedSearchBody['rating'] = termholder;
     }
 
+    this.searchTerm = (tags +" "+ actors +" " + directors +" "+ genres +" "+ languages + rating);
+    
     console.log(detailedSearchBody);
     this.getSearchResults(detailedSearchBody);
   }
