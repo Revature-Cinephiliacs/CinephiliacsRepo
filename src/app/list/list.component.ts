@@ -155,7 +155,7 @@ export class ListComponent implements OnInit {
         this.titleSearching = true;
         if (this.searchForm.get('search')!.value != "") {
           let searchParam = JSON.stringify(this.searchForm.get('search')!.value).substring(1, JSON.stringify(this.searchForm.get('search')!.value).length - 1);
-          this.routerer.navigate(["/list/" + searchParam + "/1"]);
+          window.location.href = "/list/" + searchParam + "/1";
         }
         break;
       //If filter is set to tags
