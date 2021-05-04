@@ -33,9 +33,12 @@ ul {
                 background-color: #336da3;
             }
         }
-
+        button.likeContent{
+            margin-left: 20px;
+        }
         div.commentContent {
             padding: 1.5% 3% 2% 4%;
+            
             
             a.username {
                 display: block;
@@ -50,6 +53,7 @@ ul {
                 //border-left: 5px outset rgb(182, 204, 219);
                 font-size: .95em;
             }
+            
         }
     }
     li ::ng-deep{
@@ -57,8 +61,11 @@ ul {
         border-top-left-radius: 5px;
         li{
             margin-left: 5%;
-            border-right: none;
-            border-bottom: none;
+            border: none;
+            
+            div.commentLike {
+                border-left: 2px outset rgb(182, 204, 219);
+            }
         }
     }
     
