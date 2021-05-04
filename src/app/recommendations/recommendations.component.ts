@@ -38,6 +38,7 @@ export class RecommendationsComponent implements OnInit {
     let userid = this.userModel.sub;
     this.movieService.getUserRecommendedMovies().subscribe(data => {
       this.logger.log("Recommended Movies", data);
+      this.recommendedMovies = data;
     })
   }
 
