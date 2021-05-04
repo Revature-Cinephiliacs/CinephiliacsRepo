@@ -13,7 +13,7 @@
       <div class="ticket-item" [ngClass]="{'expanded':isCollapsed(ticket)}">{{ticket.Item | json}}</div>
     </div>
     <button class="archive"(click)="archiveTicket(ticket)">Archive</button><br>
-    <button class="delete">Delete Item</button>
+    <button class="delete" (click)=deleteReview(ticket.Item)>Delete Item</button>
     {{ticket.ReportType}}
     {{ticket.ReportEnitityId}}
 
