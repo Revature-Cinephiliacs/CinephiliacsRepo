@@ -20,11 +20,14 @@
 
   </li>
 </ul>
-
-<form [formGroup]="form" (ngSubmit)="submitUserChanges()">
-  <label for="fname">UserName</label><br>
-  <input type="text" formControlName="UserName"><br>
-  <label for="options">options</label><br>
-  <button></button>
-  <button></button>>
+<!--[formGroup]="changeUser" (ngSubmit)="submitUserChanges()" -->
+<form >
+  <label for="users">Users</label><br>
+  <select name="usertochange" id="usertochange" [(ngModel)]="usertochange" [ngModelOptions]="{standalone: true}">
+    <option *ngFor="let user of users" [value]="user.userid">
+            {{user.username}}
+    </option>
+</select>
+  <button (click)="addAdmin()">Add Admin</button>
+  <button (click)="removeAdmin()">Remove Admin</button>>
 </form>

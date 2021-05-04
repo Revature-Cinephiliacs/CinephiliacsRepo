@@ -42,6 +42,7 @@ export class ReviewComponent implements OnInit {
   userId: string;
   username: string;
   authModel: NewUser;
+  userModel: any;
 
   selectedFilter: string;
   filters: string[] = [
@@ -70,11 +71,11 @@ export class ReviewComponent implements OnInit {
 
   ngOnInit(): void {
     // check if user is logged in 
-    this.authService.authModel$.subscribe(reply => {
-      this.logger.log("authmodel", reply);
-      this.authModel = reply;
-      this.logger.log("this review authmodel", this.authModel)
+    this.authService.userProfile$.subscribe(reply => {
+      this.logger.log("review user profile", reply);
+      this.userModel = reply;
     });
+
     this.loadReviews(this.reviewPage);
   }
 
@@ -231,6 +232,7 @@ export class ReviewComponent implements OnInit {
       case "Show All": {
         console.log("Show All reviews");
         this.reviewPage = 1;
+        this.reviews = [];
         this.loadReviews(this.reviewPage);
         break;
       }
@@ -255,32 +257,37 @@ export class ReviewComponent implements OnInit {
   }
 
   //Flag a review
-  flagReview(review: Review) {
-    let reportItem: ReportedItem = {
-      ReportEntityType: ReportType.Review,
-      ReportDescription: "Flagged Review",
-      ReportEnitityId: this.userId,
-      ReportTime: moment(),
-      Item: review
-    }
+  flagReview(review: Review)
+  {
+    console.log("review flag")
+    console.log(review)
 
-    this.adminToolService.ReportItem(reportItem).then(data => {
-      console.log(data)
-    })
+    // let reportItem: ReportedItem = {
+    //   ReportEntityType: ReportType.Review,
+    //   ReportDescription: "Flagged Review",
+    //   ReportEnitityId: this.userId,
+    //   ReportTime: moment(),
+    //   Item: review
+    // }
+
+    // this.adminToolService.ReportItem(reportItem).then(data => {
+    //   console.log(data)
+    // })
   }
 
   //Function to post a movie review
   postReview() {
-    // if (this.sumbitReview.score == 0 || this.sumbitReview.review == "") {
-    //   this.logger.log("", "Review Not Sumbitted");
-    // } else if (this.sumbitReview.review.length >= 250) {
-    //   alert("Reviews should be less than 250 Characters")
-    // } else {
-    //   this.reviewService.postMovieReview(this.sumbitReview).subscribe(data => this.logger.log("", data));
-    //   this.lastPage = false;
-    //   this.reloadReviews(true);
-    // }
-    // this.logger.log("", this.sumbitReview);
-    console.log(this.authModel.username)
+    if (this.sumbitReview.score == 0 || this.sumbitReview.review == "" || this.userModel.sub == null) {
+      this.logger.log("", "Review Not Sumbitted");
+    } else if (this.sumbitReview.review.length >= 250) {
+      alert("Reviews should be less than 250 Characters")
+    } else {
+      this.sumbitReview.imdbid = this.movieid;
+      this.sumbitReview.usernameid = this.userModel.sub;
+      this.reviewService.postMovieReview(this.sumbitReview).subscribe(data => this.logger.log("", data));
+      this.lastPage = false;
+      this.reloadReviews(true);
+    }
+    this.logger.log("", this.sumbitReview);
   }
 }

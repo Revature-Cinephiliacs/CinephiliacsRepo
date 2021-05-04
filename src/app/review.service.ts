@@ -56,7 +56,7 @@ export class ReviewService {
 
   //Will return a list of all reviews based on score rating for a given movie
   getMovieScoreReview(movieid: string, score: number) {
-    return this.http.get("https://localhost:5009/byRating/" + movieid + "/" + score);
+    return this.http.get("http://20.189.30.176/byRating/" + movieid + "/" + score);
   }
 
   //get a list of reported reviews

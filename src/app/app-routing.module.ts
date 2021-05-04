@@ -9,10 +9,10 @@ import { InterceptorService } from './interceptor.service';
 import { ListComponent } from './list/list.component';
 import { MovieComponent } from './movie/movie.component';
 import { UserComponent } from './user/user.component';
-import { ReviewComponent } from './review/review.component';
 
 import { DiscussionListComponent } from './discussion-list/discussion-list.component'
 import { ProfileComponent } from './profile/profile.component';
+import { RecommendationsComponent } from './recommendations/recommendations.component';
 
 
 const routes: Routes = [
@@ -25,6 +25,7 @@ const routes: Routes = [
   { path: 'discussionlist/:id', component: DiscussionListComponent },
   { path: 'admin', component: AdmintoolsComponent },
   { path: 'profile', component: ProfileComponent },
+  { path: 'recommended', component: RecommendationsComponent}
 ];
 
 @NgModule({
