@@ -39,10 +39,8 @@ export class ReviewComponent implements OnInit {
   reviewScoreSum: number = 0;
   reviewScore: number = 0;
 
-  userId: string;
-  username: string;
+  userid: string;
   authModel: NewUser;
-  userModel: any;
 
   selectedFilter: string;
   filters: string[] = [
@@ -70,11 +68,9 @@ export class ReviewComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // check if user is logged in 
-    this.authService.userProfile$.subscribe(reply => {
-      this.logger.log("review user profile", reply);
-      this.userModel = reply;
-    });
+    this.authService.authModel$.subscribe(reply =>{
+      this.authModel = reply;
+    })
 
     this.loadReviews(this.reviewPage);
   }
@@ -259,31 +255,25 @@ export class ReviewComponent implements OnInit {
   //Flag a review
   flagReview(review: Review)
   {
-    console.log("review flag")
-    console.log(review)
+    let reportItem = new ReportedItem();
+    reportItem.ReportEntityType = ReportType.Review;
+    reportItem.ReportDescription = "Review is under review for questionable content";
+    reportItem.ReportEnitityId = review.reviewid;
 
-    // let reportItem: ReportedItem = {
-    //   ReportEntityType: ReportType.Review,
-    //   ReportDescription: "Flagged Review",
-    //   ReportEnitityId: this.userId,
-    //   ReportTime: moment(),
-    //   Item: review
-    // }
-
-    // this.adminToolService.ReportItem(reportItem).then(data => {
-    //   console.log(data)
-    // })
+    this.adminToolService.ReportItem(reportItem).then(data => {
+      console.log(data)
+    })
   }
 
   //Function to post a movie review
   postReview() {
-    if (this.sumbitReview.score == 0 || this.sumbitReview.review == "" || this.userModel.sub == null) {
+    if (this.sumbitReview.score == 0 || this.sumbitReview.review == "" || this.authModel.userid == null) {
       this.logger.log("", "Review Not Sumbitted");
     } else if (this.sumbitReview.review.length >= 250) {
       alert("Reviews should be less than 250 Characters")
     } else {
       this.sumbitReview.imdbid = this.movieid;
-      this.sumbitReview.usernameid = this.userModel.sub;
+      this.sumbitReview.usernameid = this.authModel.userid;
       this.reviewService.postMovieReview(this.sumbitReview).subscribe(data => this.logger.log("", data));
       this.lastPage = false;
       this.reloadReviews(true);
