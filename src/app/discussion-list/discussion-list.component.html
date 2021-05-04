@@ -46,8 +46,8 @@
                         {{discussion.subject}}
                     </a>
                     <br>
-                    <button *ngFor="let dt of discussion.discussionTopics">
-                        <label *ngFor="let t of topics" >
+                    <button *ngFor="let dt of discussion.discussionTopics" class="topic">
+                        <label *ngFor="let t of topics">
                             <span *ngIf="t.topicId == dt">{{t.topicName}} </span>
                         </label>
                         
@@ -59,7 +59,6 @@
                     <label class="likes">Likes: {{ discussion.likes}}</label> 
                 </div>
             </div>
-
         </li>
     </ul>
 </div>
@@ -90,5 +89,5 @@
     </ul>
 </div>
 
-<button *ngIf="1<pageNum" (click)="onPrev()">Previous</button>
-<button *ngIf="numOfDiscussion > (pageNum*10)" (click)="onNext()">Next</button>
+<button *ngIf="1<pageNum" (click)="onPrev()" class="pgBtn">Previous</button>
+<button *ngIf="numOfDiscussion > (pageNum*10)" (click)="onNext()" class="pgBtn">Next</button>
