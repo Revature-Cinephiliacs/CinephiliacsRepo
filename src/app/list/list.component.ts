@@ -155,7 +155,7 @@ export class ListComponent implements OnInit {
         this.titleSearching = true;
         if (this.searchForm.get('search')!.value != "") {
           let searchParam = JSON.stringify(this.searchForm.get('search')!.value).substring(1, JSON.stringify(this.searchForm.get('search')!.value).length - 1);
-          this.routerer.navigate(["/list/" + searchParam + "/1"]);
+          window.location.href = "/list/" + searchParam + "/1";
         }
         break;
       //If filter is set to tags
@@ -242,10 +242,11 @@ export class ListComponent implements OnInit {
 
   //calls get filters when search is submitted
   onSubmit() {
-    this.getFilters();
-    this.logger.log("final results", this.movieidlist);
+    this.resultMovies = [];
     this.searches = null;
     this.searches2 = [];
+    this.getFilters();
+    this.logger.log("final results", this.movieidlist);
   }
 
   //call movie api for search filter

@@ -55,7 +55,7 @@ export class AdmintoolsComponent implements OnInit {
 
   }
 
-  archiveTicket(ticketID){
+  archiveTicket(ticketID) {
     console.log(ticketID);
     this.admin.archiveTicket(ticketID);
   }
@@ -85,7 +85,7 @@ export class AdmintoolsComponent implements OnInit {
   }
   createTicket(desc: string, type: ReportType): ReportedItem {
     let ticket = new ReportedItem();
-    ticket.ReportId = Math.random();
+    ticket.ReportId = "" + Math.random();
     ticket.ReportDescription = desc;
     ticket.ReportEntityType = type;
     ticket.ReportTime = moment(new Date());
