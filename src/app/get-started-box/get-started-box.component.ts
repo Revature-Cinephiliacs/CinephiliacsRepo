@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormControlName, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { LoggerService } from '../logger.service';
 import { NewUser } from '../models/models';
@@ -17,6 +18,7 @@ export class GetStartedBoxComponent implements OnInit {
 
   constructor(public auth: AuthService,
     private logger: LoggerService,
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
@@ -40,7 +42,7 @@ export class GetStartedBoxComponent implements OnInit {
       ).substring(1, JSON.stringify(
         this.forumSearch.get('getStartedBoxSearch')!.value
       ).length - 1);
-      window.location.href = "/list/" + searchParam + "/1";
+      this.router.navigate(["/list/" + searchParam + "/1"]);
     }
   }
 
