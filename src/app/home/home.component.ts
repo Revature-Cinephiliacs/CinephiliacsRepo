@@ -18,6 +18,7 @@ export class HomeComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    // Check if user is logged in
     this.auth.authModel$.subscribe(reply => {
       this.logger.log("current user in home", reply);
       this.currentUser = reply;

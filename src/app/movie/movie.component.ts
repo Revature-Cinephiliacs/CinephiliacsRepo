@@ -1,11 +1,8 @@
-import { HttpClient } from '@angular/common/http';
-import { analyzeAndValidateNgModules } from '@angular/compiler';
 import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Route, ActivatedRoute } from '@angular/router';
 import { HttpService } from '../http.service';
 import { LoggerService } from '../logger.service';
 import { AuthService } from '../auth.service';
-import { LoginService } from '../login.service';
 import { Movie, NewUser, PostDiscussion, PostReview, Review } from '../models/models';
 import { MoviepageService } from '../moviepage.service';
 import { ReviewService } from '../review.service';
@@ -41,6 +38,9 @@ export class MovieComponent implements OnInit {
 
   userId: string;
   username: string;
+  userModel: any;
+
+  relatedMovies: Movie[] = [];
 
   submitDiscussion: PostDiscussion = {
     movieid: this.router.snapshot.params.id,
@@ -50,7 +50,6 @@ export class MovieComponent implements OnInit {
   }
 
   topics: any;
-  //authModel: NewUser;
 
   constructor(
     private logger: LoggerService,
@@ -60,13 +59,10 @@ export class MovieComponent implements OnInit {
     private reviewService: ReviewService) { }
 
   ngOnInit(): void {
-    console.log("USERTEST")
-    this.authService.authModel$.subscribe(reply => {
-      this.logger.log("authmodel", reply);
-      this.authModel = reply
-      this.logger.log("movie authmodel", this.authModel)
+    this.authService.userProfile$.subscribe(reply => {
+      this.logger.log("review user profile", reply);
+      this.userModel = reply;
     });
-    console.log(this.authModel)
 
     this.logger.log("", this.router.snapshot.params);
     //this.inputFields();
@@ -77,6 +73,7 @@ export class MovieComponent implements OnInit {
 
     //will get the details of the movie from the IMDB API
     this.movieID = this.router.snapshot.params.id;
+    
     this.movieService.getMovieDetails(this.movieID).subscribe(data => {
       this.selectedMovie = data;
       this.logger.log("", "this is getting movie details");
@@ -100,24 +97,22 @@ export class MovieComponent implements OnInit {
       this.logger.log("", "user isn't set");
     }
 
-    this.test();
+    //Get related movies
+    this.getRelatedMovies();
+
   }
 
   //Function that will get a list of discussions for a given movie (waiting for forum service)
   async showDiscussion() {
     setTimeout(() => {
-      // this.movieService.getMovieDiscussion(this.movieID).subscribe(data => {
-      //   console.log(data)
-      //   this.logger.log("", data);
-      //   this.discussions = data;
-      // });
+      
     }, 2000);
   }
 
   //Function for a user to follow a given movie
   followMovie() {
-    if (this.userId) {
-      this.movieService.addMovieToFollowing(this.movieID, this.userId).subscribe(data => {
+    if (this.userModel) {
+      this.movieService.addMovieToFollowing(this.movieID).subscribe(data => {
         this.movieFollowed = true;
       });
     }
@@ -137,29 +132,21 @@ export class MovieComponent implements OnInit {
     this.logger.log("", this.submitDiscussion);
   }
 
-  // inputFields() {
-  //   if (localStorage.getItem("loggedin")) {
-  //     this.logger.log("", "userset");
-  //     // this.user = localStorage.getItem("loggedin")
-  //     this.userId = "";
-  //     // this.logger.log("", JSON.parse(this.user).username + "USER");
-  //     // this.logger.log("", this.user);
-  //     this.submitDiscussion.userid = this.userId;
-  //     this.sumbitReview.usernameid = this.username;
-  //     this.logger.log("", this.sumbitReview);
-
-  //   } else {
-
-  //     this.logger.log("", "no User");
-  //   }
-  // }
-
-  test()
+  //Get a list of related movies for the current movie displayed
+  getRelatedMovies()
   {
-    console.log("USERID")
-    console.log(this.authModel.userid)
-    console.log("USERNAME")
-    console.log(this.authModel.username)
+    this.movieService.getRelatedMovies(this.movieID).subscribe(data =>
+      {
+        this.logger.log("Get Related Movies", data);
+        this.relatedMovies = data;
+      });
   }
+
+  redirect(movieID: string)
+  {
+    this.movieID = movieID;
+    window.location.href = "/movie/" + this.movieID;
+  }
+  
 
 }

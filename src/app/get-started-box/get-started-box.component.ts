@@ -20,16 +20,19 @@ export class GetStartedBoxComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    // Check if user is logged in 
     this.auth.authModel$.subscribe(reply => {
       this.logger.log("get started user", reply);
       this.currentUser = reply;
       this.isLoggedIn = this.auth.loggedIn;
     })
+    // Initialize search form
     this.forumSearch = new FormGroup({
       getStartedBoxSearch: new FormControl(),
     })
   }
 
+  // If users search, go to search page
   onSubmit() {
     if (this.forumSearch.get('getStartedBoxSearch')!.value != "") {
       let searchParam = JSON.stringify(
@@ -41,6 +44,7 @@ export class GetStartedBoxComponent implements OnInit {
     }
   }
 
+  // Redirect users to login
   authLogin() {
     this.auth.login();
   }

@@ -2,7 +2,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { HttpService } from './http.service';
 import { AppComponent } from './app.component';
-import { User, Review, Discussion, Comment, NewUser, Movie } from './models/models';
+import { User, Review, Discussion, Comment, NewUser, Movie, UserNotification } from './models/models';
 import { LoggerService } from './logger.service';
 import { UrlService } from './url.service';
 
@@ -28,6 +28,10 @@ export class UserService {
     this.reviewsUrl = urlService.ReviewsAPIUrl;
   }
 
+  getUserNotifications(userid: string): Promise<UserNotification[]> {
+    return this.http.get<UserNotification[]>(this.usersUrl + `user/notification/${userid}`).toPromise();
+  }
+
   //Funtion that call User MSA to get userinfo by sending userID
   getUser(): Promise<any> {
     return this.http.get(this.usersUrl + `user/userinfo`).toPromise();
@@ -35,7 +39,16 @@ export class UserService {
 
   //Functio that call User MSA to get all users
   getAlUser() {
-    return this.http.get<NewUser[]>(this.usersUrl + "user/users")
+    return this.http.get<NewUser[]>(this.usersUrl + "user/users");
+  }
+
+  /**
+   * deletes a notification
+   * @param notId 
+   * @returns 
+   */
+  deleteNotification(notId: string) {
+    return this.http.delete<boolean>(this.usersUrl + "user/notification/" + notId).toPromise();
   }
 
   //Function that call User MSA to check if user is admin or not

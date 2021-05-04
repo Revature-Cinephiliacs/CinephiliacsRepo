@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { UrlService } from './url.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { User, Review, Discussion, Comment } from './models/models';
+import { User, Review, Discussion, Comment, Topic, newDiscussion } from './models/models';
 
 @Injectable({
   providedIn: 'root'
@@ -11,11 +11,11 @@ export class ForumService {
   forumsUrl: string = "https://localhost:5001/";
   constructor(private http: HttpClient,
     private urlService: UrlService) {
-    //this.forumsUrl = urlService.ForumAPIUrl;
+    this.forumsUrl = urlService.ForumAPIUrl;
    }
 
   getDiscussion(movieId: String) {
-    return this.http.get<Discussion[]>(this.forumsUrl + "forum/discussion/" + movieId);
+    return this.http.get<Discussion[]>(this.forumsUrl + "forum/discussions/" + movieId);
   }
 
   //Function that will make a call to the Forum API discussions/movieid endpoint
@@ -30,8 +30,13 @@ export class ForumService {
     return this.http.get<Discussion>( this.forumsUrl + "forum/discussion/" + discussionID);
   }
 
+  //Function that will modify comment like comment/like/{commentid}/{userid}
+  addLike(commentid: string, userid:string){
+    return this.http.post( this.forumsUrl + "forum/comment/like/" + commentid + "/" + userid, null);
+  }
+
   getTopics() {
-    return this.http.get<string[]>(this.forumsUrl + "forum/topics");
+    return this.http.get<Topic[]>(this.forumsUrl + "forum/topics");
   }
 
     //Function that will make a call to the Forum API endpoint to add a given topic to a given discussion
@@ -78,7 +83,8 @@ export class ForumService {
     return this.http.post(this.forumsUrl + "forum/comment", newComment);
   }
 
-  submitDiscussion(discussion: any) {
+  submitDiscussion(discussion: newDiscussion) {
+    console.log(discussion)
     return this.http.post(this.forumsUrl + "forum/discussion", discussion);
   }
 }

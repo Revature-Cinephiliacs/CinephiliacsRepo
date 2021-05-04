@@ -41,7 +41,6 @@ describe('DiscussionComponent', () => {
   it('On Init test', () => {
     component.ngOnInit();
     expect(component.getComments).toHaveBeenCalled;
-    expect(component.displayInput).toHaveBeenCalled;
   });
 
   it('spoilers shown', () => {
@@ -50,7 +49,7 @@ describe('DiscussionComponent', () => {
   });
 
   it("Should return dicussion ID", () =>{
-    component.disscussionID = "123";
+    component.discussionID = "123";
     expect(component.getDicussionID()).toBe("123");
   })
   
@@ -62,4 +61,22 @@ describe('DiscussionComponent', () => {
   it('is Empty',() =>{
     expect(component.isEmpty("NotEmpty")).toBe(false);
   })
+
+  it('Discussion-SortByCreationTimeA Should alter CreatedBtn', () =>{
+    component.createdBtn = true;
+    component.sortByCreationA();
+    expect(component.createdBtn).toBe(false);
+  })
+  it('Discussion-sortByLikeAsc Should alter likesBtn', () =>{
+    component.likesBtn = true;
+    component.sortByLikeAsc();
+    expect(component.likesBtn).toBe(false);
+  })
+
+  it('Discussion-onNext Should increment pageNum', ( ) =>{
+    component.pageNum = 1;
+    component.onNext();
+    expect(component.pageNum).toBe(2);
+  })
+
 });

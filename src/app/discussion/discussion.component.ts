@@ -15,6 +15,7 @@ import { UserService } from "../user.service";
 })
 export class DiscussionComponent implements OnInit {
 
+  // Discussion info
   discussionID: string = "";
   discussion: Discussion;
 
@@ -52,7 +53,7 @@ export class DiscussionComponent implements OnInit {
 
   //for sorting buttons 
   likesBtn: boolean = false;
-  createdBth: boolean = false;
+  createdBtn: boolean = false;
   movieTitle: string;
 
   constructor(
@@ -62,13 +63,17 @@ export class DiscussionComponent implements OnInit {
     private _forum: ForumService, private router: ActivatedRoute) { }
 
   ngOnInit(): void {
+    // Check if user is logged in
     this.auth.authModel$.subscribe(reply =>{
       this.userid = reply.userid;
+      this.username = reply.username
     })
     
+    // Load discussion info
     this.discussionID = this.router.snapshot.params.id;
     this.newComment.discussionid = this.router.snapshot.params.id;
-    this.displayInput();
+    //this.displayInput();
+    console.log(this.username)
     this.getComments();
     this._forum.getCurrentDiscussion(this.discussionID).subscribe(data => {
       this.logger.log("", data);
@@ -78,10 +83,13 @@ export class DiscussionComponent implements OnInit {
       this.subject = this.discussion.subject;
     });
 
+    // load discussion comments
     this._forum.getDiscussionComments(this.discussionID).subscribe(data => {
       this.comments = data;
       this.getParentSize();
     });
+    
+    // Check if user follows the discussion
     this.getUserFollowedDis()
     this._forum.getTopics().subscribe(data => {
       console.log(data);
@@ -111,6 +119,8 @@ export class DiscussionComponent implements OnInit {
       this.newComment.userid = this.userid;
       this._forum.postComment(this.newComment).subscribe(data => this.logger.log("", data));
       this.getComments();
+      const form = document.getElementById("postComment") as HTMLFormElement;
+      form.reset();
     }
     this.logger.log("", this.newComment);
   }
@@ -139,6 +149,15 @@ export class DiscussionComponent implements OnInit {
     console.log(this.newComment);
   }
 
+  //Function that will add a like to a comment
+  addLike(commentid: string){
+    var userid = this.userid;
+    this._forum.addLike(commentid, userid).subscribe(data => {
+      console.log(data);
+      this.getComments();
+    });
+  }
+
   //Will hide the reply form and display the new comment form
   cancelReply() {
     this.displayReplyForm = false;
@@ -149,10 +168,10 @@ export class DiscussionComponent implements OnInit {
   // Sorting functions 
   // sort comments based on creation time in Ascending order
   sortByCreationA() {
-    if(this.createdBth){
-      this.createdBth = false;
+    if(this.createdBtn){
+      this.createdBtn = false;
     }else{
-      this.createdBth = true;
+      this.createdBtn = true;
     }
     this.sortingOrder = "timeA";
     this.pageNum = 1;
@@ -160,10 +179,10 @@ export class DiscussionComponent implements OnInit {
   }
   //sort comments based on creation time in Descending order
   sortByCreationB() {
-    if(this.createdBth){
-      this.createdBth = false;
+    if(this.createdBtn){
+      this.createdBtn = false;
     }else{
-      this.createdBth = true;
+      this.createdBtn = true;
     }
     this.sortingOrder = "timeD";
     this.pageNum = 1;
@@ -223,31 +242,34 @@ export class DiscussionComponent implements OnInit {
     console.log(this.numOfComments);
   }
 
-  displayInput() {
-    if (localStorage.getItem("loggedin")) {
-      this.username = localStorage.getItem("loggedin");
-      this.newComment.username = JSON.parse(this.username).username;
-      this.logger.log("", "User Logged In");
-    } else {
-      this.logger.log("", "Hide inputs");
-    }
-  }
+  // displayInput() {
+  //   if (localStorage.getItem("loggedin")) {
+  //     this.username = localStorage.getItem("loggedin");
+  //     this.newComment.username = JSON.parse(this.username).username;
+  //     this.logger.log("", "User Logged In");
+  //   } else {
+  //     this.logger.log("", "Hide inputs");
+  //   }
+  // }
 
+  // Get discussion id for this page
   getDicussionID() {
     this.logger.log("", "Dicussion ID " + this.discussionID);
     return this.discussionID;
   }
 
-
+  //Function to display spoilers
   showSpoilers() {
     this.displaySpoilers = true;
     this.logger.log("", this.displaySpoilers);
   }
 
+  // checks whether or not a user has chosen to show spoilers
   spoilersShown() {
     return this.displaySpoilers;
   }
 
+  // checks if a string is blank
   isEmpty(testSTR: string) {
     return (testSTR == "");
   }
@@ -297,6 +319,7 @@ export class DiscussionComponent implements OnInit {
 
   }
 
+  // Allows user to follow discussion
   followDiscussion(){
     this._forum.followDiscussion(this.discussionID, this.userid).subscribe(data =>{
       console.log(data);
@@ -304,6 +327,7 @@ export class DiscussionComponent implements OnInit {
     })
   }
 
+  // Checks whether or not the user is following this discussion
   getUserFollowedDis(){
     this._forum.getUserFollowedDiscussion(this.userid).subscribe(data => {
       data.forEach(dis => {
