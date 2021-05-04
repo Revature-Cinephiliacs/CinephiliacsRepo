@@ -48,7 +48,7 @@ export class ForumService {
 
   //Function that will make a call to the Forum API endpoint to filter discussion by topic
   filterDiscussionByTopic(topicid: string){
-    return this.http.get<Discussion[]>( this.forumsUrl + "discussions/topic/" + topicid);
+    return this.http.get<Discussion[]>( this.forumsUrl + "forum/discussions/topic/" + topicid);
   }
 
   getUserDiscussions(userId: string) {

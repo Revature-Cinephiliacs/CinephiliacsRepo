@@ -267,6 +267,7 @@ export class DiscussionListComponent implements OnInit {
 
   //Function to change discussion as selected filter
   onChangeFilter(){
+    
       this._forum.filterDiscussionByTopic(this.selectedFilter).subscribe(data => {
         this.discussions = data;
       })
