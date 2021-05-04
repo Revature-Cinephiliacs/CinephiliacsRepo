@@ -30,7 +30,7 @@ export class AdmintoolsComponent implements OnInit {
     private userService: UserService) { }
 
   ngOnInit(): void {
-    this.admin.getReports().then(result => {
+    this.admin.getReports().toPromise().then(result => {
       this.tickets = result;
       this.collapsedItem = Array(this.tickets.length).fill(false);
     }).catch(err => {

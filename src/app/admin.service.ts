@@ -10,21 +10,21 @@ export class AdminService {
   adminUrl: string = "";
   forumsUrl: string = "";
   reviewsUrl: string = "";
-  authUrl: string ="";
+  userUrl: string ="";
 
   constructor(private http: HttpClient, private urlService: UrlService) {
     this.adminUrl = urlService.AdminToolsAPIUrl;
     this.forumsUrl = urlService.ForumAPIUrl;
     this.reviewsUrl = urlService.ReviewsAPIUrl;
-    this.authUrl = urlService.AuthenticationAPIUrl;
+    this.userUrl = urlService.UserAPIUrl;
   }
 
   /**
    * Get all reports from admin tools
    * @returns 
    */
-  getReports(): Promise<ReportedItem[]> {
-    return this.http.get<ReportedItem[]>(this.adminUrl + "Tickets").toPromise();
+  getReports(){
+    return this.http.get<ReportedItem[]>(this.adminUrl + "Tickets");
   }
 
   /**
@@ -76,12 +76,14 @@ export class AdminService {
     }
   }
 
-  removeAdmin(userId){
-    this.http.delete(this.authUrl + 'Authenitcation/role/Admin', userId);
-  }
+
 
   addAdmin(userId){
-    this.http.post(this.authUrl + 'Authenitcation/role/Admin', userId);
+    this.http.post(this.userUrl + 'user/role/admin/' + userId, null);
+  }
+
+  removeAdmin(userId){
+    this.http.delete(this.userUrl + 'user/role/admin/' + userId, null);
   }
 
   archiveTicket(ticketID){
