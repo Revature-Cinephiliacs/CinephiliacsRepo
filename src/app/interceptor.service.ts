@@ -21,9 +21,9 @@ export class InterceptorService implements HttpInterceptor {
   loggedIn: boolean;
 
   constructor(private auth: AuthService, private logger: LoggerService) {
-    auth.userProfile$.subscribe((reply) => {
+    auth.getTokenSilently$().subscribe((reply) => {
       this.logger.log("in interceptor", reply);
-      this.loggedIn = reply;
+      this.loggedIn = reply != null && reply != undefined;
     });
   }
 
