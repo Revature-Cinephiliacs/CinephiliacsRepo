@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
 import * as moment from 'moment';
 import { LoggerService } from '../logger.service';
 import { UserService } from '../user.service';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-admintools',
@@ -13,11 +14,17 @@ import { UserService } from '../user.service';
 })
 export class AdmintoolsComponent implements OnInit {
 
-  form: FormGroup;
+
   tickets: ReportedItem[];
   collapsedItem: boolean[];
 
   users: NewUser[];
+  selecteduser: NewUser;
+
+
+  usertochange:any;
+  changeUser:any;
+
 
   constructor(private fb: FormBuilder, private admin: AdminService, private logger: LoggerService,
     private userService: UserService) { }
@@ -31,10 +38,7 @@ export class AdmintoolsComponent implements OnInit {
       this.fillTestTickets();
       this.collapsedItem = Array(this.tickets.length).fill(false);
     });
-    this.form = this.fb.group({
-      UserName: [''],
-      Rights: ['']
-    });
+
     this.userService.getAlUser().toPromise().then(result =>{
       this.users = result;
       this.logger.log("Users" + this.users,"good");
@@ -59,6 +63,7 @@ export class AdmintoolsComponent implements OnInit {
       this.createUser("02"),
       this.createUser("03"),
     ]
+    console.log(this.users);
   }
 
   createUser(userID: string): NewUser
@@ -102,19 +107,17 @@ export class AdmintoolsComponent implements OnInit {
     return this.collapsedItem[index];
   }
 
-  submitUserChanges() {
-    if (this.form.value.UserName != '') {
-      console.log(this.form.value);
-      if (this.form.value.Rights = "admin") {
-        //Add AdminRights
-      } else if (this.form.value.Rights = "moderator") {
-        //Add ModeratorRights
-      }
-    }
-  }
 
   toggleItem(ticket: ReportedItem) {
     let index = this.tickets.indexOf(ticket);
     this.collapsedItem[index] = !this.collapsedItem[index];
+  }
+
+
+  addAdmin(){
+    this.admin.addAdmin(this.usertochange);
+  }
+  removeAdmin(){
+    this.admin.removeAdmin(this.usertochange);
   }
 }
