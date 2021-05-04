@@ -89,5 +89,9 @@
     </ul>
 </div>
 
-<button *ngIf="1<pageNum" (click)="onPrev()" class="pgBtn">Previous</button>
-<button *ngIf="numOfDiscussion > (pageNum*10)" (click)="onNext()" class="pgBtn">Next</button>
+<div class="nextPrev">
+    <button *ngIf="1<pageNum" (click)="onPrev()" class="prev">Previous</button>
+    <button *ngIf="numOfDiscussion > (pageNum*10)" (click)="onNext()" class="next">Next</button>
+</div>
+<br>
+
