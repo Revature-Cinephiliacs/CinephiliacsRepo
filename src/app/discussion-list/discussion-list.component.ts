@@ -27,11 +27,19 @@ export class DiscussionListComponent implements OnInit {
   selectedFilter: string;
 
   //for sorting buttons 
-  commentsBtn: boolean = false;
-  likesBtn: boolean = false;
-  createdBth: boolean = false;
-  movieTitle: string;
+  commentsSortState: number = 0;
+  likesSortState: number = 0;
+  createdSortState: number = 0;
+  activitySortState: number = 0;
+  commentsSort: boolean = false;
+  likesSort: boolean = false;
+  createdSort: boolean = false;
+  activitySort: boolean = true;
+  commentsSortDirection: string = "\u21D5";
+  likesSortDirection: string = "\u21D5";
+  createdSortDirection: string = "\u21D5";
 
+  movieTitle: string;
   userid: string;
 
   displayPostDiscussion: boolean = false;
@@ -99,78 +107,121 @@ export class DiscussionListComponent implements OnInit {
  }
 
   //Function that will get a list of discussions for a movie
-  //sorted in ascending order based on number of comments
-  async sortDiscussionsByCommentsAsc() {
-    if(this.commentsBtn){
-      this.commentsBtn = false;
-    }else{
-      this.commentsBtn = true;
+  //sorted based on number of comments
+  async commentsSortNext() {
+    switch (this.commentsSortState) {
+      case 0:
+        this.commentsSortState = 1;
+        this.likesSortState = 0;
+        this.createdSortState = 0;
+        this.activitySortState = 0;
+        this.sortingOrder = "commentsD";
+        this.commentsSortDirection = "\u21D3";
+        this.getDiscussions();
+        break;
+      case 1:
+        this.commentsSortState = 2;
+        this.sortingOrder = "commentsA";
+        this.commentsSortDirection = "\u21D1";
+        this.getDiscussions();
+        break;
+      case 2:
+        this.commentsSortState = 1;
+        this.sortingOrder = "commentsD";
+        this.commentsSortDirection = "\u21D3";
+        this.getDiscussions();
+        break;
     }
-    this.sortingOrder = "commentsA";
-    this.getDiscussions()
-    
+    this.likesSort = false;
+    this.createdSort = false;
+    this.activitySort = false;
+    this.commentsSort = true;
+
+    this.likesSortDirection = "\u21D5";
+    this.createdSortDirection = "\u21D5";
   }
 
-  //Function that will get a list of discussions for a movie
-  //sorted in descending order based on number of comments
-  async sortDiscussionsByCommentsDesc() {
-    if(this.commentsBtn){
-      this.commentsBtn = false;
-    }else{
-      this.commentsBtn = true;
+  //Function to get the paginated list of Discussion sorted by Creation time
+  async creationSortNext() {
+    switch (this.createdSortState) {
+      case 0:
+        this.createdSortState = 1;
+        this.likesSortState = 0;
+        this.commentsSortState = 0;
+        this.activitySortState = 0;
+        this.sortingOrder = "timeD";
+        this.createdSortDirection = "\u21D3";
+        this.getDiscussions();
+        break;
+      case 1:
+        this.createdSortState = 2;
+        this.sortingOrder = "timeA";
+        this.createdSortDirection = "\u21D1";
+        this.getDiscussions();
+        break;
+      case 2:
+        this.createdSortState = 1;
+        this.sortingOrder = "timeD";
+        this.createdSortDirection = "\u21D3";
+        this.getDiscussions();
+        break;
     }
-    this.sortingOrder = "commentsD";
-    this.getDiscussions();
-  }
+    this.likesSort = false;
+    this.commentsSort = false;
+    this.activitySort = false;
+    this.createdSort = true;
 
-  //Finction to get the paginated list of Discussion sorted by Creation time in Ascending order
-  sortByCreationA(){
-    if(this.createdBth){
-      this.createdBth = false;
-    }else{
-      this.createdBth = true;
-    }
-    this.sortingOrder = "timeA";
-    this.getDiscussions();
-  }
-  
-  //Finction to get the paginated list of Discussion sorted by Creation time in Descending order
-  sortByCreationB(){
-    if(this.createdBth){
-      this.createdBth = false;
-    }else{
-      this.createdBth = true;
-    }
-    this.sortingOrder = "timeD";
-    this.getDiscussions();
+    this.likesSortDirection = "\u21D5";
+    this.commentsSortDirection = "\u21D5";
   }
 
   //Finction to get the paginated list of Discussion sorted by recent activities in Descending order
   sortByRecent(){
     this.sortingOrder = "recent";
+    this.likesSort = false;
+    this.commentsSort = false;
+    this.createdSort = false;
+    this.activitySort = true;
+
+    this.likesSortDirection = "\u21D5";
+    this.commentsSortDirection = "\u21D5";
+    this.createdSortDirection = "\u21D5";
+    
     this.getDiscussions();
   }
 
-  //Finction to get the paginated list of Discussion sorted by num of likes in Descending order
-  sortByLikeD(){
-    if(this.likesBtn){
-      this.likesBtn = false;
-    }else{
-      this.likesBtn = true;
+  //Function to get the paginated list of Discussion sorted by num of likes
+  async likeSortNext() {
+    switch (this.likesSortState) {
+      case 0:
+        this.likesSortState = 1;
+        this.createdSortState = 0;
+        this.commentsSortState = 0;
+        this.activitySortState = 0;
+        this.sortingOrder = "likeD";
+        this.likesSortDirection = "\u21D3";
+        this.getDiscussions();
+        break;
+      case 1:
+        this.likesSortState = 2;
+        this.sortingOrder = "likeA";
+        this.likesSortDirection = "\u21D1";
+        this.getDiscussions();
+        break;
+      case 2:
+        this.likesSortState = 1;
+        this.sortingOrder = "likeD";
+        this.likesSortDirection = "\u21D3";
+        this.getDiscussions();
+        break;
     }
-    this.sortingOrder = "likeD";
-    this.getDiscussions();
-  }
-  
-  //Finction to get the paginated list of Discussion sorted by num of likes in Ascending order
-  sortByLikeA(){
-    if(this.likesBtn){
-      this.likesBtn = false;
-    }else{
-      this.likesBtn = true;
-    }
-    this.sortingOrder = "likeA";
-    this.getDiscussions();
+    this.createdSort = false;
+    this.commentsSort = false;
+    this.activitySort = false;
+    this.likesSort = true;
+
+    this.createdSortDirection = "\u21D5";
+    this.commentsSortDirection = "\u21D5";
   }
 
   //Function that will add a new discussion to a movie

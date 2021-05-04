@@ -18,12 +18,12 @@ export interface Review {
 }
 
 export class Comment {
-  commentid: number;
+  commentid: string;
   discussionid: number;
   username: string;
   text: string;
   isspoiler: boolean;
-  parentCommentid: number;
+  parentCommentid: number
 }
 
 
@@ -109,6 +109,7 @@ export class Discussion {
   discussionFollows: DiscussionFollow[];
   discussionTopics: string[];
 }
+
 export class newDiscussion {
   movieId: string;
   userId: string;
