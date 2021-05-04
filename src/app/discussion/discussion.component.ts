@@ -211,13 +211,13 @@ export class DiscussionComponent implements OnInit {
         break;
       case 1:
         this.likesSortState = 2;
-        this.sortingOrder = "likeA";
+        this.sortingOrder = "likesA";
         this.likesSortDirection = "\u21D1";
         this.getComments();
         break;
       case 2:
         this.likesSortState = 1;
-        this.sortingOrder = "likeD";
+        this.sortingOrder = "likesD";
         this.likesSortDirection = "\u21D3";
         this.getComments();
         break;
