@@ -64,8 +64,8 @@ export class MovieComponent implements OnInit {
       this.selectedMovie = data;
       this.logger.log("", "this is getting movie details");
       this.logger.log("", this.selectedMovie);
-    })
-
+    });
+    
     this.getUserFollowingMovies();
     //Get related movies
     this.getRelatedMovies();
