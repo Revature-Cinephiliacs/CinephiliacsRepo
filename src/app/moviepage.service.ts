@@ -31,15 +31,15 @@ export class MoviepageService {
 
   //Function that will call the Movie Microservice API follow/movieid/userid endpoint
   //to add the movie to the user's movie following list
-  addMovieToFollowing(movieid: string, userid: string)
+  addMovieToFollowing(movieid: string)
   {
-    return this.http.put( this.movieBaseURL + "/" +  movieid + "/" + userid, null);
+    return this.http.put( this.movieBaseURL + "/follow/" +  movieid, null);
   }
 
   //Removes a movie from a following
   removeMovieFromFollowing(movieid: string, userid: string)
   {
-    return this.http.delete (this.movieBaseURL + "/" +  movieid + "/" + userid );
+    return this.http.delete (this.movieBaseURL + "/follow/" +  movieid);
   }
 
   //Function to update a given movie
@@ -61,7 +61,7 @@ export class MoviepageService {
   }
 
   //Search for a list of movies from given filter (create filter)
-  searchMovies(filter: {[index:string] : [string, string]})
+  searchMovies(filter: any)
   {
     return this.http.post( this.movieBaseURL + "/search", filter);
   }
@@ -95,5 +95,17 @@ export class MoviepageService {
   {
     return this.http.delete ( this.movieBaseURL + "/tag/ban/" + tagname);
   } 
+
+  //Gets a list of Related Movies given a movie id
+  getRelatedMovies(movieid: string):Observable<Movie[]>
+  {
+    return this.http.get<Movie[]> (this.movieBaseURL + "/recommended/" + movieid);
+  }
+
+  //Gets a list of user recommended movies
+  getUserRecommendedMovies(): Observable<Movie[]>
+  {
+    return this.http.get<Movie[]> (this.movieBaseURL + "/recommendedByUserId");
+  }
 
 }

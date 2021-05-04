@@ -12,7 +12,7 @@
       <button class="item-toggle-button" (click)="toggleItem(ticket)">View Item</button>
       <div class="ticket-item" [ngClass]="{'expanded':isCollapsed(ticket)}">{{ticket.Item | json}}</div>
     </div>
-    <button class="archive">Archive</button><br>
+    <button class="archive"(click)="archiveTicket(ticket.ReportId)">Archive</button><br>
     <button class="delete">Delete Item</button>
     {{ticket.ReportType}}
     {{ticket.ReportEnitityId}}
@@ -20,12 +20,14 @@
 
   </li>
 </ul>
-
-<form [formGroup]="form" (ngSubmit)="submitUserChanges()">
-  <label for="fname">UserName</label><br>
-  <input type="text" formControlName="UserName"><br>
-  <label for="options">options</label><br>
-  <input type="radio" formControlName="Rights" value="admin">Admin Rights<br>
-  <input type="radio" formControlName="Rights" value="moderator">Moderator Rights<br>
-  <input type="submit" value="Submit">
+<!--[formGroup]="changeUser" (ngSubmit)="submitUserChanges()" -->
+<form >
+  <label for="users">Users</label><br>
+  <select name="usertochange" id="usertochange" [(ngModel)]="usertochange" [ngModelOptions]="{standalone: true}">
+    <option *ngFor="let user of users" [value]="user.userid">
+            {{user.username}}
+    </option>
+</select>
+  <button (click)="addAdmin()">Add Admin</button>
+  <button (click)="removeAdmin()">Remove Admin</button>>
 </form>

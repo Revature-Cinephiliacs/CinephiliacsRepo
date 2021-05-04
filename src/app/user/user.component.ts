@@ -31,9 +31,10 @@ export class UserComponent implements OnInit {
     private router: ActivatedRoute, private _http: HttpService, private _login: LoginService,) { }
 
   ngOnInit(): void {
-
+    // Get username from url
     this.userName = this.router.snapshot.params.username;
 
+    // Check if user follows any movies
     this._login.getUserMovies(this.userName).subscribe(data => {
       this.userMovieNames = data;
 
@@ -48,6 +49,7 @@ export class UserComponent implements OnInit {
       this.moviesAreLoaded = true;
     });
 
+    // Check if user has created any discussions
     this._login.getUserDiscussions(this.userName).subscribe(data => {
       if (data != null) {
         this.userDiscussions = data;
@@ -55,6 +57,7 @@ export class UserComponent implements OnInit {
       this.discussionsAreLoaded = true;
     });
 
+    // Check if user has created any comments
     this._login.getUserComments(this.userName).subscribe(data => {
       if (data != null) {
         this.userComments = data;
@@ -62,6 +65,7 @@ export class UserComponent implements OnInit {
       this.commentsAreLoaded = true;
     });
 
+    // Check if user has created any reviews
     this._login.getUserReviews(this.userName).subscribe(data => {
       if (data != null) {
         this.userReviews = data;
@@ -70,33 +74,40 @@ export class UserComponent implements OnInit {
     });
   }
 
+  // Check if movies are loaded
   moviesLoaded() {
     this.moviesAreLoaded = true;
     this.logger.log("", "movies are loaded");
   }
+  // Check if reviews are loaded
   reviewsLoaded() {
     this.reviewsAreLoaded = true;
     this.logger.log("", "reviews are loaded");
   }
+  // Check if discussions are loaded
   discussionsLoaded() {
     this.discussionsAreLoaded = true;
     this.logger.log("", "discussionsAreLoaded");
   }
+  // Check if comments are loaded
   commentsLoaded() {
     this.commentsAreLoaded = true;
     this.logger.log("", "commentsAreLoaded");
   }
 
+  // Return username
   getUsername() {
     this.logger.log("", "username" + this.userName);
     return this.userName;
   }
 
+  // Return if current user has displayed spoilers or not
   showSpoilers() {
     this.displaySpoilers = true;
     this.logger.log("", this.displaySpoilers);
   }
 
+  // Check if current user has displayed spoilers or not
   spoilersShown() {
     return this.displaySpoilers;
   }

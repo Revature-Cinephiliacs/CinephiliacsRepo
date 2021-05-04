@@ -129,6 +129,9 @@ export class AuthService {
       // this.tryRetrieveUser(reply.sub);
     }, () => { }, () => {
     });
+    this.isAdmin$.subscribe(admin => {
+      this.isAdmin = admin;
+    });
   }
 
   // call the users api to get the current user
@@ -139,7 +142,8 @@ export class AuthService {
       this.authModel$.next(reply);
       if (reply.firstname == null && window.location.pathname != "/profile") {
         this.logger.log("new user in auth", reply);
-        this.router.navigate(["profile"]);
+        if (window.location.pathname == "" || window.location.pathname == "/")
+          this.router.navigate(["profile"]);
         this.isANewUser$.next(true);
       }
       else {
@@ -149,15 +153,11 @@ export class AuthService {
       this.logger.error("in retrieving user", err);
       this.isAdmin$.next(false);
       if (err.status == 400) {
-        this.router.navigate(["profile"]);
+        if (window.location.pathname == "" || window.location.pathname == "/")
+          this.router.navigate(["profile"]);
         this.isANewUser$.next(true);
       }
     });
-    this.userService.getAlUser().toPromise().then(reply => {
-      this.logger.log("all users", reply);
-    }).catch(err => {
-      this.logger.error("all users", err);
-    })
   }
 
   // send a request to check if user is an admin
@@ -167,12 +167,14 @@ export class AuthService {
       this.logger.log("isadmin", reply);
       this.isAdmin$.next(true);
       this.isAdmin = reply;
-      this.router.navigate(["profile"]);
+      if (window.location.pathname == "" || window.location.pathname == "/")
+        this.router.navigate(["profile"]);
     }).catch(err => {
       this.logger.error("isadmin", err);
       this.isAdmin$.next(false);
       this.isAdmin = false;
-      this.router.navigate(["profile"]);
+      if (window.location.pathname == "" || window.location.pathname == "/")
+        this.router.navigate(["profile"]);
     });
   }
 
@@ -232,4 +234,6 @@ export class AuthService {
       });
     });
   }
+
+
 }

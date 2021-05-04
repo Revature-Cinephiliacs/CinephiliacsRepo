@@ -10,11 +10,13 @@ export class AdminService {
   adminUrl: string = "";
   forumsUrl: string = "";
   reviewsUrl: string = "";
+  authUrl: string ="";
 
   constructor(private http: HttpClient, private urlService: UrlService) {
     this.adminUrl = urlService.AdminToolsAPIUrl;
     this.forumsUrl = urlService.ForumAPIUrl;
     this.reviewsUrl = urlService.ReviewsAPIUrl;
+    this.authUrl = urlService.AuthenticationAPIUrl;
   }
 
   /**
@@ -73,5 +75,19 @@ export class AdminService {
       "reviews": reportedItemsList.filter(item => { item.ReportEntityType == ReportType.Review }),
     }
   }
+
+  removeAdmin(userId){
+    this.http.delete(this.authUrl + 'Authenitcation/role/Admin', userId);
+  }
+
+  addAdmin(userId){
+    this.http.post(this.authUrl + 'Authenitcation/role/Admin', userId);
+  }
+
+  archiveTicket(ticketID){
+    this.http.post(this.adminUrl + 'reports/archive',ticketID);
+  }
+
+
 
 }

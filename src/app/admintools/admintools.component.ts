@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { AdminService } from '../admin.service';
-import { Comment, Discussion, PostReview, ReportedItem, ReportType } from "../models/models";
+import { Comment, Discussion, NewUser, PostReview, ReportedItem, ReportType } from "../models/models";
 import { FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
 import * as moment from 'moment';
 import { LoggerService } from '../logger.service';
+import { UserService } from '../user.service';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-admintools',
@@ -12,11 +14,20 @@ import { LoggerService } from '../logger.service';
 })
 export class AdmintoolsComponent implements OnInit {
 
-  form: FormGroup;
+
   tickets: ReportedItem[];
   collapsedItem: boolean[];
 
-  constructor(private fb: FormBuilder, private admin: AdminService, private logger: LoggerService) { }
+  users: NewUser[];
+  selecteduser: NewUser;
+
+
+  usertochange:any;
+  changeUser:any;
+
+
+  constructor(private fb: FormBuilder, private admin: AdminService, private logger: LoggerService,
+    private userService: UserService) { }
 
   ngOnInit(): void {
     this.admin.getReports().then(result => {
@@ -27,10 +38,20 @@ export class AdmintoolsComponent implements OnInit {
       this.fillTestTickets();
       this.collapsedItem = Array(this.tickets.length).fill(false);
     });
-    this.form = this.fb.group({
-      UserName: [''],
-      Rights: ['']
-    });
+
+    this.userService.getAlUser().toPromise().then(result =>{
+      this.users = result;
+      this.logger.log("Users" + this.users,"good");
+    }).catch(error =>{
+      this.logger.error("error in retreaving customers",error);
+      this.fillUsers();
+    })
+    
+  }
+
+  archiveTicket(ticketID){
+    console.log(ticketID);
+    this.admin.archiveTicket(ticketID);
   }
 
   fillTestTickets() {
@@ -41,6 +62,22 @@ export class AdmintoolsComponent implements OnInit {
     ];
   }
 
+  fillUsers(){
+    this.users = [
+      this.createUser("01"),
+      this.createUser("02"),
+      this.createUser("03"),
+    ]
+    console.log(this.users);
+  }
+
+  createUser(userID: string): NewUser
+  {
+    let user = new NewUser();
+    user.username = "TestUser" + userID;
+    user.userid = userID;
+    return user;
+  }
   createTicket(desc: string, type: ReportType): ReportedItem {
     let ticket = new ReportedItem();
     ticket.ReportId = Math.random();
@@ -75,19 +112,17 @@ export class AdmintoolsComponent implements OnInit {
     return this.collapsedItem[index];
   }
 
-  submitUserChanges() {
-    if (this.form.value.UserName != '') {
-      console.log(this.form.value);
-      if (this.form.value.Rights = "admin") {
-        //Add AdminRights
-      } else if (this.form.value.Rights = "moderator") {
-        //Add ModeratorRights
-      }
-    }
-  }
 
   toggleItem(ticket: ReportedItem) {
     let index = this.tickets.indexOf(ticket);
     this.collapsedItem[index] = !this.collapsedItem[index];
+  }
+
+
+  addAdmin(){
+    this.admin.addAdmin(this.usertochange);
+  }
+  removeAdmin(){
+    this.admin.removeAdmin(this.usertochange);
   }
 }

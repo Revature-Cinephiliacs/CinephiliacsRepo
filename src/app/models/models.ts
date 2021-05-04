@@ -18,12 +18,12 @@ export interface Review {
 }
 
 export class Comment {
-  commentid: number;
+  commentid: string;
   discussionid: number;
   username: string;
   text: string;
   isspoiler: boolean;
-  parentCommentid: number;
+  parentCommentid: number
 }
 
 
@@ -49,7 +49,16 @@ export class NewUser {
   lastname: string;
   email: string;
   dateofbirth: string;
-  permissions: number;
+  permissions: number; // 1 for normal user, 3 for admin
+}
+
+export class UserNotification {
+  creatorUsername: string;
+  notificationId: string;
+  otherId: string;
+  fromService: string;
+  creatorId: string;
+  item: any; // this can be comments, discussions, or reviews
 }
 
 export class Movie {
@@ -95,11 +104,12 @@ export class Discussion {
   userId: string;
   creationTime: Moment;
   subject: string;
-  totalikes: number;
+  likes: number;
   comments: Comment[];
   discussionFollows: DiscussionFollow[];
   discussionTopics: string[];
 }
+
 export class newDiscussion {
   movieId: string;
   userId: string;

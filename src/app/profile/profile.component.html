@@ -63,13 +63,13 @@
     <h3>Your Info</h3>
     <div class="container" (ngSubmit)="updateUser()">
       <label for="uname">Email</label>
-      <p *ngIf="!userIsEditable">{{editedUser.email}}</p>
+      <p>{{editedUser.email}}</p>
       <input *ngIf="false" type="text" [(ngModel)]="editedUser.email" [ngModelOptions]="{standalone: true}"
         required><br>
       <label for="uname">Username</label>
-      <p>{{editedUser.username}}</p>
-      <input *ngIf="isNewUser && userIsEditable" type="text" [(ngModel)]="editedUser.username"
-        [ngModelOptions]="{standalone: true}" class="noneditable" required><br>
+      <p *ngIf="!userIsEditable">{{editedUser.username}}</p>
+      <input *ngIf="userIsEditable" type="text" [(ngModel)]="editedUser.username" [ngModelOptions]="{standalone: true}"
+        required><br>
       <label for="uname">First Name</label>
       <p *ngIf="!userIsEditable">{{editedUser.firstname}}</p>
       <input *ngIf="userIsEditable" type="text" [(ngModel)]="editedUser.firstname" [ngModelOptions]="{standalone: true}"
@@ -78,6 +78,10 @@
       <p *ngIf="!userIsEditable">{{editedUser.lastname}}</p>
       <input *ngIf="userIsEditable" type="text" [(ngModel)]="editedUser.lastname" [ngModelOptions]="{standalone: true}"
         required><br>
+      <label for="uname">Date of Birth</label>
+      <p *ngIf="!userIsEditable">{{editedUser.dateofbirth}}</p>
+      <input *ngIf="userIsEditable" type="date" [(ngModel)]="editedUser.dateofbirth"
+        [ngModelOptions]="{standalone: true}" required><br>
       <button *ngIf="!userIsUpdating && !userIsEditable" (click)="editUser()">Edit Profile</button>
       <a *ngIf="userIsEditable" (click)="cancelUpdate()">Cancel Changes</a>
       <input *ngIf="!userIsUpdating && userIsEditable" type="Submit" (click)="updateUser(true)">
@@ -92,9 +96,10 @@
     <div *ngIf="userReviews.length">
       <ul class="reviews">
         <li *ngFor="let review of userReviews">
-          <p class="rating">{{ review.rating}}</p>
-          <a routerLink="/user/{{review.username}}" class="username">{{ review.username}}</a>
-          <p>{{ review.text}}</p>
+          <p class="rating">Score: {{ review.score}}</p>
+          <!-- <a routerLink="/user/{{review.usernameid}}" class="username">{{ review.username}}</a> -->
+          <a class="username">{{ review.usernameid}}</a>
+          <p>{{ review.review}}</p>
         </li>
       </ul>
     </div>
@@ -112,8 +117,8 @@
     <div *ngIf="userDiscussions.length">
       <ul class="discussions">
         <li *ngFor="let discussion of userDiscussions">
-          <a routerLink="/user/{{discussion.username}}" class="username">{{ discussion.username }}</a>
-          <p *ngIf="discussion.topic != 'None'" class="topic">Topic: {{ discussion.topic}}</p>
+          <a routerLink="/user/{{discussion.userid}}" class="username">{{ discussion.userid }}</a>
+          <!-- <p *ngIf="discussion.topic != 'None'" class="topic">Topic: {{ discussion.topic}}</p> -->
           <div routerLink="/discussion/{{discussion.discussionid}}" class="discussionsubject">{{ discussion.subject}}
           </div>
         </li>
@@ -134,7 +139,8 @@
       <ul class="comments">
         <li *ngFor="let comment of userComments">
           <div class="commentContent">
-            <a routerLink="/user/{{comment.username}}" class="username">{{ comment.username }}</a>
+            <!-- <a routerLink="/user/{{comment.userid}}" class="username">{{ comment.username }}</a> -->
+            <a class="username">{{ comment.userid }}</a>
             <div routerLink="/discussion/{{comment.discussionid}}" class="commenttext">{{comment.text}}</div>
           </div>
         </li>
@@ -146,5 +152,89 @@
   </ng-template>
   <ng-template #elseCBlock>
     <h4>Loading Comments . . .</h4>
+  </ng-template>
+
+  <h3>Recommended Movies</h3>
+  <a routerLink="/recommended">Show More Recommended Movies</a>
+  <!-- <app-recommendations></app-recommendations> -->
+
+  <h3>Notifications</h3>
+  <div *ngIf="notificationsAreLoaded; then thenNBlock else elseNBlock"></div>
+  <ng-template #thenNBlock>
+    <div *ngIf="userNotifications.length">
+      <ul class="comments">
+        <li *ngFor="let notification of userNotifications">
+          <div *ngIf="!isCreatorNull(notification)">
+            <span>User {{notification.creatorUsername}} that you follow has created a&nbsp;</span>
+            <span *ngIf="notification.fromService=='c'">Comment
+
+              <div *ngIf="notification.item" class="commentContent">
+                <a routerLink="/user/{{notification.item.username}}"
+                  class="username">{{ notification.item.username }}</a>
+                <div routerLink="/discussion/{{notification.item.discussionid}}" class="commenttext">
+                  {{notification.item.text}}
+                </div>
+              </div>
+            </span>
+            <span *ngIf="notification.fromService=='r'">Review
+
+              <div *ngIf="notification.item">
+                <p class="rating">{{ notification.item.rating}}</p>
+                <!-- <a routerLink="/user/{{notification.item.username}}" class="username">{{ notification.item.usernameid}}</a> -->
+                <a class="username">{{ notification.item.usernameid}}</a>
+                <p>{{ notification.item.review}}</p>
+              </div>
+
+            </span>
+            <span *ngIf="notification.fromService=='d'">Discussion
+
+              <div *ngIf="notification.item" routerLink="/discussion/{{notification.item.discussionid}}"
+                class="discussionsubject">
+                {{ notification.item.subject}}
+              </div><br>
+            </span>
+          </div>
+          <div *ngIf="isCreatorNull(notification)">
+            <div *ngIf="notification.fromService=='c'">
+              A Discussion that you followed has a new Comment
+
+              <div *ngIf="notification.item" class="commentContent">
+                <a routerLink="/user/{{notification.item.username}}"
+                  class="username">{{ notification.item.username }}</a>
+                <div routerLink="/discussion/{{notification.item.discussionid}}" class="commenttext">
+                  {{notification.item.text}}</div>
+              </div>
+            </div>
+            <div *ngIf="notification.fromService=='r'">
+              A Movie that you followed has a new Review
+
+              <div *ngIf="notification.item">
+                <p class="rating">{{ notification.item.rating}}</p>
+                <!-- <a routerLink="/user/{{notification.item.username}}" class="username">{{ notification.item.usernameid}}</a> -->
+                <a class="username">{{ notification.item.usernameid}}</a>
+                <p>{{ notification.item.review}}</p>
+              </div>
+            </div>
+            <div *ngIf="notification.fromService=='d'">
+              A Movie that you followed has a new Discussion
+
+              <!-- <a routerLink="/user/{{discussion.username}}" class="username">{{ discussion.username }}</a> -->
+              <!-- <a class="username">{{ discussion.username }}</a> -->
+              <div *ngIf="notification.item" routerLink="/discussion/{{notification.item.discussionid}}"
+                class="discussionsubject">
+                {{ notification.item.subject}}
+              </div><br>
+            </div>
+          </div>
+          <button (click)="deleteNotification(notification)" class="delete-not">Delete</button>
+        </li>
+      </ul>
+    </div>
+    <div *ngIf="!userNotifications.length">
+      <h4 class="missing">No Notifications</h4>
+    </div>
+  </ng-template>
+  <ng-template #elseNBlock>
+    <h4>Loading Notifications . . .</h4>
   </ng-template>
 </div>
