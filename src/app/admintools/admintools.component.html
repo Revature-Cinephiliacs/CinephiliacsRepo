@@ -12,7 +12,7 @@
       <button class="item-toggle-button" (click)="toggleItem(ticket)">View Item</button>
       <div class="ticket-item" [ngClass]="{'expanded':isCollapsed(ticket)}">{{ticket.Item | json}}</div>
     </div>
-    <button class="archive">Archive</button><br>
+    <button class="archive"(click)="archiveTicket(ticket.ReportId)">Archive</button><br>
     <button class="delete">Delete Item</button>
     {{ticket.ReportType}}
     {{ticket.ReportEnitityId}}
