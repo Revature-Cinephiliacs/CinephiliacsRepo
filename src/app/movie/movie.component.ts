@@ -1,11 +1,8 @@
-import { HttpClient } from '@angular/common/http';
-import { analyzeAndValidateNgModules } from '@angular/compiler';
 import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Route, ActivatedRoute } from '@angular/router';
 import { HttpService } from '../http.service';
 import { LoggerService } from '../logger.service';
 import { AuthService } from '../auth.service';
-import { LoginService } from '../login.service';
 import { Movie, NewUser, PostDiscussion, PostReview, Review } from '../models/models';
 import { MoviepageService } from '../moviepage.service';
 import { ReviewService } from '../review.service';
@@ -43,6 +40,8 @@ export class MovieComponent implements OnInit {
   username: string;
   userModel: any;
 
+  relatedMovies: Movie[] = [];
+
   submitDiscussion: PostDiscussion = {
     movieid: this.router.snapshot.params.id,
     topic: "",
@@ -74,6 +73,7 @@ export class MovieComponent implements OnInit {
 
     //will get the details of the movie from the IMDB API
     this.movieID = this.router.snapshot.params.id;
+    
     this.movieService.getMovieDetails(this.movieID).subscribe(data => {
       this.selectedMovie = data;
       this.logger.log("", "this is getting movie details");
@@ -96,6 +96,10 @@ export class MovieComponent implements OnInit {
     else {
       this.logger.log("", "user isn't set");
     }
+
+    //Get related movies
+    this.getRelatedMovies();
+
   }
 
   //Function that will get a list of discussions for a given movie (waiting for forum service)
@@ -112,7 +116,7 @@ export class MovieComponent implements OnInit {
   //Function for a user to follow a given movie
   followMovie() {
     if (this.userModel) {
-      this.movieService.addMovieToFollowing(this.movieID, this.userModel.sub).subscribe(data => {
+      this.movieService.addMovieToFollowing(this.movieID).subscribe(data => {
         this.movieFollowed = true;
       });
     }
@@ -132,21 +136,21 @@ export class MovieComponent implements OnInit {
     this.logger.log("", this.submitDiscussion);
   }
 
-  // inputFields() {
-  //   if (localStorage.getItem("loggedin")) {
-  //     this.logger.log("", "userset");
-  //     // this.user = localStorage.getItem("loggedin")
-  //     this.userId = "";
-  //     // this.logger.log("", JSON.parse(this.user).username + "USER");
-  //     // this.logger.log("", this.user);
-  //     this.submitDiscussion.userid = this.userId;
-  //     this.sumbitReview.usernameid = this.username;
-  //     this.logger.log("", this.sumbitReview);
+  //Get a list of related movies for the current movie displayed
+  getRelatedMovies()
+  {
+    this.movieService.getRelatedMovies(this.movieID).subscribe(data =>
+      {
+        this.logger.log("Get Related Movies", data);
+        this.relatedMovies = data;
+      });
+  }
 
-  //   } else {
-
-  //     this.logger.log("", "no User");
-  //   }
-  // }
+  redirect(movieID: string)
+  {
+    this.movieID = movieID;
+    window.location.href = "/movie/" + this.movieID;
+  }
+  
 
 }
