@@ -4,12 +4,12 @@
   padding: 0;
   list-style-type: none;
 
-  * {
-    transition: 0.7s ease-in-out;
-  }
-
   li {
     padding: 10px;
+
+    div, .archive, .delete {
+      margin: 10px;
+    }
 
     span {
       color: grey;
@@ -21,35 +21,39 @@
       display: inline-block;
     }
 
-    .ticket-description {}
-
-    .item-and-button {
-      background-color: lightgrey;
-
-    }
-
     .ticket-item {
-      height: 0;
-      display: none;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s, padding 0.5s;
+      display: block;
+      border-color: #60a0dd;
+      border-style: solid;
+      border-width: 0 0 0 3px;
+      padding: 0 0 0 15px;
+      background-color: lightgrey;
+      margin: 0 10px 0 10px;
     }
 
     .ticket-item.expanded {
-      height: auto;
+      max-height: 100px;
       display: block;
+      border-style: solid;
+      border-width: 0 0 0 3px;
+      padding: 5px 0 5px 15px;
+      margin: 0 10px 0 10px;
     }
 
     button {
       width: 150px;
       height: 40px;
       text-align: left;
-      margin: 1% 0;
       color: white;
       border: none;
       background-color: #60a0dd;
       border-radius: 5px;
       font-size: .8em;
       text-align: center;
-      transition: background-color 0.2s, color 0.2s;
+      transition: background-color 0.15s, color 0.15s;
 
       &:hover {
         cursor: pointer;
@@ -68,7 +72,7 @@
     }
 
     .archive {
-      background-color: #57c260;
+      background-color: #45994c;
 
       &:hover {
         background-color: #5ff16c;
