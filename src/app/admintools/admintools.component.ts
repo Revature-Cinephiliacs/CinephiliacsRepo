@@ -56,6 +56,9 @@ export class AdmintoolsComponent implements OnInit {
 
   }
 
+  deleteReview(review){
+    this.admin.deleteReview(review.reviewid);
+  }
 
   fillTestTickets() {
     this.tickets = [
