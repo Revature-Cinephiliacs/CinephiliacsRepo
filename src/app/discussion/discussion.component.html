@@ -1,25 +1,92 @@
-<h1>{{subject}}</h1>
-
-<div *ngIf="comments">
-    <ul>
-        <li *ngFor="let comment of comments">
-            <div  class="spoilerCover" *ngIf="comment.isspoiler && !spoilersShown()">
-                <button (click)="showSpoilers()">Show Spoilers</button>
-            </div>
-            <div class="commentContent" *ngIf="!comment.isspoiler || spoilersShown()">
-                <a routerLink="/user/{{comment.username}}" class="username">{{ comment.username }}</a>
-                <div class="commenttext">{{comment.text}}</div>
-            </div>
-        </li>
-    </ul>
+<h1>{{discussion.subject}}</h1>
+<button *ngFor="let dt of discussion.discussionTopics">
+    <span *ngFor="let t of topics" >
+        <span *ngIf="t.topicId == dt">{{t.topicName}} </span>
+    </span>
+</button>
+<div class="sort">
+    Sort:
+    <button class="sortTimeA" *ngIf="!createdBtn" (click) = "sortByCreationA()">Created &#9650;</button>
+    <button class="sortTimeD" *ngIf="createdBtn" (click) = "sortByCreationB()">Created &#9660;</button>
+    <button class="sortComment" (click) = "sortByCommentD()">Comments &#9660;</button>
+    <button class="sortLikeA" *ngIf="!likesBtn" (click) = "sortByLikeAsc()">Likes &#9650;</button>
+    <button class="sortLikeD" *ngIf="likesBtn" (click) = "sortByLikeDesc()">Likes &#9660;</button>
+    <button class="followDis" (click)="followDiscussion()">Follow Discussion</button>
 </div>
 
-<div id="input">
-    <h3>New Comment</h3>
-    <form>
-        <input type="text" placeholder="Comment" id="comment" [(ngModel)]="newComment.text" [ngModelOptions]="{standalone: true}" required><br>
-        <button (click)="postComment()">Post Comment</button>
-        <input type="checkbox" id="spoiler" [(ngModel)]="newComment.isspoiler" [ngModelOptions]="{standalone: true}">
+    
+<h5>Current Topics</h5>
+<ul>
+    <li *ngFor = "let ct of currentTopics">{{ct}}</li>
+</ul>
+
+<ul>
+    <ng-container
+      *ngTemplateOutlet="recursiveListTmpl; context:{ list: pageComments }"
+    ></ng-container>
+</ul>
+
+
+<ng-template #recursiveListTmpl let-list="list">
+<li *ngFor="let item of list">
+    <div  class="spoilerCover" *ngIf="item.isspoiler && !spoilersShown()">
+        <button (click)="showSpoilers()">Show Spoilers</button>
+    </div>
+    <div class="commentContent" *ngIf="!item.isspoiler || spoilersShown()">
+        <a routerLink="/user/{{item.userid}}" class="userid">{{ item.userid }}</a>
+        {{item.creationTime}}
+        <div class="commentLike">
+            <div class="commenttext">{{item.text}}</div>
+            <button class="likeContent" (click) = "showReplyForm(item.commentid)">reply</button>
+            <button (click) = "addLike(item.commentid)">Like {{item.likes}}</button>
+        </div>
+        
+    </div>    
+    <ul *ngIf="item.replies.length > 0">
+    <ng-container class="nestedclass"
+        *ngTemplateOutlet="recursiveListTmpl; context:{ list: item.replies }"
+    ></ng-container>
+    </ul>
+</li>
+</ng-template>
+<br> 
+<div>
+    <button class="prev" *ngIf="1<pageNum" (click)="onPrev()">Previous</button>
+    <button class="next" *ngIf="numOfComments>(pageNum*5)" (click)="onNext()">Next</button>
+</div>
+
+<br>
+<div id = "reply" *ngIf = "displayReplyForm">
+    <h3>Reply</h3>
+    <form class = "replyForm">
+        <label>Message</label>
+        <input type="text" placeholder="Comment" [(ngModel)]="newComment.text" [ngModelOptions]="{standalone: true}" required><br>
+        <button (click)="postReply()">Post Reply</button>
+        <input type="checkbox" [(ngModel)]="newComment.isspoiler" [ngModelOptions]="{standalone: true}">
         <label>Spoiler</label>
     </form>
+    <button (click) = "cancelReply()">Cancel Reply</button>
+</div>
+
+
+<div class="addcomment" id="input" *ngIf = "displayMessageForm">
+    <h3>New Comment</h3>
+    <form id="postComment">
+        <input type="text" placeholder="Comment" id="comment" [(ngModel)]="newComment.text" [ngModelOptions]="{standalone: true}" required><br>
+        <input type="checkbox" id="spoiler" [(ngModel)]="newComment.isspoiler" [ngModelOptions]="{standalone: true}">
+        <label>Spoiler</label><br>
+        <button (click)="postComment()">Post Comment</button>
+    </form>
+</div>
+
+<div class="addtopic">
+    <h3>Add a Discussion Topic</h3>
+    <div *ngIf = "displayWarning">
+        <p>This topic is already used!</p>
+    </div>
+
+    <select [(ngModel)] = "selectedDiscussionOption">
+        <option *ngFor = "let t of topics">{{t.topicName}}</option>
+    </select>
+    <button (click) = "addNewTopic()">Add</button>
 </div>

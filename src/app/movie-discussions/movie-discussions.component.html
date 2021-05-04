@@ -1,0 +1,19 @@
+<h2>Recent Discussions</h2>
+<div class="grey-box">
+  <div *ngIf="discussions then thenDBlock else elseDBlock"></div>
+</div>
+
+<ng-template #thenDBlock>
+  <ul>
+    <li *ngFor="let discussion of discussions">
+      <a routerLink="/discussion/{{discussion.discussionId}}">{{discussion.subject}}</a>
+    </li>
+  </ul>
+  <button type="reset" *ngIf="discussions" class="dis-view-more" routerLink="/discussionlist/{{movieId}}">
+    View More
+  </button>
+</ng-template>
+<ng-template #elseDBlock>
+  <span>Be the first to start a discussion about this Movie!</span>
+  <button routerLink = "/discussionlist/{{movieId}}">Post a Discussion</button>
+</ng-template>

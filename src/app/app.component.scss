@@ -1,153 +1,178 @@
 #g4288 {
+  fill: none;
+  stroke: black;
+  stroke-width: 1.5;
+  stroke-miterlimit: 4;
+  stroke-dasharray: none;
+  stroke-opacity: 1;
+
+  #path4284 {
+
+    clip-rule: nonzero;
+    display: inline;
+    overflow: visible;
+    visibility: visible;
+    opacity: 1;
+    isolation: auto;
+    mix-blend-mode: normal;
+    color-interpolation-filters: linearRGB;
     fill: none;
+    fill-opacity: 1;
+    fill-rule: nonzero;
     stroke: black;
     stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
     stroke-miterlimit: 4;
     stroke-dasharray: none;
+    stroke-dashoffset: 0;
     stroke-opacity: 1;
+    image-rendering: auto;
+    shape-rendering: auto;
+    text-rendering: auto;
+    enable-background: accumulate;
+  }
 
-    #path4284 {
-        
-        clip-rule: nonzero;
-        display: inline;
-        overflow: visible;
-        visibility: visible;
-        opacity: 1;
-        isolation: auto;
-        mix-blend-mode: normal;
-        color-interpolation-filters: linearRGB;
-        fill: none;
-        fill-opacity: 1;
-        fill-rule: nonzero;
-        stroke: black;
-        stroke-width: 1.5;
-        stroke-linecap: round;
-        stroke-linejoin: round;
-        stroke-miterlimit: 4;
-        stroke-dasharray: none;
-        stroke-dashoffset: 0;
-        stroke-opacity: 1;
-        image-rendering: auto;
-        shape-rendering: auto;
-        text-rendering: auto;
-        enable-background: accumulate;
-    }
+  #path4286 {
 
-    #path4286 {
-        
-        clip-rule: nonzero;
-        display: inline;
-        overflow: visible;
-        visibility: visible;
-        opacity: 1;
-        isolation: auto;
-        mix-blend-mode: normal;
-        color-interpolation-filters: linearRGB;
-        fill: none;
-        fill-opacity: 1;
-        fill-rule: nonzero;
-        stroke: black;
-        stroke-width: 1.5;
-        stroke-linecap: round;
-        stroke-linejoin: round;
-        stroke-miterlimit: 4;
-        stroke-dasharray: none;
-        stroke-dashoffset: 0;
-        stroke-opacity: 1;
-        image-rendering: auto;
-        shape-rendering: auto;
-        text-rendering: auto;
-        enable-background: accumulate;
-    }
+    clip-rule: nonzero;
+    display: inline;
+    overflow: visible;
+    visibility: visible;
+    opacity: 1;
+    isolation: auto;
+    mix-blend-mode: normal;
+    color-interpolation-filters: linearRGB;
+    fill: none;
+    fill-opacity: 1;
+    fill-rule: nonzero;
+    stroke: black;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-miterlimit: 4;
+    stroke-dasharray: none;
+    stroke-dashoffset: 0;
+    stroke-opacity: 1;
+    image-rendering: auto;
+    shape-rendering: auto;
+    text-rendering: auto;
+    enable-background: accumulate;
+  }
 }
 
 #layer1 {
-    #path4293-4 {  
-        opacity: 1;
-        fill-rule: nonzero;
-        stroke: #000000;
-        stroke-width: 0.50507629;
-        stroke-opacity: 1;
-    }
+  #path4293-4 {
+    opacity: 1;
+    fill-rule: nonzero;
+    stroke: #000000;
+    stroke-width: 0.50507629;
+    stroke-opacity: 1;
+  }
 
-    #path295-9{
-        opacity: 1;
-        fill-rule: nonzero;
-        stroke: #000000;
-        stroke-opacity: 1;
-    }
+  #path295-9 {
+    opacity: 1;
+    fill-rule: nonzero;
+    stroke: #000000;
+    stroke-opacity: 1;
+  }
 }
 
-header{
+header {
+  display: flex;
+  align-items: center;
+
+  a.logo {
     display: flex;
     align-items: center;
+    font-size: 1.3em;
+    width: 25%;
 
-    a.logo {
-        display: flex;
-        align-items: center;
-        font-size: 1.3em;
-        width: 25%;
-
-        img#siteLogo {
-            position: relative;
-            z-index: 1;
-            width: 50px;
-            height: auto;
-            margin-right: 10px;
-        }
+    img#siteLogo {
+      position: relative;
+      z-index: 1;
+      width: 50px;
+      height: auto;
+      margin-right: 10px;
     }
+  }
 
-    nav {
-        margin-top: -38px;
+  nav {
+    margin-top: -38px;
 
-        ul{
-            li {
-                &.search {
-                    width: 215px;
-                    form {
-                        svg{ 
-                            padding-top: 5px;
-                        }
-                    }
-                }
+    ul {
+      li {
+        &.search {
+          width: 215px;
 
-                input {
-                    position: relative;
-                    float: left;
-                    border-radius: 5px;
-                    border: 1px solid grey;
-                    padding-left: 5px;
-                    margin-left: 3%;
-                    height: 25px;
-                }
-
-
-                svg {
-                    position: relative;
-                    float: left;
-
-                    path, ellipse, circle {
-                        fill:black;
-                    }
-                }
-
-                a.profile {
-                    svg {
-                        margin-top: -24px;
-                        padding-top: 16px;
-                    }
-                }
-
-                &:hover {
-                    .profile {
-                        svg {
-                            path, ellipse {
-                                fill-opacity: .65;
-                            }
-                        } 
-                    }
-                }
+          form {
+            svg {
+              padding-top: 5px;
             }
+          }
         }
+
+        input {
+          position: relative;
+          float: left;
+          border-radius: 5px;
+          border: 1px solid grey;
+          padding-left: 5px;
+          margin-left: 3%;
+          height: 25px;
+        }
+
+
+        svg {
+          position: relative;
+          float: left;
+
+          path,
+          ellipse,
+          circle {
+            fill: black;
+          }
+        }
+
+        a.profile {
+          svg {
+            margin-top: -24px;
+            padding-top: 16px;
+          }
+        }
+
+        &:hover {
+          .profile {
+            svg {
+
+              path,
+              ellipse {
+                fill-opacity: .65;
+              }
+            }
+          }
+        }
+      }
     }
+  }
+}
+
+app-error {
+  z-index: 9999;
+  position: fixed;
+  display: inline-block;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 8pt;
+}
+
+.admin-icon {
+  height: 30px;
+  margin-right: 30px;
+  cursor: pointer;
+
+}
+
+.admin-icon:hover {
+  color: #00000097;
 }

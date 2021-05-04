@@ -1,0 +1,17 @@
+<div class = "recommendations">
+    <h3>Your Recommended Movies</h3>
+    <div class="moviecard">
+        <ul *ngIf = "recommendedMovies" class = "recMovie">
+            <li *ngFor="let rm of recommendedMovies">
+                <div class="image">
+                    <img src="{{rm.posterURL}}" routerLink="/movie/{{rm.imdbId}}" alt="Movie Poster">
+                </div>
+                <div>
+                    <p class="name">{{ rm.title }}</p>
+                    <p class="year">{{ rm.releaseDate | date: 'yyyy'}}</p>
+                </div>
+                
+            </li>
+        </ul>
+    </div>
+</div>
