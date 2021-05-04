@@ -56,10 +56,6 @@ export class AdmintoolsComponent implements OnInit {
 
   }
 
-  archiveTicket(ticketID) {
-    console.log(ticketID);
-    this.admin.archiveTicket(ticketID);
-  }
 
   fillTestTickets() {
     this.tickets = [
