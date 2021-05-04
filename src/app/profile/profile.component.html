@@ -84,7 +84,7 @@
         [ngModelOptions]="{standalone: true}" required><br>
       <button *ngIf="!userIsUpdating && !userIsEditable" (click)="editUser()">Edit Profile</button>
       <a *ngIf="userIsEditable" (click)="cancelUpdate()">Cancel Changes</a>
-      <input *ngIf="!userIsUpdating && userIsEditable" type="Submit" (click)="updateUser(true)">
+      <input *ngIf="!userIsUpdating && userIsEditable" type="Submit" (click)="updateUser(true)" value="Update Profile">
     </div>
   </form>
 </div>
