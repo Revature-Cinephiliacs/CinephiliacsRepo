@@ -84,6 +84,7 @@ export class MovieComponent implements OnInit {
     //Will get the discussions for the movie
     this.showDiscussion();
 
+    // Check if user is following this movie
     if (this.userId) {
       this.movieService.getUserFollowingMovies(this.userId).subscribe((usersMovieNames: string[]) => {
         if (typeof usersMovieNames.find(m => m == this.movieID) === 'undefined') {
