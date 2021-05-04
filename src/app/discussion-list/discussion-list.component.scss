@@ -4,8 +4,7 @@
       width: 200px;
       margin-left: 10%;
   }
-  
-  
+
 
 .createDiscussion{
     float: right;
@@ -13,28 +12,40 @@
 }
 
 .discussionList{
-    border-left: 2px solid #d8d5d1;
-    border-right: 2px solid #d8d5d1;
-    border-bottom: 2px solid #d8d5d1;
-    border-radius: 5px;
+    // border-left: 2px solid #d8d5d1;
+    // border-right: 2px solid #d8d5d1;
+    // border-bottom: 2px solid #d8d5d1;
+    // border-radius: 5px;
     
     margin-top: 10px;
 }
 
-ul{
+ul {
     list-style-type: none;
-    border-top: 2px solid #d8d5d1;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    padding-bottom: 5px;
+    border: 2px solid #d8d5d1;
+    border-radius: 5px;
+    padding-bottom: 10px;
     padding-top: 10px;
-    height: 40px;
-    margin-bottom: 10px;
+    height: 65px;
+    background-color: #fffdfa;
+    margin-bottom: -15px;
+    margin-top: -2px;
 
-}
-li label{
-    float: right;
-    padding-right: 5px;
+   li {
+       padding-bottom: 5px;
+        label{
+            float: right;
+            padding-right: 5px;
+            span{
+                font-size: small;
+            }
+        }
+        .createdTime{
+            font-size: small;
+        }
+
+    }
+
 }
 
 .postDiscussion{
@@ -80,6 +91,14 @@ li label{
 }
 .right{
     margin-right: 20px;
+    a:first-of-type {
+        display: block;
+        margin-bottom: 5px;
+    }
+    
+    br {
+        display: inherit;
+    }
 }
 
 
@@ -91,7 +110,7 @@ label {
     height: 150px;
 
     .headleft {
-        width: 50%;
+        width: 55%;
         float: left;
 
         h2 {
@@ -142,7 +161,7 @@ label {
         button {
             width: 200px;
             height: 40px;
-            border-radius: 10px;
+            border-radius: 5px;
             background-color: #357fc5;
             border: none;
             color: white;
@@ -150,6 +169,33 @@ label {
     }
 }
 
-.discussionList {
-    margin-bottom: 50px;
+.discussionList{
+    margin-bottom: 20px;
+}
+
+.nextPrev{
+    margin-bottom: 10px;
+}
+.prev{
+    
+    float: left;
+    margin-left: 30%;
+        width: 100px;
+        height: 25px;
+        color: white;
+        border: none;
+        background-color: #357fc5;
+        border-radius: 2px;
+        
+}
+.next{
+    
+    float: right;
+    margin-right: 30%;
+        width: 100px;
+        height: 25px;
+        color: white;
+        border: none;
+        background-color: #357fc5;
+        border-radius: 2px;
 }
