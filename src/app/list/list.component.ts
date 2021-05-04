@@ -242,10 +242,11 @@ export class ListComponent implements OnInit {
 
   //calls get filters when search is submitted
   onSubmit() {
-    this.getFilters();
-    this.logger.log("final results", this.movieidlist);
+    this.resultMovies = [];
     this.searches = null;
     this.searches2 = [];
+    this.getFilters();
+    this.logger.log("final results", this.movieidlist);
   }
 
   //call movie api for search filter
