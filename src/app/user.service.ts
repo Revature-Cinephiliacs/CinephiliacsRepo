@@ -39,7 +39,16 @@ export class UserService {
 
   //Functio that call User MSA to get all users
   getAlUser() {
-    return this.http.get<NewUser[]>(this.usersUrl + "user/users")
+    return this.http.get<NewUser[]>(this.usersUrl + "user/users");
+  }
+
+  /**
+   * deletes a notification
+   * @param notId 
+   * @returns 
+   */
+  deleteNotification(notId: string) {
+    return this.http.delete<boolean>(this.usersUrl + "user/notification/" + notId).toPromise();
   }
 
   //Function that call User MSA to check if user is admin or not
