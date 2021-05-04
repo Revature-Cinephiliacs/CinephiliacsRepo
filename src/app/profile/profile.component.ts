@@ -186,31 +186,34 @@ export class ProfileComponent implements OnInit {
         let commentNotifications = this.userNotifications.filter(n => n.fromService == 'c').map(n => n.otherId);
         this.discussionService.getCommentsByIds(commentNotifications).then(c => {
           this.logger.log("comments", c);
-          this.userNotifications.forEach(n => {
-            temp1 = c.filter(c => c.commentid == n.otherId)[0];
-            if (temp1 != null)
-              n.item = temp1
-          });
+          if (c != null && c != undefined)
+            this.userNotifications.forEach(n => {
+              temp1 = c.filter(c => c.commentid == n.otherId)[0];
+              if (temp1 != null)
+                n.item = temp1
+            });
           this.logger.log("new notifications", this.userNotifications);
         });
         let reviewNotifications = this.userNotifications.filter(n => n.fromService == 'r').map(n => n.otherId);
         this.reviewService.getReviewbyIds(reviewNotifications).then(r => {
           this.logger.log("reviews", r);
-          this.userNotifications.forEach(n => {
-            temp2 = r.filter(r => r.reviewid == n.otherId)[0];
-            if (temp2 != null)
-              n.item = temp2;
-          });
+          if (r != null && r != undefined)
+            this.userNotifications.forEach(n => {
+              temp2 = r.filter(r => r.reviewid == n.otherId)[0];
+              if (temp2 != null)
+                n.item = temp2;
+            });
           this.logger.log("new notifications", this.userNotifications);
         });
         let discussionNotifications = this.userNotifications.filter(n => n.fromService == 'd').map(n => n.otherId);
         this.discussionService.getDiscussionsByIds(discussionNotifications).then(d => {
           this.logger.log("discussions", d);
-          this.userNotifications.forEach(n => {
-            temp3 = d.filter(d => d.discussionId == n.otherId)[0];
-            if (temp3 != null)
-              n.item = temp3;
-          });
+          if (d != null && d != undefined)
+            this.userNotifications.forEach(n => {
+              temp3 = d.filter(d => d.discussionId == n.otherId)[0];
+              if (temp3 != null)
+                n.item = temp3;
+            });
           this.logger.log("new notifications", this.userNotifications);
         });
       }
