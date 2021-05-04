@@ -17,7 +17,7 @@ export class DiscussionListComponent implements OnInit {
   pageNum: number = 1;
   topics: Topic[];
   discussionTopics: string[];
-  sortingOrder: string = "recent"   //Default sorting order will be based recent activities
+  sortingOrder: string = "recentD"   //Default sorting order will be based recent activities
 
   constructor(private auth: AuthService,
     private _forum: ForumService, 
@@ -38,6 +38,7 @@ export class DiscussionListComponent implements OnInit {
   commentsSortDirection: string = "\u21D5";
   likesSortDirection: string = "\u21D5";
   createdSortDirection: string = "\u21D5";
+  activitySortDirection: string = "\u21D3";
 
   movieTitle: string;
   userid: string;
@@ -74,11 +75,9 @@ export class DiscussionListComponent implements OnInit {
   //snapshot movie id
   async getDiscussions() {
     this.discussions = [];
-    setTimeout(() => {
       this._forum.getDiscussionPage(this.movieID, this.pageNum, this.sortingOrder).subscribe(data => {
         this.discussions = data;
       });
-    }, 1000);
   }
 
    //get next discussion page
@@ -99,9 +98,10 @@ export class DiscussionListComponent implements OnInit {
  filterlist: Discussion[] = [];
  searchDiscussion(){
   let input, filter;
-  input = document.getElementById("myInput");
+  input = document.getElementById("searchDiscussion");
   filter = input.value.toUpperCase();
-  this.discussions = this.discussions.filter(obj => {
+
+  this.filterlist = this.discussions.filter(obj => {
     return !!JSON.stringify(Object.values(obj)).match(new RegExp(filter, 'i'));
   });
  }
@@ -139,6 +139,7 @@ export class DiscussionListComponent implements OnInit {
 
     this.likesSortDirection = "\u21D5";
     this.createdSortDirection = "\u21D5";
+    this.activitySortDirection = "\u21D5";
   }
 
   //Function to get the paginated list of Discussion sorted by Creation time
@@ -173,21 +174,42 @@ export class DiscussionListComponent implements OnInit {
 
     this.likesSortDirection = "\u21D5";
     this.commentsSortDirection = "\u21D5";
+    this.activitySortDirection = "\u21D5";
   }
 
   //Finction to get the paginated list of Discussion sorted by recent activities in Descending order
   sortByRecent(){
-    this.sortingOrder = "recent";
+    switch (this.activitySortState) {
+      case 0:
+        this.createdSortState = 0;
+        this.likesSortState = 0;
+        this.commentsSortState = 0;
+        this.activitySortState = 1;
+        this.sortingOrder = "recentD";
+        this.activitySortDirection = "\u21D3";
+        this.getDiscussions();
+        break;
+      case 1:
+        this.activitySortState = 2;
+        this.sortingOrder = "recentA";
+        this.activitySortDirection = "\u21D1";
+        this.getDiscussions();
+        break;
+      case 2:
+        this.activitySortState = 1;
+        this.sortingOrder = "recentD";
+        this.activitySortDirection = "\u21D3";
+        this.getDiscussions();
+        break;
+    }
     this.likesSort = false;
     this.commentsSort = false;
-    this.createdSort = false;
     this.activitySort = true;
+    this.createdSort = false;
 
     this.likesSortDirection = "\u21D5";
     this.commentsSortDirection = "\u21D5";
     this.createdSortDirection = "\u21D5";
-    
-    this.getDiscussions();
   }
 
   //Function to get the paginated list of Discussion sorted by num of likes
@@ -222,6 +244,7 @@ export class DiscussionListComponent implements OnInit {
 
     this.createdSortDirection = "\u21D5";
     this.commentsSortDirection = "\u21D5";
+    this.activitySortDirection = "\u21D5";
   }
 
   //Function that will add a new discussion to a movie
@@ -236,6 +259,7 @@ export class DiscussionListComponent implements OnInit {
       this.submitDiscussion.movieId = this.router.snapshot.params.id;
       this._forum.submitDiscussion(this.submitDiscussion).subscribe(data => {
         this.displayPostDiscussion = false;
+        this.getDiscussions();
       });
      
     }
@@ -243,11 +267,9 @@ export class DiscussionListComponent implements OnInit {
 
   //Function to change discussion as selected filter
   onChangeFilter(){
-    setTimeout(() => {
       this._forum.filterDiscussionByTopic(this.selectedFilter).subscribe(data => {
         this.discussions = data;
       })
-    })
   }
 
 }

@@ -38,10 +38,19 @@ export class DiscussionComponent implements OnInit {
   pageComments: Comment[] = [];
   pageNum: number = 1;
   numOfComments = 0;
-  sortingOrder: string = "timeD";
+  sortingOrder: string = "comments";
   parentId: string;
   comments: Comment[];
 
+ //for sorting buttons 
+ commentsSortState: number = 1;
+ likesSortState: number = 0;
+ createdSortState: number = 0;
+ sortComment: boolean = true;
+ sortLike: boolean = false;
+ sortTime: boolean = false;
+ likesSortDirection: string = "\u21D5";
+ createdSortDirection: string = "\u21D5";
 
   newComment: any = {
     discussionid: "",
@@ -51,9 +60,6 @@ export class DiscussionComponent implements OnInit {
     parentcommentid: null
   };
 
-  //for sorting buttons 
-  likesBtn: boolean = false;
-  createdBtn: boolean = false;
   movieTitle: string;
 
   constructor(
@@ -98,13 +104,11 @@ export class DiscussionComponent implements OnInit {
   // Function to get paginated comments 
   async getComments() {
     this.pageComments = [];
-    setTimeout(() => {
       this._forum.getDiscussionCommentsPage(this.discussionID, this.pageNum, this.sortingOrder).subscribe(data => {
         this.pageComments = data;
         this.currentTopics = [];
         this.getCurrentTopicNames();
       });
-    }, 1000);
   }
 
   //Post comment (parent comment)
@@ -156,53 +160,77 @@ export class DiscussionComponent implements OnInit {
 
   // Sorting functions 
   // sort comments based on creation time in Ascending order
-  sortByCreationA() {
-    if (this.createdBtn) {
-      this.createdBtn = false;
-    } else {
-      this.createdBtn = true;
+  sortByCreation() {
+    switch (this.createdSortState) {
+      case 0:
+        this.createdSortState = 1;
+        this.likesSortState = 0;
+        this.commentsSortState = 0;
+        this.sortingOrder = "timeD";
+        this.createdSortDirection = "\u21D3";
+        this.getComments();
+        break;
+      case 1:
+        this.createdSortState = 2;
+        this.sortingOrder = "timeA";
+        this.createdSortDirection = "\u21D1";
+        this.getComments();
+        break;
+      case 2:
+        this.createdSortState = 1;
+        this.sortingOrder = "timeD";
+        this.createdSortDirection = "\u21D3";
+        this.getComments();
+        break;
     }
-    this.sortingOrder = "timeA";
-    this.pageNum = 1;
-    this.getComments();
+    this.sortLike = false;
+    this.sortComment = false;
+    this.sortTime = true;
+
+    this.likesSortDirection = "\u21D5";
   }
-  //sort comments based on creation time in Descending order
-  sortByCreationB() {
-    if (this.createdBtn) {
-      this.createdBtn = false;
-    } else {
-      this.createdBtn = true;
+
+  //sort comments based on number of like in  
+  sortByLikes() {
+    switch (this.likesSortState) {
+      case 0:
+        this.likesSortState = 1;
+        this.createdSortState = 0;
+        this.commentsSortState = 0;
+        this.sortingOrder = "likeD";
+        this.likesSortDirection = "\u21D3";
+        this.getComments();
+        break;
+      case 1:
+        this.likesSortState = 2;
+        this.sortingOrder = "likeA";
+        this.likesSortDirection = "\u21D1";
+        this.getComments();
+        break;
+      case 2:
+        this.likesSortState = 1;
+        this.sortingOrder = "likeD";
+        this.likesSortDirection = "\u21D3";
+        this.getComments();
+        break;
     }
-    this.sortingOrder = "timeD";
-    this.pageNum = 1;
-    this.getComments();
+    this.sortTime = false;
+    this.sortComment = false;
+    this.sortLike = true;
+
+    this.createdSortDirection = "\u21D5";
   }
-  //sort comments based on number of like in Ascending order
-  sortByLikeAsc() {
-    if (this.likesBtn) {
-      this.likesBtn = false;
-    } else {
-      this.likesBtn = true;
-    }
-    this.sortingOrder = "likesA";
-    this.pageNum = 1;
-    this.getComments();
-  }
-  //sort comments based on number of like in Descending order
-  sortByLikeDesc() {
-    if (this.likesBtn) {
-      this.likesBtn = false;
-    } else {
-      this.likesBtn = true;
-    }
-    this.sortingOrder = "likesD";
-    this.pageNum = 1;
-    this.getComments();
-  }
+
   //sort comments based on number of comments in Descending order
-  sortByCommentD() {
+  sortByComment() {
     this.sortingOrder = "comments";
-    this.pageNum = 1;
+    this.commentsSortState = 1;
+    this.sortComment = true;
+    this.sortLike = false;
+    this.sortTime = false;
+
+    this.likesSortDirection = "\u21D5";
+    this.createdSortDirection = "\u21D5";
     this.getComments();
   }
 
