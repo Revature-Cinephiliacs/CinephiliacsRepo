@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Review, Discussion, Comment } from '../models/models';
+import { Review, Discussion, Comment, NewUser } from '../models/models';
 import { ActivatedRoute } from '@angular/router';
 import { LoginService } from '../login.service';
 import { HttpService } from '../http.service';
 import { LoggerService } from '../logger.service';
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'app-user',
@@ -12,6 +13,7 @@ import { LoggerService } from '../logger.service';
 })
 export class UserComponent implements OnInit {
   userName: string = "";
+  user: NewUser = new NewUser();
 
   moviesAreLoaded: boolean = false;
   reviewsAreLoaded: boolean = false;
@@ -28,14 +30,25 @@ export class UserComponent implements OnInit {
 
   constructor(
     private logger: LoggerService,
-    private router: ActivatedRoute, private _http: HttpService, private _login: LoginService,) { }
+    private router: ActivatedRoute,
+    private _http: HttpService,
+    private userService: UserService,
+  ) { }
 
   ngOnInit(): void {
     // Get username from url
+    // let userName = this.router.snapshot.params["username"];
     this.userName = this.router.snapshot.params.username;
+    this.userService.getUserByUsername(this.userName).then(user => {
+      this.user = user;
+      this.getUserData();
+    });
+
+  }
+  getUserData() {
 
     // Check if user follows any movies
-    this._login.getUserMovies(this.userName).subscribe(data => {
+    this.userService.getAUserFollowedMovies(this.user.userid).then(data => {
       this.userMovieNames = data;
 
       if (this.userMovieNames) {
@@ -50,7 +63,7 @@ export class UserComponent implements OnInit {
     });
 
     // Check if user has created any discussions
-    this._login.getUserDiscussions(this.userName).subscribe(data => {
+    this.userService.getAUserDiscussions(this.user.userid).then(data => {
       if (data != null) {
         this.userDiscussions = data;
       }
@@ -58,7 +71,7 @@ export class UserComponent implements OnInit {
     });
 
     // Check if user has created any comments
-    this._login.getUserComments(this.userName).subscribe(data => {
+    this.userService.getAUserComments(this.user.userid).then(data => {
       if (data != null) {
         this.userComments = data;
       }
@@ -66,7 +79,7 @@ export class UserComponent implements OnInit {
     });
 
     // Check if user has created any reviews
-    this._login.getUserReviews(this.userName).subscribe(data => {
+    this.userService.getAUserReviews(this.user.userid).then(data => {
       if (data != null) {
         this.userReviews = data;
       }

@@ -97,8 +97,7 @@
       <ul class="reviews">
         <li *ngFor="let review of userReviews">
           <p class="rating">Score: {{ review.score}}</p>
-          <!-- <a routerLink="/user/{{review.usernameid}}" class="username">{{ review.username}}</a> -->
-          <a class="username">{{ review.usernameid}}</a>
+          <a routerLink="/user/{{review.usernameid}}" class="username">{{ review.usernameid}}</a>
           <p>{{ review.review}}</p>
         </li>
       </ul>
@@ -139,8 +138,7 @@
       <ul class="comments">
         <li *ngFor="let comment of userComments">
           <div class="commentContent">
-            <!-- <a routerLink="/user/{{comment.userid}}" class="username">{{ comment.username }}</a> -->
-            <a class="username">{{ comment.userid }}</a>
+            <a routerLink="/user/{{comment.userid}}" class="username">{{ comment.userid }}</a>
             <div routerLink="/discussion/{{comment.discussionid}}" class="commenttext">{{comment.text}}</div>
           </div>
         </li>
@@ -236,5 +234,26 @@
   </ng-template>
   <ng-template #elseNBlock>
     <h4>Loading Notifications . . .</h4>
+  </ng-template>
+
+  <h3>Followed Discussions</h3>
+  <div *ngIf="followedDiscussionsAreLoaded; then thenFDBlock else elseFDBlock"></div>
+  <ng-template #thenFDBlock>
+    <div *ngIf="userFollowedDiscussions.length">
+      <ul class="discussions">
+        <li *ngFor="let discussion of userFollowedDiscussions">
+          <a routerLink="/user/{{discussion.userid}}" class="username">{{ discussion.userid }}</a>
+          <!-- <p *ngIf="discussion.topic != 'None'" class="topic">Topic: {{ discussion.topic}}</p> -->
+          <div routerLink="/discussion/{{discussion.discussionId}}" class="discussionsubject">{{ discussion.subject}}
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div *ngIf="!userFollowedDiscussions.length">
+      <h4 class="missing">You haven't followed any yet</h4>
+    </div>
+  </ng-template>
+  <ng-template #elseFDBlock>
+    <h4>Loading Followed Discussions . . .</h4>
   </ng-template>
 </div>
