@@ -59,7 +59,6 @@
                     <label class="likes">Likes: <span>{{ discussion.likes}}</span></label> 
                 </div>
             </div>
-
         </li>
     </ul>
 </div>
@@ -90,9 +89,5 @@
     </ul>
 </div>
 
-<div class="nextPrev">
-    <button class="prev" *ngIf="1<pageNum" (click)="onPrev()">Previous</button>
-    <button class="next" *ngIf="numOfDiscussion > (pageNum*10)" (click)="onNext()">Next</button>
-</div>
-<br>
-
+<button *ngIf="1<pageNum" (click)="onPrev()" class="pgBtn">Previous</button>
+<button *ngIf="numOfDiscussion > (pageNum*10)" (click)="onNext()" class="pgBtn">Next</button>

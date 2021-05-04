@@ -29,6 +29,7 @@ ul {
     height: 65px;
     background-color: #fffdfa;
     margin-bottom: -15px;
+    margin-top: -2px;
 
    li {
        padding-bottom: 5px;
@@ -38,18 +39,14 @@ ul {
             span{
                 font-size: small;
             }
-            
         }
         .createdTime{
             font-size: small;
         }
 
     }
-    
 
 }
-
-
 
 .postDiscussion{
     border: 1px solid black;
@@ -201,5 +198,4 @@ label {
         border: none;
         background-color: #357fc5;
         border-radius: 2px;
-        
 }
