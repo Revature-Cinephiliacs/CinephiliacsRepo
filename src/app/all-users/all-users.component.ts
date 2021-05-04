@@ -10,10 +10,10 @@ import { LoggerService } from '../logger.service';
 export class AllUsersComponent implements OnInit {
 
   users: any;
-  constructor(private http: HttpClient,
-    private logger: LoggerService,
-  ) { }
+  constructor(private http: HttpClient, private logger: LoggerService) 
+  { }
 
+  // get all users on init
   ngOnInit(): void {
     this.http.get("https://cinephiliacsapi.azurewebsites.net/user/users").subscribe(data => {
       this.logger.log("", data);

@@ -28,20 +28,24 @@ export class ListComponent implements OnInit {
     private router: ActivatedRoute, private _http: HttpService) { }
 
   ngOnInit(): void {
-
+    // initialize the search form
     this.searchForm = new FormGroup({
       search: new FormControl('', Validators.minLength(2))
     });
 
+    // Display results for the search terms
     this.logger.log("", this.router.snapshot.params);
     this.searchTerm = this.router.snapshot.params.search;
     this.pageNum = (this.router.snapshot.params.page - 1) * 2 + 1;
+    // Check if there is a next page
     if (this.pageNum < 75) {
       this.nextPg = parseInt(this.router.snapshot.params.page) + 1;
     }
+    // Check if there is a previous page
     if (this.pageNum > 1) {
       this.prevPg = this.router.snapshot.params.page - 1;
     }
+    // Get the first page of search results from the third party API
     this._http.getMovies(this.searchTerm, this.pageNum).subscribe(data => {
       this.movies = data;
       this.searches = this.movies.Search;
@@ -49,6 +53,7 @@ export class ListComponent implements OnInit {
       this.logger.log("", this.movies.Search);
 
     });
+    // Get the second page of search results from the third party API
     this._http.getMovies(this.searchTerm, (this.pageNum + 1)).subscribe(data => {
       this.movies2 = data;
 
@@ -70,38 +75,45 @@ export class ListComponent implements OnInit {
     return myString + myString;
   }
 
+  // Go to next page
   increasePage() {
     this.pageNum++;
     return this.pageNum;
   }
 
+  // Go to previous page
   decreasePage() {
     this.pageNum--;
     return this.pageNum;
   }
+
+  // Store previous page number
   getPreviousPageNum() {
     this.prevPg = this.pageNum - 1;
     this.logger.log("", this.prevPg);
     return this.prevPg;
   }
 
+  // Store next page number
   getNextPageNum() {
     this.nextPg = this.pageNum + 1;
     this.logger.log("", this.nextPg);
     return this.nextPg;
   }
 
+  // Store current page number
   getPageNum() {
     this.logger.log("", "PageNum" + this.pageNum);
     return this.pageNum;
   }
 
-
+  // Store current search term
   getSearchTerm() {
     this.logger.log("", "Search Term" + this.searchTerm);
     return this.searchTerm;
   }
 
+  // Go to new search if user submits search form on top of page
   onSubmit() {
     if (this.searchForm.get('search')!.value != "") {
       let searchParam = JSON.stringify(this.searchForm.get('search')!.value).substring(1, JSON.stringify(this.searchForm.get('search')!.value).length - 1);

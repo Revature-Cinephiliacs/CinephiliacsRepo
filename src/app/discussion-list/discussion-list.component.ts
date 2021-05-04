@@ -39,7 +39,7 @@ export class DiscussionListComponent implements OnInit {
     
   }
   ngOnInit(): void {
-
+    // Load movie info from ID in url
     this.movieID =  this.router.snapshot.params.id;
     this._movie.getMovieDetails(this.movieID).subscribe(data => { this.movieTitle = data.title })
     this._forum.getDiscussion(this.movieID).subscribe(data =>{ 
