@@ -41,7 +41,6 @@ describe('DiscussionComponent', () => {
   it('On Init test', () => {
     component.ngOnInit();
     expect(component.getComments).toHaveBeenCalled;
-    expect(component.displayInput).toHaveBeenCalled;
   });
 
   it('spoilers shown', () => {

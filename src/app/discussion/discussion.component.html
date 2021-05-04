@@ -1,6 +1,8 @@
 <h1>{{discussion.subject}}</h1>
-<button class="tag" *ngFor="let i of discussion.discussionTopics">
-    {{i}}
+<button *ngFor="let dt of discussion.discussionTopics">
+    <span *ngFor="let t of topics" >
+        <span *ngIf="t.topicId == dt">{{t.topicName}} </span>
+    </span>
 </button>
 <div class="sort">
     Sort:
@@ -33,9 +35,12 @@
     <div class="commentContent" *ngIf="!item.isspoiler || spoilersShown()">
         <a routerLink="/user/{{item.userid}}" class="userid">{{ item.userid }}</a>
         {{item.creationTime}}
-        <div class="commenttext">{{item.text}}</div>
-        <button (click) = "showReplyForm(item.commentid)">reply</button>
-        <button (click) = "addLike(item.commentid)">Like {{item.likes}}</button>
+        <div class="commentLike">
+            <div class="commenttext">{{item.text}}</div>
+            <button class="likeContent" (click) = "showReplyForm(item.commentid)">reply</button>
+            <button (click) = "addLike(item.commentid)">Like {{item.likes}}</button>
+        </div>
+        
     </div>    
     <ul *ngIf="item.replies.length > 0">
     <ng-container class="nestedclass"
@@ -66,7 +71,7 @@
 
 <div class="addcomment" id="input" *ngIf = "displayMessageForm">
     <h3>New Comment</h3>
-    <form>
+    <form id="postComment">
         <input type="text" placeholder="Comment" id="comment" [(ngModel)]="newComment.text" [ngModelOptions]="{standalone: true}" required><br>
         <input type="checkbox" id="spoiler" [(ngModel)]="newComment.isspoiler" [ngModelOptions]="{standalone: true}">
         <label>Spoiler</label><br>
