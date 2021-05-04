@@ -69,7 +69,7 @@
             <img src="{{search.posterURL}}" routerLink="/movie/{{search.imdbId}}" alt="Movie Poster">
         </div>
         <p class="name">{{ search.title }}</p>
-        <p class="year">{{ search.releaseDate }}</p>
+        <p class="year">{{ search.releaseDate | date: "yyyy" }}</p>
     </li>
 </ul>
 

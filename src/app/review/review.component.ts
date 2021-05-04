@@ -71,10 +71,9 @@ export class ReviewComponent implements OnInit {
 
   ngOnInit(): void {
     // check if user is logged in 
-    this.authService.authModel$.subscribe(reply => {
-      this.logger.log("authmodel", reply);
-      this.authModel = reply;
-      this.logger.log("this review authmodel", this.authModel)
+    this.authService.userProfile$.subscribe(reply => {
+      this.logger.log("review user profile", reply);
+      this.userModel = reply;
     });
 
     this.loadReviews(this.reviewPage);
@@ -233,6 +232,7 @@ export class ReviewComponent implements OnInit {
       case "Show All": {
         console.log("Show All reviews");
         this.reviewPage = 1;
+        this.reviews = [];
         this.loadReviews(this.reviewPage);
         break;
       }
