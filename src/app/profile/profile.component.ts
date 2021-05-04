@@ -277,18 +277,7 @@ export class ProfileComponent implements OnInit {
     if (this.userIsEditable || newuser) {
       this.userIsUpdating = true;
       this.userIsEditable = false;
-      //todo: update to new api calls
-      //2021-05-27 year, month, day
-      //2000-12-27 <-- should be correct form :(
-      // let splitDate = this.editedUser.dateofbirth.split("-");
-      // let year = splitDate[0];
-      // let month = splitDate[1];
-      // let day = splitDate[2];
-      // let correctDate = [year, day, month];
-      // this.editedUser.dateofbirth = correctDate.join("-");
-      // splitDate = splitDate.reverse();
-      // this.editedUser.dateofbirth = splitDate.join("-");
-      // this.editedUser.dateofbirth = this.editedUser.dateofbirth.replace("-", "/");
+      this.logger.log("new user??/", newuser);
       this.logger.log("creating user", this.editedUser);
       if (newuser) {
         this.userService.createUser(this.editedUser).then(reply => {
@@ -306,6 +295,7 @@ export class ProfileComponent implements OnInit {
           this.userIsUpdating = false;
         });
       } else {
+        this.logger.log("updating the user", this.editedUser);
         this.userService.postUpdateUser(this.currentUser.userid, this.editedUser).toPromise().then(response => {
           // Once the update request has processed, use an API call to get the updated user information
           this.userService.getUser().then(reply => {
