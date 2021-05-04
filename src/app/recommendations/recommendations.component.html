@@ -1,17 +1,31 @@
-<div class = "recommendations">
+<!-- <div class = "recommendations">
     <h3>Your Recommended Movies</h3>
-    <div class="moviecard">
+    <div class = "movieCard">
         <ul *ngIf = "recommendedMovies" class = "recMovie">
             <li *ngFor="let rm of recommendedMovies">
                 <div class="image">
                     <img src="{{rm.posterURL}}" routerLink="/movie/{{rm.imdbId}}" alt="Movie Poster">
                 </div>
-                <div>
+                <div class="info">
                     <p class="name">{{ rm.title }}</p>
                     <p class="year">{{ rm.releaseDate | date: 'yyyy'}}</p>
                 </div>
-                
             </li>
         </ul>
-    </div>
+    </div> 
+</div> -->
+<div class = "recommendations">
+    <h3>Your Recommended Movies</h3>
+    <div class = "movieCardContainer" *ngIf = "recommendedMovies">
+
+        <div class="movieCard" *ngFor = "let rm of recommendedMovies">
+            <img src="{{rm.posterURL}}" routerLink="/movie/{{rm.imdbId}}" alt="{{rm.title}}">
+            <div class="info">
+                <h1>{{ rm.title }}</h1>
+                <p>{{ rm.releaseDate | date: 'yyyy'}}</p>
+                <button routerLink="/movie/{{rm.imdbId}}">View Movie</button>
+            </div>
+        </div>
+        
+    </div> 
 </div>

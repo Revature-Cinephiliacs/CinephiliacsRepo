@@ -1,24 +1,17 @@
 <h1>{{discussion.subject}}</h1>
+<label>Current Topics: </label>
 <button *ngFor="let dt of discussion.discussionTopics">
     <span *ngFor="let t of topics" >
         <span *ngIf="t.topicId == dt">{{t.topicName}} </span>
     </span>
 </button>
 <div class="sort">
-    Sort:
-    <button class="sortTimeA" *ngIf="!createdBtn" (click) = "sortByCreationA()">Created &#9650;</button>
-    <button class="sortTimeD" *ngIf="createdBtn" (click) = "sortByCreationB()">Created &#9660;</button>
-    <button class="sortComment" (click) = "sortByCommentD()">Comments &#9660;</button>
-    <button class="sortLikeA" *ngIf="!likesBtn" (click) = "sortByLikeAsc()">Likes &#9650;</button>
-    <button class="sortLikeD" *ngIf="likesBtn" (click) = "sortByLikeDesc()">Likes &#9660;</button>
+    <label>Sort: </label> 
+    <button class="first" (click) = "sortByComment()" [class.selected]="sortComment">Comments </button>
+    <button  (click) = "sortByCreation()" [class.selected]="sortTime">Created {{createdSortDirection}}</button>
+    <button class="last" (click) = "sortByLikes()" [class.selected]="sortLike">Likes {{likesSortDirection}}</button>
     <button class="followDis" (click)="followDiscussion()">Follow Discussion</button>
 </div>
-
-    
-<h5>Current Topics</h5>
-<ul>
-    <li *ngFor = "let ct of currentTopics">{{ct}}</li>
-</ul>
 
 <ul>
     <ng-container
@@ -34,18 +27,20 @@
     </div>
     <div class="commentContent" *ngIf="!item.isspoiler || spoilersShown()">
         <a routerLink="/user/{{item.userid}}" class="userid">{{ item.userid }}</a>
-        {{item.creationTime}}
+        <div class="createdTime" >{{item.creationTime | date: 'MM/dd/yyyy h:mm:ss a'}}</div>
         <div class="commentLike">
             <div class="commenttext">{{item.text}}</div>
             <button class="likeContent" (click) = "showReplyForm(item.commentid)">reply</button>
             <button (click) = "addLike(item.commentid)">Like {{item.likes}}</button>
         </div>
         
-    </div>    
+    </div>  
+    <hr>  
     <ul *ngIf="item.replies.length > 0">
     <ng-container class="nestedclass"
         *ngTemplateOutlet="recursiveListTmpl; context:{ list: item.replies }"
     ></ng-container>
+    
     </ul>
 </li>
 </ng-template>
@@ -90,3 +85,4 @@
     </select>
     <button (click) = "addNewTopic()">Add</button>
 </div>
+ 
