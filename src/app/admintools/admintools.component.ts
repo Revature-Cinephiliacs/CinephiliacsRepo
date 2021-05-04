@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { AdminService } from '../admin.service';
-import { Comment, Discussion, PostReview, ReportedItem, ReportType } from "../models/models";
+import { Comment, Discussion, NewUser, PostReview, ReportedItem, ReportType } from "../models/models";
 import { FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
 import * as moment from 'moment';
 import { LoggerService } from '../logger.service';
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'app-admintools',
@@ -16,7 +17,10 @@ export class AdmintoolsComponent implements OnInit {
   tickets: ReportedItem[];
   collapsedItem: boolean[];
 
-  constructor(private fb: FormBuilder, private admin: AdminService, private logger: LoggerService) { }
+  users: NewUser[];
+
+  constructor(private fb: FormBuilder, private admin: AdminService, private logger: LoggerService,
+    private userService: UserService) { }
 
   ngOnInit(): void {
     this.admin.getReports().then(result => {
@@ -31,6 +35,14 @@ export class AdmintoolsComponent implements OnInit {
       UserName: [''],
       Rights: ['']
     });
+    this.userService.getAlUser().toPromise().then(result =>{
+      this.users = result;
+      this.logger.log("Users" + this.users,"good");
+    }).catch(error =>{
+      this.logger.error("error in retreaving customers",error);
+      this.fillUsers();
+    })
+    
   }
 
   fillTestTickets() {
@@ -41,6 +53,21 @@ export class AdmintoolsComponent implements OnInit {
     ];
   }
 
+  fillUsers(){
+    this.users = [
+      this.createUser("01"),
+      this.createUser("02"),
+      this.createUser("03"),
+    ]
+  }
+
+  createUser(userID: string): NewUser
+  {
+    let user = new NewUser();
+    user.username = "TestUser" + userID;
+    user.userid = userID;
+    return user;
+  }
   createTicket(desc: string, type: ReportType): ReportedItem {
     let ticket = new ReportedItem();
     ticket.ReportId = Math.random();

@@ -16,7 +16,6 @@ import * as moment from 'moment';
 })
 export class ReviewComponent implements OnInit {
   @Input() movieid: string;
-
   reviews: Review[] = [];
   allReviews: Review[] = [];
   filteredReviews: Review[] = [];
@@ -26,6 +25,7 @@ export class ReviewComponent implements OnInit {
   submitReviewStatus = false;
   submitReviewMessage = "Review not submitted";
 
+  // set up info for sorting and pagination
   timeSortState: number = 0;
   timeSortString: string = "Newest";
   ratingSortState: number = 0;
@@ -34,12 +34,14 @@ export class ReviewComponent implements OnInit {
   timeActive: boolean = true;
   reviewsBusy: boolean = false;
   lastPage: boolean = false;
+
+  // set up info to get the average review score
   reviewScoreSum: number = 0;
   reviewScore: number = 0;
 
   userId: string;
   username: string;
-  //authModel: NewUser;
+  authModel: NewUser;
   userModel: any;
 
   selectedFilter: string;
@@ -68,9 +70,11 @@ export class ReviewComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.authService.userProfile$.subscribe(reply => {
-      this.logger.log("review user profile", reply);
-      this.userModel = reply;
+    // check if user is logged in 
+    this.authService.authModel$.subscribe(reply => {
+      this.logger.log("authmodel", reply);
+      this.authModel = reply;
+      this.logger.log("this review authmodel", this.authModel)
     });
 
     this.loadReviews(this.reviewPage);
