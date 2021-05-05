@@ -36,7 +36,7 @@ export class AuthService {
     createAuth0Client({
       domain: 'cinephiliacs.us.auth0.com', // the account
       client_id: 'uDzm9BWSa0J3ePufHnwOjxzKWO2hpW5P', // an application
-      redirect_uri: "http://localhost:4200", // angular deployment url
+      redirect_uri: "https://cinephiliacsapp.azurewebsites.net/", // angular deployment url
       audience: 'https://cinephiliacs-api/' // an API
     })
   ) as Observable<Auth0Client>).pipe(
