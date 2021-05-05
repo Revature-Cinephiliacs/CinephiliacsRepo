@@ -11,12 +11,7 @@
     
 }
 
-.discussionList{
-    // border-left: 2px solid #d8d5d1;
-    // border-right: 2px solid #d8d5d1;
-    // border-bottom: 2px solid #d8d5d1;
-    // border-radius: 5px;
-    
+.discussionList {
     margin-top: 10px;
 }
 
@@ -207,4 +202,10 @@ label {
         border: none;
         background-color: #357fc5;
         border-radius: 2px;
+}
+
+.topicBtn:hover {
+    cursor: default;
+    background-color: lightgrey;
+    border: 1px solid grey;
 }
