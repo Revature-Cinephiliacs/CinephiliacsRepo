@@ -46,12 +46,12 @@
           <a routerLink="/discussion/{{discussion.discussionId}}">
             {{discussion.subject}}
           </a>
-          <br>
           <button *ngFor="let dt of discussion.discussionTopics">
             <span *ngFor="let t of topics">
               <span *ngIf="t.topicId == dt">{{t.topicName}} </span>
             </span>
           </button>
+          <button class="flag" *ngIf="isloggedIn" (click)="flagDiscussion(discussion)">Flag</button>
         </div>
         <div class="left">
           <label class="createdTime">{{discussion.creationTime | date: 'MM/dd/yyyy h:mm:ss a'}}</label><br>
