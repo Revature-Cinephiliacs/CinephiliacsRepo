@@ -67,9 +67,15 @@ export class ReviewComponent implements OnInit {
     private adminToolService: AdminService
   ) { }
 
+  loggedIn: boolean = false;
   ngOnInit(): void {
     this.authService.authModel$.subscribe(reply => {
-      this.authModel = reply;
+      if (reply != null || reply != undefined) {
+        this.authModel = reply;
+        this.loggedIn = true;
+      } else {
+        this.loggedIn = false;
+      }
     })
 
     this.loadReviews(this.reviewPage);
