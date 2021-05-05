@@ -12,10 +12,11 @@
                 </div>
             </li>
         </ul>
-    </div> 
+    </div>
 </div> -->
 <div class = "recommendations">
     <h3>Your Recommended Movies</h3>
+    <button routerLink="/profile">Return To Profile</button>
     <div class = "movieCardContainer" *ngIf = "recommendedMovies">
 
         <div class="movieCard" *ngFor = "let rm of recommendedMovies">
@@ -26,6 +27,6 @@
                 <button routerLink="/movie/{{rm.imdbId}}">View Movie</button>
             </div>
         </div>
-        
-    </div> 
+
+    </div>
 </div>

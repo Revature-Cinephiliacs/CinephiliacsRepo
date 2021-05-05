@@ -38,6 +38,18 @@ u:hover {
     margin-bottom: 2%;
   }
 
+  button.gray {
+    width: 150px;
+    height: 35px;
+    color: white;
+    border: none;
+    background-color: lightgrey;
+    border-radius: 5px;
+    margin-right: 20px;
+    margin-bottom: 2%;
+    cursor: pointer;
+  }
+
   button:active:not(.deactived) {
     background-color: #336da3;
   }

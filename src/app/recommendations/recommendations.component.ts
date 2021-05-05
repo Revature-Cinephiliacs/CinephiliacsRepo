@@ -11,7 +11,7 @@ import { MoviepageService } from '../moviepage.service';
   styleUrls: ['./recommendations.component.scss']
 })
 export class RecommendationsComponent implements OnInit {
-  
+
   userModel: any;
   recommendedMovies: Movie[];
   userid: string;
@@ -40,6 +40,6 @@ export class RecommendationsComponent implements OnInit {
     })
   }
 
-  
+
 
 }
