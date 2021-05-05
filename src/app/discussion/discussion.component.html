@@ -10,7 +10,8 @@
     <button class="first" (click) = "sortByComment()" [class.selected]="sortComment">Comments </button>
     <button  (click) = "sortByCreation()" [class.selected]="sortTime">Created {{createdSortDirection}}</button>
     <button class="last" (click) = "sortByLikes()" [class.selected]="sortLike">Likes {{likesSortDirection}}</button>
-    <button class="followDis" (click)="followDiscussion()">Follow Discussion</button>
+    <button *ngIf="displayFollow" class="followDis" (click)="followDiscussion()">Follow Discussion</button>
+    <button *ngIf="!displayFollow" class="followDis">Following Discussion</button>
 </div>
 
 <ul>
