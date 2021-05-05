@@ -124,7 +124,7 @@
     <div *ngIf="userNotifications.length">
       <button (click)="deleteAllNotifications()" class="delete-not">Delete all</button>
       <ul class="comments">
-        <li *ngFor="let notification of userNotifications">
+        <li *ngFor="let notification of userShownNotifications">
           <div *ngIf="!isCreatorNull(notification)">
             <span>User {{notification.creatorUsername}} that you follow has created a&nbsp;</span>
             <span *ngIf="notification.fromService=='c'">Comment
@@ -187,11 +187,11 @@
               </div><br>
             </div>
           </div>
-          <button *ngIf="showNotificationsButtons() && !moreNotifications" (click)="showMoreNotifications()">Show
-            More</button>
-          <button *ngIf="showNotificationsButtons() && moreNotifications" (click)="showMoreNotifications()">Show
-            Less</button>
         </li>
+        <button *ngIf="showNotificationsButtons() && !moreNotifications" (click)="showMoreNotifications()">Show
+          More</button>
+        <button *ngIf="showNotificationsButtons() && moreNotifications" (click)="showMoreNotifications()">Show
+          Less</button>
       </ul>
     </div>
     <div *ngIf="!userNotifications.length">
@@ -207,7 +207,7 @@
   <ng-template #thenRBlock>
     <div *ngIf="userReviews.length">
       <ul class="reviews">
-        <li *ngFor="let review of userReviews">
+        <li *ngFor="let review of userShownReviews">
           <p class="rating">Score: {{ review.score}}</p>
           <a routerLink="/user/{{review.usernameid}}" class="username">{{ review.usernameid}}</a>
           <p>{{ review.review}}</p>
@@ -252,7 +252,7 @@
   <ng-template #thenCBlock>
     <div *ngIf="userComments.length">
       <ul class="comments">
-        <li *ngFor="let comment of userComments">
+        <li *ngFor="let comment of userShownComments">
           <div class="commentContent">
             <a routerLink="/user/{{comment.userid}}" class="username">{{ comment.userid }}</a>
             <div routerLink="/discussion/{{comment.discussionid}}" class="commenttext">{{comment.text}}</div>
