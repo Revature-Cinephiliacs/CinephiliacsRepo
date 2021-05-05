@@ -226,7 +226,7 @@
         <li *ngFor="let discussion of userDiscussions">
           <a routerLink="/user/{{discussion.userid}}" class="username">{{ discussion.userid }}</a>
           <!-- <p *ngIf="discussion.topic != 'None'" class="topic">Topic: {{ discussion.topic}}</p> -->
-          <div routerLink="/discussion/{{discussion.discussionid}}" class="discussionsubject">{{ discussion.subject}}
+          <div routerLink="/discussion/{{discussion.discussionId}}" class="discussionsubject">{{ discussion.subject}}
           </div>
         </li>
       </ul>

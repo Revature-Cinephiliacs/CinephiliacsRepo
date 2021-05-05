@@ -240,12 +240,11 @@ export class ProfileComponent implements OnInit {
     //get recommended movies 
     this.movieService.getUserRecommendedMovies().subscribe(data => {
       this.logger.log("Recommended Movies", data);
-      this.userRecommendedMovies = data.slice(0,4);
-      if(data.length > 5)
-      {
+      this.userRecommendedMovies = data.slice(0, 4);
+      if (data.length > 5) {
         this.moreRecMovies = true;
       }
-      
+
       console.log(this.userRecommendedMovies)
       this.recommendationsAreLoaded = true;
     })
@@ -276,7 +275,7 @@ export class ProfileComponent implements OnInit {
   }
 
   // Check whether or not recommended movies are loaded
-  recsLoaded(){
+  recsLoaded() {
     this.recommendationsAreLoaded = true;
     return this.recommendationsAreLoaded;
   }
