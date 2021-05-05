@@ -112,8 +112,6 @@ export class DiscussionComponent implements OnInit {
   // Function to get paginated comments 
   async getComments() {
     this.pageComments = [];
-    this.pageNum = 1;
-    this.sortingOrder = "timeD";
       this._forum.getDiscussionCommentsPage(this.discussionID, this.pageNum, this.sortingOrder).subscribe(data => {
         this.pageComments = data;
         this.currentTopics = [];
@@ -129,6 +127,8 @@ export class DiscussionComponent implements OnInit {
       this.newComment.userid = this.userid;
       this._forum.postComment(this.newComment).subscribe(data => {
         this.logger.log("", data);
+        this.pageNum = 1;
+        this.sortingOrder = "timeD";
         this.getComments();
       });
      
@@ -153,6 +153,8 @@ export class DiscussionComponent implements OnInit {
       this.newComment.userid = this.userid;
       this.newComment.parentcommentid = this.parentId;
       this._forum.postComment(this.newComment).subscribe(data => {
+        this.pageNum = 1;
+        this.sortingOrder = "timeD";
         this.getComments();
        });
     }
