@@ -36,8 +36,6 @@ export class MovieComponent implements OnInit {
     subject: ""
   }
 
-  topics: any;
-
   constructor(
     private logger: LoggerService,
     private router: ActivatedRoute, private _http: HttpService,
@@ -52,24 +50,19 @@ export class MovieComponent implements OnInit {
     })
 
     this.logger.log("", this.router.snapshot.params);
-    this.movieService.getMovieTags().subscribe(data => {
-      this.logger.log("", data);
-      this.topics = data;
-    });
 
     //will get the details of the movie from the IMDB API
     this.movieID = this.router.snapshot.params.id;
 
     this.movieService.getMovieDetails(this.movieID).subscribe(data => {
       this.selectedMovie = data;
-      this.logger.log("", "this is getting movie details");
-      this.logger.log("", this.selectedMovie);
+      this.logger.log("Movie details", this.selectedMovie);
     });
-    
+
     this.movieService.getUserFollowingMovie(this.movieID).subscribe((isFollowing: boolean) => {
       this.movieFollowed = isFollowing;
     });
-    
+
     //Get related movies
     this.getRelatedMovies();
 
