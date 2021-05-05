@@ -16,6 +16,14 @@ export class DiscussionService {
     this.commentBaseUrl = urlService.ForumAPIUrl + "forum/comment";
   }
 
+  deleteDiscussion(discussionId: string) {
+    return this.http.delete(this.discussionBaseUrl + '/' + discussionId).toPromise();
+  }
+
+  deleteComment(commentId: string) {
+    return this.http.delete(this.commentBaseUrl + "/" + commentId).toPromise();
+  }
+
   getMovieDiscussions(movieId: string): Promise<Discussion[]> {
     return this.http.get<Discussion[]>(this.discussionBaseUrl + `s/${movieId}`).toPromise();
   }

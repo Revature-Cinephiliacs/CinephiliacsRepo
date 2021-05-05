@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { AdminService } from '../admin.service';
-import { Comment, Discussion, NewUser, PostReview, ReportedItem, ReportType } from "../models/models";
+import { Comment, Discussion, NewUser, PostReview, ReportedItem, ReportType, TicketItem } from "../models/models";
 import { FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
 import * as moment from 'moment';
 import { LoggerService } from '../logger.service';
 import { UserService } from '../user.service';
 import { AuthService } from '../auth.service';
+import { ReviewService } from '../review.service';
+import { DiscussionService } from '../discussion.service';
 
 @Component({
   selector: 'app-admintools',
@@ -15,7 +17,7 @@ import { AuthService } from '../auth.service';
 export class AdmintoolsComponent implements OnInit {
 
 
-  tickets: ReportedItem[];
+  tickets: TicketItem[];
   collapsedItem: boolean[];
 
   users: NewUser[];
@@ -28,7 +30,10 @@ export class AdmintoolsComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
     private auth: AuthService,
-    private admin: AdminService, private logger: LoggerService,
+    private admin: AdminService,
+    private logger: LoggerService,
+    private reviewService: ReviewService,
+    private discussionService: DiscussionService,
     private userService: UserService) { }
 
   ngOnInit(): void {
@@ -36,11 +41,16 @@ export class AdmintoolsComponent implements OnInit {
       if (iad) {
         this.admin.getReports().toPromise().then(result => {
           this.tickets = result;
+          this.logger.log("tickets before", this.tickets);
+          this.tickets.forEach(t => {
+            t.item = JSON.parse("" + t.item);
+          });
+
           this.collapsedItem = Array(this.tickets.length).fill(false);
+          this.logger.log("tickets are", this.tickets);
           console.log(this.tickets);
         }).catch(err => {
           this.logger.error("in retrieving tickets", err);
-          this.fillTestTickets();
           this.collapsedItem = Array(this.tickets.length).fill(false);
         });
 
@@ -54,18 +64,6 @@ export class AdmintoolsComponent implements OnInit {
       }
     });
 
-  }
-
-  deleteReview(review){
-    this.admin.deleteReview(review.reviewid);
-  }
-
-  fillTestTickets() {
-    this.tickets = [
-      this.createTicket("some descriptionsome description some description some description some description some description some description some description ", ReportType.Comment),
-      this.createTicket("some description some description some description some description some description some description some description ", ReportType.Review),
-      this.createTicket("some description some description some description some description some description ", ReportType.Discussion),
-    ];
   }
 
   fillUsers() {
@@ -83,50 +81,56 @@ export class AdmintoolsComponent implements OnInit {
     user.userid = userID;
     return user;
   }
-  createTicket(desc: string, type: ReportType): ReportedItem {
-    let ticket = new ReportedItem();
-    ticket.ReportId = "" + Math.random();
-    ticket.ReportDescription = desc;
-    ticket.ReportEntityType = type;
-    ticket.ReportTime = moment(new Date());
-    ticket.Item = this.createItem(type);
-    return ticket;
-  }
 
-  createItem(type: ReportType): any {
-    switch (type) {
-      case ReportType.Comment:
-        let c = new Comment();
-        c.text = "comment description comment description comment description comment description";
-        return c;
-      case ReportType.Discussion:
-        let d = new Discussion();
-        d.subject = "sasdfa sasdfa sdf asdfasdasdf";
-        break;
-      case ReportType.Review:
-        let r = new PostReview();
-        r.review = "review description review description review description review description review description";
-        return r;
-      default:
-        break;
-    }
-  }
-
-  isCollapsed(ticket: ReportedItem): boolean {
+  isCollapsed(ticket: TicketItem): boolean {
     let index = this.tickets.indexOf(ticket);
     return this.collapsedItem[index];
   }
 
 
-  toggleItem(ticket: ReportedItem) {
+  toggleItem(ticket: TicketItem) {
     let index = this.tickets.indexOf(ticket);
     this.collapsedItem[index] = !this.collapsedItem[index];
   }
 
-  archiveTicket(ticketNumber){
-    this.admin.archiveTicket(ticketNumber);
+  archiveTicket(ticketNumber: TicketItem) {
+    this.logger.log("ticket archive", ticketNumber);
+    this.admin.archiveTicket(ticketNumber.ticketId).then(r => {
+      this.tickets = this.tickets.filter(t => t.itemId != ticketNumber.itemId);
+    });
   }
 
+  deleteTicket(ticket: TicketItem) {
+    switch (ticket.affectedService) {
+      case "Comment":
+        this.discussionService.deleteComment(ticket.itemId).then(reply => {
+          this.admin.archiveTicket(ticket.ticketId).then(reply => {
+            this.logger.log("archived", reply);
+            this.tickets = this.tickets.filter(t => t.itemId != ticket.itemId);
+          });
+        });
+        break;
+      case "Review":
+        this.reviewService.deleteReview(ticket.itemId).then(reply => {
+          this.admin.archiveTicket(ticket.ticketId).then(reply => {
+            this.logger.log("archived", reply);
+            this.tickets = this.tickets.filter(t => t.itemId != ticket.itemId);
+          });
+        });
+        break;
+      case "Discussion":
+        this.discussionService.deleteDiscussion(ticket.itemId).then(reply => {
+          this.admin.archiveTicket(ticket.ticketId).then(reply => {
+            this.logger.log("archived", reply);
+            this.tickets = this.tickets.filter(t => t.itemId != ticket.itemId);
+          });
+        });
+        break;
+
+      default:
+        break;
+    }
+  }
 
   addAdmin() {
     this.admin.addAdmin(this.usertochange);
