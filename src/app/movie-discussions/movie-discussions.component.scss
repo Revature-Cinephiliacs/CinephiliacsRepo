@@ -5,8 +5,8 @@ button:not(.deactived) {
   border: none;
   background-color: #357fc5;
   border-radius: 5px;
-  margin-right: 20px;
   margin-bottom: 2%;
+  margin-top: 5%;
   cursor: pointer;
 }
 
@@ -17,23 +17,12 @@ button.deactived {
   border: none;
   background-color: #357fc5;
   border-radius: 5px;
-  margin-right: 20px;
   margin-bottom: 2%;
+  margin-top: 5%;
 }
 
 .grey-box {
   padding: 5% 10%;
-  //   width: 100%;
   background-color: lightgrey;
+  text-align: center;
 }
-
-// ul,
-// li {
-//   margin: 0;
-//   padding: 0;
-// }
-
-// ul {
-//   padding-left: 8%;
-//   margin-bottom: 5vh;
-// }

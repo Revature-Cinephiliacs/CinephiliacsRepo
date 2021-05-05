@@ -173,11 +173,17 @@ label {
 }
 
 .discussionList{
-    margin-bottom: 20px;
+    margin-bottom: 50px;
+
+    .right {
+        margin-top: 15px;
+    }
 }
 
-.nextPrev{
-    margin-bottom: 10px;
+.nextPrev{   
+    button{
+        margin-bottom: 50px;
+    }
 }
 .prev{
     

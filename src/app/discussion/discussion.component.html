@@ -36,13 +36,13 @@
         </div>
         
     </div>  
-    <hr>  
+    <hr>
     <ul *ngIf="item.replies.length > 0">
     <ng-container class="nestedclass"
         *ngTemplateOutlet="recursiveListTmpl; context:{ list: item.replies }"
     ></ng-container>
     
-    </ul>
+    </ul>    
 </li>
 </ng-template>
 <br> 
