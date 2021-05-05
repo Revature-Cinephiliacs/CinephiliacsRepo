@@ -122,6 +122,7 @@
   <div *ngIf="notificationsAreLoaded; then thenNBlock else elseNBlock"></div>
   <ng-template #thenNBlock>
     <div *ngIf="userNotifications.length">
+      <button (click)="deleteAllNotifications()" class="delete-not">Delete all</button>
       <ul class="comments">
         <li *ngFor="let notification of userNotifications">
           <div *ngIf="!isCreatorNull(notification)">
