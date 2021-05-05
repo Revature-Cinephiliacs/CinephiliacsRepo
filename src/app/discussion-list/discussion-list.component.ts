@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {ForumService } from '../forum.service';
+import { ForumService } from '../forum.service';
 import { ActivatedRoute } from '@angular/router';
 import { MoviepageService } from '../moviepage.service'
 import { Discussion, Movie, Topic, newDiscussion, NewUser } from '../models/models'
-import { AuthService} from '../auth.service';
+import { AuthService } from '../auth.service';
 import * as moment from 'moment';
 
 @Component({
@@ -20,10 +20,10 @@ export class DiscussionListComponent implements OnInit {
   sortingOrder: string = "recentD"   //Default sorting order will be based recent activities
 
   constructor(private auth: AuthService,
-    private _forum: ForumService, 
+    private _forum: ForumService,
     private _movie: MoviepageService,
-    private router:  ActivatedRoute) { }
-  movieID:string = "";
+    private router: ActivatedRoute) { }
+  movieID: string = "";
   selectedFilter: string;
 
   //for sorting buttons 
@@ -44,30 +44,37 @@ export class DiscussionListComponent implements OnInit {
   userid: string;
 
   displayPostDiscussion: boolean = false;
-  
+
   submitDiscussion: newDiscussion = {
-      movieId: this.router.snapshot.params.id,
-      topic:"",
-      userId: "",
-      subject:"",
-      creationTime: null
+    movieId: this.router.snapshot.params.id,
+    topic: "",
+    userId: "",
+    subject: "",
+    creationTime: null
   }
-  ngOnInit(): void { 
-    this.auth.authModel$.subscribe(reply =>{
-      this.userid = reply.userid;
-      this.submitDiscussion.userId = reply.userid;
+  isloggedIn: boolean = false;
+  ngOnInit(): void {
+    this.auth.authModel$.subscribe(reply => {
+      if (reply != null && reply != undefined) {
+        this.userid = reply.userid;
+        this.submitDiscussion.userId = reply.userid;
+        this.isloggedIn = true;
+      } else {
+        this.isloggedIn = false;
+      }
     })
-    this.movieID =  this.router.snapshot.params.id;
+    this.movieID = this.router.snapshot.params.id;
     this._movie.getMovieDetails(this.movieID).subscribe(data => { this.movieTitle = data.title })
-    this._forum.getDiscussion(this.movieID).subscribe(data =>{ 
+    this._forum.getDiscussion(this.movieID).subscribe(data => {
       this.discussions = data;
       this.numOfDiscussion = this.discussions.length
-      this.discussions = []})
+      this.discussions = []
+    })
 
-      this._forum.getTopics().subscribe(data => {
-        this.topics = data;
-      });
-      this.getDiscussions()
+    this._forum.getTopics().subscribe(data => {
+      this.topics = data;
+    });
+    this.getDiscussions()
   }
 
 
@@ -75,36 +82,36 @@ export class DiscussionListComponent implements OnInit {
   //snapshot movie id
   async getDiscussions() {
     this.discussions = [];
-      this._forum.getDiscussionPage(this.movieID, this.pageNum, this.sortingOrder).subscribe(data => {
-        this.discussions = data;
-      });
+    this._forum.getDiscussionPage(this.movieID, this.pageNum, this.sortingOrder).subscribe(data => {
+      this.discussions = data;
+    });
   }
 
-   //get next discussion page
-   onNext(){
-    
+  //get next discussion page
+  onNext() {
+
     this.pageNum++;
     this.getDiscussions();
   }
   //get previous duscussuin page
-  onPrev(){
-    
+  onPrev() {
+
     this.pageNum--;
     this.getDiscussions();
   }
 
-    //Function that will take in a search string and then filter
+  //Function that will take in a search string and then filter
   //the dicussions to show matching results
- filterlist: Discussion[] = [];
- searchDiscussion(){
-  let input, filter;
-  input = document.getElementById("searchDiscussion");
-  filter = input.value.toUpperCase();
+  filterlist: Discussion[] = [];
+  searchDiscussion() {
+    let input, filter;
+    input = document.getElementById("searchDiscussion");
+    filter = input.value.toUpperCase();
 
-  this.filterlist = this.discussions.filter(obj => {
-    return !!JSON.stringify(Object.values(obj)).match(new RegExp(filter, 'i'));
-  });
- }
+    this.filterlist = this.discussions.filter(obj => {
+      return !!JSON.stringify(Object.values(obj)).match(new RegExp(filter, 'i'));
+    });
+  }
 
   //Function that will get a list of discussions for a movie
   //sorted based on number of comments
@@ -178,7 +185,7 @@ export class DiscussionListComponent implements OnInit {
   }
 
   //Finction to get the paginated list of Discussion sorted by recent activities in Descending order
-  sortByRecent(){
+  sortByRecent() {
     switch (this.activitySortState) {
       case 0:
         this.createdSortState = 0;
@@ -249,28 +256,27 @@ export class DiscussionListComponent implements OnInit {
 
   //Function that will add a new discussion to a movie
   //Will validate input
-  postDiscussion(){
-    if(this.submitDiscussion.topic == "" || this.submitDiscussion.subject == "")
-    {
-    }else if(this.submitDiscussion.subject.length >= 250){
+  postDiscussion() {
+    if (this.submitDiscussion.topic == "" || this.submitDiscussion.subject == "") {
+    } else if (this.submitDiscussion.subject.length >= 250) {
       alert("Discussion should be less than 250 Characters")
-    }else{
+    } else {
       this.submitDiscussion.creationTime = moment();
       this.submitDiscussion.movieId = this.router.snapshot.params.id;
       this._forum.submitDiscussion(this.submitDiscussion).subscribe(data => {
         this.displayPostDiscussion = false;
         this.getDiscussions();
       });
-     
+
     }
   }
 
   //Function to change discussion as selected filter
-  onChangeFilter(){
-    
-      this._forum.filterDiscussionByTopic(this.selectedFilter).subscribe(data => {
-        this.discussions = data;
-      })
+  onChangeFilter() {
+
+    this._forum.filterDiscussionByTopic(this.selectedFilter).subscribe(data => {
+      this.discussions = data;
+    })
   }
 
 }
