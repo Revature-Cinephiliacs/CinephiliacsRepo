@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ForumService } from '../forum.service';
 import { ActivatedRoute } from '@angular/router';
 import { MoviepageService } from '../moviepage.service'
-import { Discussion, Movie, Topic, newDiscussion, NewUser } from '../models/models'
+import { Discussion, Movie, Topic, newDiscussion, NewUser, ReportedItem, ReportType } from '../models/models'
 import { AuthService } from '../auth.service';
 import * as moment from 'moment';
+import { AdminService } from '../admin.service';
 
 @Component({
   selector: 'app-discussion-list',
@@ -13,7 +14,7 @@ import * as moment from 'moment';
 })
 export class DiscussionListComponent implements OnInit {
   discussions: Discussion[] = [];
-  
+
   numOfDiscussion: number = 0;
   pageNum: number = 1;
   topics: Topic[];
@@ -23,6 +24,7 @@ export class DiscussionListComponent implements OnInit {
   constructor(private auth: AuthService,
     private _forum: ForumService,
     private _movie: MoviepageService,
+    private adminToolService: AdminService,
     private router: ActivatedRoute) { }
   movieID: string = "";
   selectedFilter: string;
@@ -66,15 +68,27 @@ export class DiscussionListComponent implements OnInit {
     })
     this.movieID = this.router.snapshot.params.id;
     this._movie.getMovieDetails(this.movieID).subscribe(data => { this.movieTitle = data.title })
-    this._forum.getDiscussion(this.movieID).subscribe(data =>{ 
+    this._forum.getDiscussion(this.movieID).subscribe(data => {
       var tempDis
       tempDis = data;
       this.numOfDiscussion = tempDis.length
     })
-      this._forum.getTopics().subscribe(data => {
-        this.topics = data;
-      });
-      this.getDiscussions()
+    this._forum.getTopics().subscribe(data => {
+      this.topics = data;
+    });
+    this.getDiscussions()
+  }
+
+  flagDiscussion(discussion: Discussion) {
+    let reportItem = new ReportedItem();
+    reportItem.ReportEntityType = ReportType.Discussion;
+    reportItem.ReportDescription = "Discussion is under review for questionable subject";
+    reportItem.ReportEnitityId = discussion.discussionId;
+
+    this.adminToolService.ReportItem(reportItem).then(data => {
+      console.log(data)
+    }).catch(err => {
+    });
   }
 
 
