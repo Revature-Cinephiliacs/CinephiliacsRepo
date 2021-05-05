@@ -1,6 +1,6 @@
 <h1>{{discussion.subject}}</h1>
 <label>Current Topics: </label>
-<button *ngFor="let dt of discussion.discussionTopics">
+<button *ngFor="let dt of discussion.discussionTopics" class="topicBtn">
     <span *ngFor="let t of topics" >
         <span *ngIf="t.topicId == dt">{{t.topicName}} </span>
     </span>
@@ -10,8 +10,8 @@
     <button class="first" (click) = "sortByComment()" [class.selected]="sortComment">Comments </button>
     <button  (click) = "sortByCreation()" [class.selected]="sortTime">Created {{createdSortDirection}}</button>
     <button class="last" (click) = "sortByLikes()" [class.selected]="sortLike">Likes {{likesSortDirection}}</button>
-    <button *ngIf="displayFollow" class="followDis" (click)="followDiscussion()">Follow Discussion</button>
-    <button *ngIf="!displayFollow" class="followDis">Following Discussion</button>
+    <button *ngIf="isLoggedIn && displayFollow" class="followDis" (click)="followDiscussion()">Follow Discussion</button>
+    <button *ngIf="isLoggedIn && !displayFollow" class="followDis">Following Discussion</button>
 </div>
 
 <ul>
@@ -52,7 +52,7 @@
 </div>
 
 <br>
-<div id = "reply" *ngIf = "displayReplyForm">
+<div id = "reply" *ngIf = "isLoggedIn && displayReplyForm">
     <h3>Reply</h3>
     <form class = "replyForm">
         <label>Message</label>
@@ -65,7 +65,7 @@
 </div>
 
 
-<div class="addcomment" id="input" *ngIf = "displayMessageForm">
+<div class="addcomment" id="input" *ngIf = "isLoggedIn && displayMessageForm">
     <h3>New Comment</h3>
     <form id="postComment">
         <input type="text" placeholder="Comment" id="comment" [(ngModel)]="newComment.text" [ngModelOptions]="{standalone: true}" required><br>
@@ -75,7 +75,7 @@
     </form>
 </div>
 
-<div class="addtopic">
+<div *ngIf="isLoggedIn" class="addtopic">
     <h3>Add a Discussion Topic</h3>
     <div *ngIf = "displayWarning">
         <p>This topic is already used!</p>
