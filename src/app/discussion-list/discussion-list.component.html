@@ -77,6 +77,7 @@
               <span *ngIf="t.topicId == dt">{{t.topicName}} </span>
             </span>
           </button>
+          <button class="flag" *ngIf="isloggedIn" (click)="flagDiscussion(discussion)">Flag</button>
         </div>
         <div class="left">
           <label class="createdTime">{{discussion.creationTime | date: 'MM/dd/yyyy h:mm:ss a'}}</label><br>
@@ -85,7 +86,7 @@
           <label class="likes">Likes: <span>{{ discussion.likes}}</span></label>
         </div>
       </div>
-      <button *ngIf="isloggedIn" (click)="flagDiscussion(discussion)">Flag</button>
+      
     </li>
   </ul>
 </div>
