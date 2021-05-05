@@ -60,7 +60,7 @@ export class AppComponent {
   onSubmit() {
     if (this.headerSearch.get('headSearch')!.value != "") {
       let searchParam = JSON.stringify(this.headerSearch.get('headSearch')!.value).substring(1, JSON.stringify(this.headerSearch.get('headSearch')!.value).length - 1);
-      this.router.navigate(["/list/" + searchParam + "/1"]);
+      window.location.href = "/list/" + searchParam + "/1";
     }
   }
 
