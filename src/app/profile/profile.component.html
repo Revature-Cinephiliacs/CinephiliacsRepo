@@ -187,6 +187,7 @@
               </div><br>
             </div>
           </div>
+          <button (click)="deleteNotification(notification)" class="delete-not">Delete</button>
         </li>
         <button *ngIf="showNotificationsButtons() && !moreNotifications" (click)="showMoreNotifications()">Show
           More</button>
