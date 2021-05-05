@@ -1,8 +1,8 @@
-.moviePage
-{
+.moviePage {
   display: flex;
   flex-direction: column;
 }
+
 u:hover {
   cursor: pointer;
 }
@@ -32,7 +32,7 @@ u:hover {
     height: 35px;
     color: white;
     border: none;
-    background-color: #357fc5;
+    background-color: lightgrey;
     border-radius: 5px;
     margin-right: 20px;
     margin-bottom: 2%;
@@ -310,7 +310,8 @@ app-movie-discussions {
   display: flex;
   flex-direction: row;
   max-height: 300px;
-  .cardPoster{
+
+  .cardPoster {
     max-height: 100%;
     width: auto;
   }
