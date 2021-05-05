@@ -14,7 +14,7 @@
         </select>
     </div>
 
-    <div class="headright">
+    <div *ngIf="isloggedIn" class="headright">
         <input type="search" id="searchDiscussion" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon"  (keyup)="searchDiscussion()" placeholder="Search Discussions"><br>
         <button (click)="displayPostDiscussion = true" class="createDiscussion" >Create New Discussion</button>
     </div>
@@ -71,7 +71,7 @@
                     <a routerLink="/discussion/{{discussion.discussionId}}">
                         {{discussion.subject}}
                     </a>
-                    <button *ngFor="let dt of discussion.discussionTopics">
+                    <button *ngFor="let dt of discussion.discussionTopics" class="topicBtn">
                         <span *ngFor="let t of topics" >
                             <span *ngIf="t.topicId == dt">{{t.topicName}} </span>
                         </span>

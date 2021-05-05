@@ -181,3 +181,9 @@ ul {
 .tag{
     background-color: #bbc6d1;
 }
+
+.topicBtn:hover {
+    cursor: default;
+    background-color: lightgrey;
+    border: 1px solid grey;
+}
