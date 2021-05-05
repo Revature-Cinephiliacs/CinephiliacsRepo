@@ -38,6 +38,10 @@
         margin-left:3rem;
         display: flex;
         align-items: center;
+
+        select {
+            margin-left: 15px;
+        }
     }
 
     select.filter{
@@ -127,6 +131,10 @@
 
             .username {
                 font-size: .75em;
+                
+                &:hover {
+                    cursor: pointer;
+                }
             }
 
             button {
