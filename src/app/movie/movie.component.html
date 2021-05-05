@@ -4,10 +4,10 @@
     <div *ngIf="userModel">
       <div *ngIf="movieFollowed then thenFBlock else elseFBlock"></div>
       <ng-template #thenFBlock>
-        <button (click)='unfollowMovie()' class="deactived">Unfollow Movie</button>
+        <button (click)='unfollowMovie()' class="gray">Unfollow Movie</button>
       </ng-template>
       <ng-template #elseFBlock>
-        <button (click)="followMovie()">Follow Movie</button>
+        <button (click)='followMovie()'>Follow Movie</button>
       </ng-template>
     </div>
 

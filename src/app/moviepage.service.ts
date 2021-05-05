@@ -33,7 +33,7 @@ export class MoviepageService {
   // Checks if user is already following this movie
   getUserFollowingMovie(movieid: string)
   {
-    return this.http.get( this.movieBaseURL + "/isfollowing/" + movieid);
+    return this.http.get<boolean>( this.movieBaseURL + "/isfollowing/" + movieid);
   }
 
   //Function that will call the Movie Microservice API follow/movieid/userid endpoint
