@@ -40,11 +40,21 @@ export class ProfileComponent implements OnInit {
   // Get user created elements
   userMovieNames: string[] = [];
   userMovies: any[] = [];
+  userShownReviews: Review[] = [];
   userReviews: Review[] = [];
+  user5Reviews: Review[] = [];
+  userShownDiscussions: Discussion[] = [];
   userDiscussions: Discussion[] = [];
+  user5Discussions: Discussion[] = [];
+  userShownFollowedDiscussions: Discussion[] = [];
   userFollowedDiscussions: Discussion[] = [];
+  user5FollowedDiscussions: Discussion[] = [];
+  userShownComments: Comment[] = [];
   userComments: Comment[] = [];
+  user5Comments: Comment[] = [];
+  userShownNotifications: UserNotification[] = [];
   userNotifications: UserNotification[] = [];
+  user5Notifications: UserNotification[] = [];
   userRecommendedMovies: Movie[];
 
   constructor(
@@ -161,6 +171,8 @@ export class ProfileComponent implements OnInit {
       if (data != null) {
         this.logger.log("discussions user", data);
         this.userDiscussions = data;
+        this.userShownDiscussions = this.userDiscussions.slice(0, 5);
+        this.logger.log("current all discussions", this.userDiscussions);
       }
       this.discussionsAreLoaded = true;
     });
@@ -170,6 +182,7 @@ export class ProfileComponent implements OnInit {
       if (data != null) {
         this.logger.log("comments user", data);
         this.userComments = data;
+        this.userShownComments = this.userComments.slice(0, 5);
       }
       this.commentsAreLoaded = true;
     });
@@ -179,6 +192,7 @@ export class ProfileComponent implements OnInit {
       if (data != null) {
         this.logger.log("reviews user", data);
         this.userReviews = data;
+        this.userShownReviews = this.userReviews.slice(0, 5);
       }
       this.reviewsAreLoaded = true;
     });
@@ -188,6 +202,7 @@ export class ProfileComponent implements OnInit {
       if (data != null) {
         this.logger.log("followed discussions user", data);
         this.userFollowedDiscussions = data;
+        this.userShownFollowedDiscussions = this.userFollowedDiscussions.slice(0, 5);
       }
       this.followedDiscussionsAreLoaded = true;
     });
@@ -203,34 +218,40 @@ export class ProfileComponent implements OnInit {
         let commentNotifications = this.userNotifications.filter(n => n.fromService == 'c').map(n => n.otherId);
         this.discussionService.getCommentsByIds(commentNotifications).then(c => {
           this.logger.log("comments", c);
-          if (c != null && c != undefined)
+          if (c != null && c != undefined) {
             this.userNotifications.forEach(n => {
               temp1 = c.filter(c => c.commentid == n.otherId)[0];
               if (temp1 != null)
                 n.item = temp1
             });
+            this.userShownNotifications = this.userNotifications.slice(0, 5);
+          }
           this.logger.log("new notifications", this.userNotifications);
         });
         let reviewNotifications = this.userNotifications.filter(n => n.fromService == 'r').map(n => n.otherId);
         this.reviewService.getReviewbyIds(reviewNotifications).then(r => {
           this.logger.log("reviews", r);
-          if (r != null && r != undefined)
+          if (r != null && r != undefined) {
             this.userNotifications.forEach(n => {
               temp2 = r.filter(r => r.reviewid == n.otherId)[0];
               if (temp2 != null)
                 n.item = temp2;
             });
+            this.userShownNotifications = this.userNotifications.slice(0, 5);
+          }
           this.logger.log("new notifications", this.userNotifications);
         });
         let discussionNotifications = this.userNotifications.filter(n => n.fromService == 'd').map(n => n.otherId);
         this.discussionService.getDiscussionsByIds(discussionNotifications).then(d => {
           this.logger.log("discussions", d);
-          if (d != null && d != undefined)
+          if (d != null && d != undefined) {
             this.userNotifications.forEach(n => {
               temp3 = d.filter(d => d.discussionId == n.otherId)[0];
               if (temp3 != null)
                 n.item = temp3;
             });
+            this.userShownNotifications = this.userNotifications.slice(0, 5);
+          }
           this.logger.log("new notifications", this.userNotifications);
         });
       }
@@ -278,6 +299,111 @@ export class ProfileComponent implements OnInit {
   recsLoaded() {
     this.recommendationsAreLoaded = true;
     return this.recommendationsAreLoaded;
+  }
+
+  /**
+   * Show more discussions
+   */
+  moreDiscussions: boolean = false;
+  showMoreDiscussions() {
+    this.moreDiscussions = !this.moreDiscussions;
+    if (this.moreDiscussions) {
+      this.userShownDiscussions = this.userDiscussions;
+    }
+    else {
+      this.userShownDiscussions = this.userDiscussions.slice(0, 5);
+    }
+  }
+
+  /**
+   * false to not show buttons true to show them
+   */
+  showDiscussionsButtons(): boolean {
+    return this.userDiscussions.length > 5;
+  }
+
+  /**
+   * Show more Comments
+   */
+  moreComments: boolean = false;
+  showMoreComments() {
+    this.moreComments = !this.moreComments;
+    if (this.moreComments) {
+      this.userShownComments = this.userComments;
+    }
+    else {
+      this.userShownComments = this.userComments.slice(0, 5);
+    }
+  }
+
+  /**
+   * false to not show buttons true to show them
+   */
+  showCommentsButtons(): boolean {
+    return this.userComments.length > 5;
+  }
+
+  /**
+   * Show more Reviews
+   */
+  moreReviews: boolean = false;
+  showMoreReviews() {
+    this.moreReviews = !this.moreReviews;
+    if (this.moreReviews) {
+      this.userShownReviews = this.userReviews;
+    }
+    else {
+      this.userShownReviews = this.userReviews.slice(0, 5);
+    }
+  }
+
+  /**
+   * false to not show buttons true to show them
+   */
+  showReviewsButtons(): boolean {
+    return this.userReviews.length > 5;
+  }
+
+  /**
+   * Show more Notifications
+   */
+  moreNotifications: boolean = false;
+  showMoreNotifications() {
+    this.moreNotifications = !this.moreNotifications;
+    if (this.moreNotifications) {
+      this.userShownNotifications = this.userNotifications;
+    }
+    else {
+      this.userShownNotifications = this.userNotifications.slice(0, 5);
+    }
+  }
+
+  /**
+   * false to not show buttons true to show them
+   */
+  showNotificationsButtons(): boolean {
+    return this.userNotifications.length > 5;
+  }
+
+  /**
+   * show more/less followed discussions
+   */
+  moreFollowedDiscussions: boolean = false;
+  showMoreFollowedDiscussions() {
+    this.moreFollowedDiscussions = !this.moreFollowedDiscussions;
+    if (this.moreFollowedDiscussions) {
+      this.userShownFollowedDiscussions = this.userFollowedDiscussions;
+    }
+    else {
+      this.userShownFollowedDiscussions = this.userFollowedDiscussions.slice(0, 5);
+    }
+  }
+
+  /**
+   * false to not show buttons true to show them
+   */
+  showFollowedDiscussionButtons(): boolean {
+    return this.userFollowedDiscussions.length > 5;
   }
 
   /**
