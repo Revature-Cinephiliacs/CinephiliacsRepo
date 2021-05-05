@@ -43,15 +43,15 @@ export class DiscussionComponent implements OnInit {
   parentId: string;
   comments: Comment[];
 
- //for sorting buttons 
- commentsSortState: number = 1;
- likesSortState: number = 0;
- createdSortState: number = 0;
- sortComment: boolean = true;
- sortLike: boolean = false;
- sortTime: boolean = false;
- likesSortDirection: string = "\u21D5";
- createdSortDirection: string = "\u21D5";
+  //for sorting buttons 
+  commentsSortState: number = 1;
+  likesSortState: number = 0;
+  createdSortState: number = 0;
+  sortComment: boolean = true;
+  sortLike: boolean = false;
+  sortTime: boolean = false;
+  likesSortDirection: string = "\u21D5";
+  createdSortDirection: string = "\u21D5";
 
   newComment: any = {
     discussionid: "",
@@ -67,20 +67,28 @@ export class DiscussionComponent implements OnInit {
     private _user: UserService,
     private auth: AuthService,
     private logger: LoggerService,
-    private _forum: ForumService, 
+    private _forum: ForumService,
     private _admin: AdminService,
     private router: ActivatedRoute) { }
 
+  isLoggedIn: boolean = false;
   ngOnInit(): void {
     // Check if user is logged in
     this.auth.authModel$.subscribe(reply => {
-      this.userid = reply.userid;
-      this.username = reply.username
+      if (reply != null && reply != undefined) {
+        this.userid = reply.userid;
+        this.username = reply.username;
+        this.isLoggedIn = true;
+      }
+      else {
+        this.isLoggedIn = false;
+      }
     })
     this.auth.isAdmin$.subscribe(iad => {
       if (iad) {
         console.log("isadmin");
-      }}
+      }
+    }
     );
 
     // Load discussion info
@@ -112,11 +120,11 @@ export class DiscussionComponent implements OnInit {
   // Function to get paginated comments 
   async getComments() {
     this.pageComments = [];
-      this._forum.getDiscussionCommentsPage(this.discussionID, this.pageNum, this.sortingOrder).subscribe(data => {
-        this.pageComments = data;
-        this.currentTopics = [];
-        this.getCurrentTopicNames();
-      });
+    this._forum.getDiscussionCommentsPage(this.discussionID, this.pageNum, this.sortingOrder).subscribe(data => {
+      this.pageComments = data;
+      this.currentTopics = [];
+      this.getCurrentTopicNames();
+    });
   }
 
   //Post comment (parent comment)
@@ -357,7 +365,7 @@ export class DiscussionComponent implements OnInit {
     })
   }
 
-  reportComment(commentToReport){
+  reportComment(commentToReport) {
 
   }
 }
