@@ -414,6 +414,12 @@ export class ProfileComponent implements OnInit {
     this.userService.deleteNotification(not.notificationId).then(r => {
       this.logger.log("deleted?", r);
       this.userNotifications = this.userNotifications.filter(n => n.notificationId != not.notificationId);
+      if (this.moreNotifications) {
+        this.userShownNotifications = this.userNotifications;
+      }
+      else {
+        this.userShownNotifications = this.userNotifications.slice(0, 5);
+      }
     }).catch(err => {
       this.logger.log("error in deleting comment", err);
     });
