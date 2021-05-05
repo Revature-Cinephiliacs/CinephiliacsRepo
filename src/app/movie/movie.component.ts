@@ -59,6 +59,7 @@ export class MovieComponent implements OnInit {
       this.logger.log("Movie details", this.selectedMovie);
     });
 
+    // Check if user is already following movie
     this.movieService.getUserFollowingMovie(this.movieID).subscribe((isFollowing: boolean) => {
       this.movieFollowed = isFollowing;
     });
