@@ -47,7 +47,7 @@ export class MovieComponent implements OnInit {
     private reviewService: ReviewService) { }
 
   ngOnInit(): void {
-    this.authService.authModel$.subscribe(reply =>{
+    this.authService.authModel$.subscribe(reply => {
       this.userModel = reply;
     })
 
@@ -65,7 +65,7 @@ export class MovieComponent implements OnInit {
       this.logger.log("", "this is getting movie details");
       this.logger.log("", this.selectedMovie);
     });
-    
+
     this.getUserFollowingMovies();
     //Get related movies
     this.getRelatedMovies();
@@ -81,8 +81,16 @@ export class MovieComponent implements OnInit {
     }
   }
 
+  unfollowMovie() {
+    if (this.userModel) {
+      this.movieService.removeMovieFromFollowing(this.movieID, this.userId).subscribe(data => {
+        this.movieFollowed = false;
+      })
+    }
+  }
+
   //Get user following movies
-  getUserFollowingMovies(){
+  getUserFollowingMovies() {
     if (this.userModel) {
       this.movieService.getUserFollowingMovies(this.userId).subscribe((usersMovieNames: string[]) => {
         if (typeof usersMovieNames.find(m => m == this.movieID) === 'undefined') {
@@ -103,7 +111,7 @@ export class MovieComponent implements OnInit {
     this.movieService.getRelatedMovies(this.movieID).subscribe(data => {
       this.logger.log("Get Related Movies", data);
       data.forEach(m => {
-        if(m != null){
+        if (m != null) {
           this.relatedMovies.push(m);
         }
       });
@@ -114,7 +122,7 @@ export class MovieComponent implements OnInit {
   redirect(movieID: string) {
     this.movieID = movieID;
     //this.routerer.navigate(["/movie/" + this.movieID]);
-    window.location.href ="/movie/" + this.movieID;
+    window.location.href = "/movie/" + this.movieID;
   }
 
 

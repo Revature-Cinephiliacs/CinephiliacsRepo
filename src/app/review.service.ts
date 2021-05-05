@@ -14,6 +14,10 @@ export class ReviewService {
     this.reviewBaseURL = urlService.ReviewsAPIUrl + "review/";
   }
 
+  deleteReview(id: string) {
+    return this.http.delete(this.reviewBaseURL + 'deleteRev/admin/' + id).toPromise();
+  }
+
   getReviewbyIds(ids: string[]) {
     return this.http.post<Review[]>(this.reviewBaseURL + 'reportedReviews', ids).toPromise();
   }

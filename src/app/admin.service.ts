@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Comment, ReportedItem, ReportType } from './models/models';
+import { Comment, ReportedItem, ReportType, TicketItem } from './models/models';
 import { UrlService } from './url.service';
 
 @Injectable({
@@ -10,7 +10,7 @@ export class AdminService {
   adminUrl: string = "";
   forumsUrl: string = "";
   reviewsUrl: string = "";
-  userUrl: string ="";
+  userUrl: string = "";
 
   constructor(private http: HttpClient, private urlService: UrlService) {
     this.adminUrl = urlService.AdminToolsAPIUrl;
@@ -23,8 +23,8 @@ export class AdminService {
    * Get all reports from admin tools
    * @returns 
    */
-  getReports(){
-    return this.http.get<ReportedItem[]>(this.adminUrl + "Tickets");
+  getReports() {
+    return this.http.get<TicketItem[]>(this.adminUrl + "Tickets");
   }
 
   /**
@@ -78,17 +78,23 @@ export class AdminService {
 
 
 
-  addAdmin(userId){
+  addAdmin(userId) {
     this.http.post(this.userUrl + 'user/role/admin/' + userId, null).subscribe(reply => reply);
     console.log(userId + "Added to admin");
   }
 
-  removeAdmin(userId){
-    this.http.delete(this.userUrl + 'user/role/admin/' + userId, null).subscribe(reply=> reply);
+  removeAdmin(userId) {
+    this.http.delete(this.userUrl + 'user/role/admin/' + userId, null).subscribe(reply => reply);
   }
 
-  archiveTicket(ticket){
-    this.http.post(this.adminUrl + 'reports/archive',ticket.ticketId).subscribe(reply=> reply);
+  archiveTicket(ticketId: string) {
+
+    let httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      })
+    };
+    return this.http.post(this.adminUrl + 'reports/archive/' + ticketId, "").toPromise();
   }
 
 
