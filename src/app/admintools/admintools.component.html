@@ -1,33 +1,36 @@
 <h1>Admin</h1>
 <h2>Reports</h2>
 
-<ul class="ticket-list" *ngIf="tickets">
+<ul class="ticket-list" *ngIf="tickets.length">
   <li *ngFor="let ticket of tickets">
     <span>Report ID:</span>&nbsp;
     <div class="ticket-id">{{ticket.ticketId}}</div> <br>
     <span>Date:</span>&nbsp;
     <div class="ticket-date">{{ticket.timeSubmitted}}</div>
-    <div class="ticket-description">{{ticket.ReportDescription}}</div>
+    <div class="ticket-description">{{ticket.descript}}</div>
     <div class="item-and-button">
       <button class="item-toggle-button" (click)="toggleItem(ticket)">View Item</button>
-      <div class="ticket-item" [ngClass]="{'expanded':isCollapsed(ticket)}">{{ticket.Item | json}}</div>
+      <div *ngIf="ticket.affectedService=='Comment'" class="ticket-item" [ngClass]="{'expanded':isCollapsed(ticket)}">
+        {{ticket.item.text}}</div>
+      <div *ngIf="ticket.affectedService=='Discussion'" class="ticket-item"
+        [ngClass]="{'expanded':isCollapsed(ticket)}">{{ticket.item.subject}}</div>
+      <div *ngIf="ticket.affectedService=='Review'" class="ticket-item" [ngClass]="{'expanded':isCollapsed(ticket)}">
+        {{ticket.item.review}}</div>
     </div>
-    <button class="archive"(click)="archiveTicket(ticket)">Archive</button><br>
-    <button class="delete">Delete Item</button>
-    {{ticket.ReportType}}
-    {{ticket.ReportEnitityId}}
+    <button class="archive" (click)="archiveTicket(ticket)">Archive</button><br>
+    <button class="delete" (click)="deleteTicket(ticket)">Delete Item</button>
 
 
   </li>
 </ul>
 <!--[formGroup]="changeUser" (ngSubmit)="submitUserChanges()" -->
-<form >
+<form>
   <label for="users">Users</label><br>
   <select name="usertochange" id="usertochange" [(ngModel)]="usertochange" [ngModelOptions]="{standalone: true}">
     <option *ngFor="let user of users" [value]="user.userid">
-            {{user.username}}
+      {{user.username}}
     </option>
-</select>
+  </select>
   <button (click)="addAdmin()">Add Admin</button>
   <button (click)="removeAdmin()">Remove Admin</button>>
 </form>
