@@ -10,8 +10,8 @@
     </div>
     <div class="filterSection">
       <span>Filter: </span>
-      <select class="filter" [(ngModel)]="selectedFilter">
-        <option *ngFor="let f of filters" (click)="filterByRating()">{{f}}</option>
+      <select class="filter" [(ngModel)]="selectedFilter" (change)="filterByRating()">
+        <option *ngFor="let f of filters" >{{f}}</option>
       </select>
     </div>
   </div>
