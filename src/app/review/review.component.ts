@@ -197,9 +197,8 @@ export class ReviewComponent implements OnInit {
   }
 
   //filter ratings
-  filterByRating(ratingOption: string) {
-    console.log(ratingOption);
-    switch (ratingOption) {
+  filterByRating() {
+    switch (this.selectedFilter) {
       case "1 Star": {
         console.log("Filter 1 star reviews");
         this.getMovieScoreReviews(1);
