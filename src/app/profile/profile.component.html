@@ -58,7 +58,10 @@
 
   <h3>Recommended Movies</h3>
   <div *ngIf="recommendationsAreLoaded; then thenRMBlock else elseRMBlock"></div>
-  <ng-template #thenRMBlock>
+  <ng-template #thenRMBlock>  
+    <div *ngIf="moreRecMovies">
+      <button id="recButton" routerLink="/recommended">Show More Recommended Movies</button>
+    </div>
     <div *ngIf="userRecommendedMovies.length">
       <ul class="movies">
         <li *ngFor="let recmovie of userRecommendedMovies">
@@ -69,9 +72,6 @@
           <p class="year">{{ recmovie.releaseDate | date: "yyyy" }}</p>
         </li>
       </ul>
-    </div>
-    <div *ngIf="moreRecMovies">
-      <button id="recButton" routerLink="/recommended">Show More Recommended Movies</button>
     </div>
 
     <div *ngIf="!userRecommendedMovies.length">
