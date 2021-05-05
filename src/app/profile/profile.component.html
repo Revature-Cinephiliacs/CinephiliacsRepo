@@ -58,7 +58,7 @@
 
   <h3>Recommended Movies</h3>
   <div *ngIf="recommendationsAreLoaded; then thenRMBlock else elseRMBlock"></div>
-  <ng-template #thenRMBlock>  
+  <ng-template #thenRMBlock>
     <div *ngIf="moreRecMovies">
       <button id="recButton" routerLink="/recommended">Show More Recommended Movies</button>
     </div>
@@ -124,7 +124,7 @@
     <div *ngIf="userNotifications.length">
       <button (click)="deleteAllNotifications()" class="delete-not">Delete all</button>
       <ul class="comments">
-        <li *ngFor="let notification of userNotifications">
+        <li *ngFor="let notification of userShownNotifications">
           <div *ngIf="!isCreatorNull(notification)">
             <span>User {{notification.creatorUsername}} that you follow has created a&nbsp;</span>
             <span *ngIf="notification.fromService=='c'">Comment
@@ -187,8 +187,11 @@
               </div><br>
             </div>
           </div>
-          <button (click)="deleteNotification(notification)" class="delete-not">Delete</button>
         </li>
+        <button *ngIf="showNotificationsButtons() && !moreNotifications" (click)="showMoreNotifications()">Show
+          More</button>
+        <button *ngIf="showNotificationsButtons() && moreNotifications" (click)="showMoreNotifications()">Show
+          Less</button>
       </ul>
     </div>
     <div *ngIf="!userNotifications.length">
@@ -204,11 +207,13 @@
   <ng-template #thenRBlock>
     <div *ngIf="userReviews.length">
       <ul class="reviews">
-        <li *ngFor="let review of userReviews">
+        <li *ngFor="let review of userShownReviews">
           <p class="rating">Score: {{ review.score}}</p>
           <a routerLink="/user/{{review.usernameid}}" class="username">{{ review.usernameid}}</a>
           <p>{{ review.review}}</p>
         </li>
+        <button *ngIf="showReviewsButtons() && !moreReviews" (click)="showMoreReviews()">Show More</button>
+        <button *ngIf="showReviewsButtons() && moreReviews" (click)="showMoreReviews()">Show Less</button>
       </ul>
     </div>
     <div *ngIf="!userReviews.length">
@@ -222,14 +227,16 @@
   <h3>Your Discussions</h3>
   <div *ngIf="discussionsAreLoaded; then thenDBlock else elseDBlock"></div>
   <ng-template #thenDBlock>
-    <div *ngIf="userDiscussions.length">
+    <div *ngIf="userShownDiscussions.length">
       <ul class="discussions">
-        <li *ngFor="let discussion of userDiscussions">
+        <li *ngFor="let discussion of userShownDiscussions">
           <a routerLink="/user/{{discussion.userid}}" class="username">{{ discussion.userid }}</a>
           <!-- <p *ngIf="discussion.topic != 'None'" class="topic">Topic: {{ discussion.topic}}</p> -->
           <div routerLink="/discussion/{{discussion.discussionId}}" class="discussionsubject">{{ discussion.subject}}
           </div>
         </li>
+        <button *ngIf="showDiscussionsButtons() && !moreDiscussions" (click)="showMoreDiscussions()">Show More</button>
+        <button *ngIf="showDiscussionsButtons() && moreDiscussions" (click)="showMoreDiscussions()">Show Less</button>
       </ul>
     </div>
     <div *ngIf="!userDiscussions.length">
@@ -245,12 +252,14 @@
   <ng-template #thenCBlock>
     <div *ngIf="userComments.length">
       <ul class="comments">
-        <li *ngFor="let comment of userComments">
+        <li *ngFor="let comment of userShownComments">
           <div class="commentContent">
             <a routerLink="/user/{{comment.userid}}" class="username">{{ comment.userid }}</a>
             <div routerLink="/discussion/{{comment.discussionid}}" class="commenttext">{{comment.text}}</div>
           </div>
         </li>
+        <button *ngIf="showCommentsButtons() && !moreComments" (click)="showMoreComments()">Show More</button>
+        <button *ngIf="showCommentsButtons() && moreComments" (click)="showMoreComments()">Show Less</button>
       </ul>
     </div>
     <div *ngIf="!userComments.length">
@@ -264,14 +273,18 @@
   <h3>Your Followed Discussions</h3>
   <div *ngIf="followedDiscussionsAreLoaded; then thenFDBlock else elseFDBlock"></div>
   <ng-template #thenFDBlock>
-    <div *ngIf="userFollowedDiscussions.length">
+    <div *ngIf="userShownFollowedDiscussions.length">
       <ul class="discussions">
-        <li *ngFor="let discussion of userFollowedDiscussions">
+        <li *ngFor="let discussion of userShownFollowedDiscussions">
           <a routerLink="/user/{{discussion.userid}}" class="username">{{ discussion.userid }}</a>
           <!-- <p *ngIf="discussion.topic != 'None'" class="topic">Topic: {{ discussion.topic}}</p> -->
           <div routerLink="/discussion/{{discussion.discussionId}}" class="discussionsubject">{{ discussion.subject}}
           </div>
         </li>
+        <button *ngIf="showFollowedDiscussionButtons() && !moreFollowedDiscussions"
+          (click)="showMoreFollowedDiscussions()">Show More</button>
+        <button *ngIf="showFollowedDiscussionButtons() && moreFollowedDiscussions"
+          (click)="showMoreFollowedDiscussions()">Show Less</button>
       </ul>
     </div>
     <div *ngIf="!userFollowedDiscussions.length">

@@ -116,7 +116,7 @@ export class UserService {
   }
 
   getAUserFollowedDiscussions(userid: string) {
-    return this.http.get<Discussion[]>(this.forumsUrl + "forum/discussions/follow/{userid}" + userid).toPromise();
+    return this.http.get<Discussion[]>(this.forumsUrl + "forum/discussions/follow/" + userid).toPromise();
   }
 
   //Function to get user's age

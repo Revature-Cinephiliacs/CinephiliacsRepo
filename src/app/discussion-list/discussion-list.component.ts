@@ -13,6 +13,7 @@ import * as moment from 'moment';
 })
 export class DiscussionListComponent implements OnInit {
   discussions: Discussion[] = [];
+  
   numOfDiscussion: number = 0;
   pageNum: number = 1;
   topics: Topic[];
@@ -60,10 +61,10 @@ export class DiscussionListComponent implements OnInit {
     this.movieID =  this.router.snapshot.params.id;
     this._movie.getMovieDetails(this.movieID).subscribe(data => { this.movieTitle = data.title })
     this._forum.getDiscussion(this.movieID).subscribe(data =>{ 
-      this.discussions = data;
-      this.numOfDiscussion = this.discussions.length
-      this.discussions = []})
-
+      var tempDis
+      tempDis = data;
+      this.numOfDiscussion = tempDis.length
+    })
       this._forum.getTopics().subscribe(data => {
         this.topics = data;
       });
