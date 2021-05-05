@@ -65,8 +65,11 @@ export class MovieComponent implements OnInit {
       this.logger.log("", "this is getting movie details");
       this.logger.log("", this.selectedMovie);
     });
-
-    this.getUserFollowingMovies();
+    
+    this.movieService.getUserFollowingMovie(this.movieID).subscribe((isFollowing: boolean) => {
+      this.movieFollowed = isFollowing;
+    });
+    
     //Get related movies
     this.getRelatedMovies();
 
@@ -86,23 +89,6 @@ export class MovieComponent implements OnInit {
       this.movieService.removeMovieFromFollowing(this.movieID, this.userId).subscribe(data => {
         this.movieFollowed = false;
       })
-    }
-  }
-
-  //Get user following movies
-  getUserFollowingMovies() {
-    if (this.userModel) {
-      this.movieService.getUserFollowingMovies(this.userId).subscribe((usersMovieNames: string[]) => {
-        if (typeof usersMovieNames.find(m => m == this.movieID) === 'undefined') {
-          this.movieFollowed = false;
-        }
-        else {
-          this.movieFollowed = true;
-        }
-      });
-    }
-    else {
-      this.logger.log("", "user isn't set");
     }
   }
 

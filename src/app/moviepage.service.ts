@@ -10,7 +10,7 @@ import { Review } from './models/models';
 })
 export class MoviepageService {
   movieBaseURL: string = "";
-  constructor(private http: HttpClient, private urlService: UrlService) { 
+  constructor(private http: HttpClient, private urlService: UrlService) {
     this.movieBaseURL = urlService.MovieAPIUrl + "movie";
     // this.movieBaseURL = "https://localhost:5003/movie";// for testing
   }
@@ -27,6 +27,11 @@ export class MoviepageService {
   getUserFollowingMovies(userid: string)
   {
     return this.http.get( this.movieBaseURL + "/follow/" + userid);
+  }
+
+  getUserFollowingMovie(movieid: string)
+  {
+    return this.http.get( this.movieBaseURL + "/isfollowing/ + movieid");
   }
 
   //Function that will call the Movie Microservice API follow/movieid/userid endpoint
@@ -94,7 +99,7 @@ export class MoviepageService {
   unbanMovieTage(tagname: string)
   {
     return this.http.delete ( this.movieBaseURL + "/tag/ban/" + tagname);
-  } 
+  }
 
   //Gets a list of Related Movies given a movie id
   getRelatedMovies(movieid: string):Observable<Movie[]>

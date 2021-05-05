@@ -293,6 +293,12 @@ export class ProfileComponent implements OnInit {
     });
   }
 
+  deleteAllNotifications() {
+    this.userService.deleteAllNotifications().then(r => {
+      this.userNotifications = this.userNotifications.filter(n => false);
+    });
+  }
+
   /**
    * Update the user data
    * @param newuser 

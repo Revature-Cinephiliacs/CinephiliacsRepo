@@ -55,6 +55,10 @@ export class UserService {
     return this.http.delete<boolean>(this.usersUrl + "user/notification/" + notId).toPromise();
   }
 
+  deleteAllNotifications() {
+    return this.http.delete<boolean>(this.usersUrl + "user/notification/").toPromise();
+  }
+
   //Function that call User MSA to check if user is admin or not
   isAdmin(userid: string): Promise<any> {
     return this.http.get(this.usersUrl + `user/isadmin`).toPromise();
