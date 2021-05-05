@@ -65,11 +65,11 @@ export class MovieComponent implements OnInit {
       this.logger.log("", "this is getting movie details");
       this.logger.log("", this.selectedMovie);
     });
-
+    
     this.movieService.getUserFollowingMovie(this.movieID).subscribe((isFollowing: boolean) => {
       this.movieFollowed = isFollowing;
     });
-
+    
     //Get related movies
     this.getRelatedMovies();
 
