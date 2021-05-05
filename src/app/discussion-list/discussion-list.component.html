@@ -71,7 +71,7 @@
                     <a routerLink="/discussion/{{discussion.discussionId}}">
                         {{discussion.subject}}
                     </a>
-                    <button *ngFor="let dt of discussion.discussionTopics">
+                    <button *ngFor="let dt of discussion.discussionTopics" class="topicBtn">
                         <span *ngFor="let t of topics" >
                             <span *ngIf="t.topicId == dt">{{t.topicName}} </span>
                         </span>
