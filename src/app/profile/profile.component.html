@@ -148,7 +148,7 @@
             </span>
             <span *ngIf="notification.fromService=='d'">Discussion
 
-              <div *ngIf="notification.item" routerLink="/discussion/{{notification.item.discussionid}}"
+              <div *ngIf="notification.item" routerLink="/discussion/{{notification.item.discussionId}}"
                 class="discussionsubject">
                 {{ notification.item.subject}}
               </div><br>
@@ -180,7 +180,7 @@
 
               <!-- <a routerLink="/user/{{discussion.username}}" class="username">{{ discussion.username }}</a> -->
               <!-- <a class="username">{{ discussion.username }}</a> -->
-              <div *ngIf="notification.item" routerLink="/discussion/{{notification.item.discussionid}}"
+              <div *ngIf="notification.item" routerLink="/discussion/{{notification.item.discussionId}}"
                 class="discussionsubject">
                 {{ notification.item.subject}}
               </div><br>
@@ -226,7 +226,7 @@
         <li *ngFor="let discussion of userDiscussions">
           <a routerLink="/user/{{discussion.userid}}" class="username">{{ discussion.userid }}</a>
           <!-- <p *ngIf="discussion.topic != 'None'" class="topic">Topic: {{ discussion.topic}}</p> -->
-          <div routerLink="/discussion/{{discussion.discussionid}}" class="discussionsubject">{{ discussion.subject}}
+          <div routerLink="/discussion/{{discussion.discussionId}}" class="discussionsubject">{{ discussion.subject}}
           </div>
         </li>
       </ul>
@@ -259,11 +259,6 @@
   <ng-template #elseCBlock>
     <h4>Loading Comments . . .</h4>
   </ng-template>
-
-  <h3>Your Recommended Movies</h3>
-  <a routerLink="/recommended">Show More Recommended Movies</a>
-  <!-- <app-recommendations></app-recommendations> -->
-
 
   <h3>Your Followed Discussions</h3>
   <div *ngIf="followedDiscussionsAreLoaded; then thenFDBlock else elseFDBlock"></div>

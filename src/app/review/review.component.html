@@ -9,7 +9,7 @@
         </div>
         <div class = "filterSection">
             <span>Filter: </span>
-            <select class = "filter" ng-Model= "selectedFilter">
+            <select class = "filter" [(ngModel)]= "selectedFilter">
                 <option *ngFor = "let f of filters" (click) = "filterByRating(f)">{{f}}</option>
             </select>
         </div>
@@ -19,7 +19,9 @@
     <ng-template #thenRBlock>
         <ul>
             <li *ngFor="let review of reviews">
+                <p id="datePost">Date Posted: {{review.creationTime | date: "shortDate"}}</p>
                 <u routerLink ="/user/{{review.usernameid}}" class="username">{{ review.usernameid}}</u>
+                
                 <p class="rating">{{ review.score}}</p>
                 <p >{{ review.review}}</p>
                 <button id="flag" (click) = "flagReview(review)">Flag</button>

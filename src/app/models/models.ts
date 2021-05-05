@@ -36,6 +36,15 @@ export class ReportedItem {
   Item: any;
 }
 
+export class TicketItem {
+  affectedService: string;
+  descript: string;
+  item: any;
+  itemId: string;
+  ticketId: string;
+  timeSubmitted: Moment;
+}
+
 export enum ReportType {
   Review = "Review",
   Comment = "Comment",
