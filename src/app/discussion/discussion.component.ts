@@ -120,6 +120,8 @@ export class DiscussionComponent implements OnInit {
   // Function to get paginated comments 
   async getComments() {
     this.pageComments = [];
+    this.pageNum = 1;
+    this.sortingOrder = "timeD";
     this._forum.getDiscussionCommentsPage(this.discussionID, this.pageNum, this.sortingOrder).subscribe(data => {
       this.pageComments = data;
       this.currentTopics = [];
@@ -133,8 +135,11 @@ export class DiscussionComponent implements OnInit {
       this.logger.log("", "Please enter a comment");
     } else {
       this.newComment.userid = this.userid;
-      this._forum.postComment(this.newComment).subscribe(data => this.logger.log("", data));
-      this.getComments();
+      this._forum.postComment(this.newComment).subscribe(data => {
+        this.logger.log("", data);
+        this.getComments();
+      });
+
       const form = document.getElementById("postComment") as HTMLFormElement;
       form.reset();
     }
@@ -155,8 +160,9 @@ export class DiscussionComponent implements OnInit {
     } else {
       this.newComment.userid = this.userid;
       this.newComment.parentcommentid = this.parentId;
-      this._forum.postComment(this.newComment).subscribe(data => { });
-      this.getComments();
+      this._forum.postComment(this.newComment).subscribe(data => {
+        this.getComments();
+      });
     }
   }
 
@@ -172,6 +178,7 @@ export class DiscussionComponent implements OnInit {
   cancelReply() {
     this.displayReplyForm = false;
     this.displayMessageForm = true;
+    this.newComment.parentcommentid = null;
   }
 
   // Sorting functions 
